@@ -1,0 +1,141 @@
+name: Foremost
+main: com.andreigeorgescu.foremost.Foremost
+version: 1.0.0
+author: Andrei Georgescu
+depend: [NSA]
+description: >
+            First and foremost, the essentials.
+commands:
+  msg:
+      aliases: [m]
+      description: Message anyone on the server
+      usage: |
+             Usages:
+             /<msg, m> <playername> <message>
+  r:
+      aliases: [reply]
+      description: Reply to the last person you interacted with.
+      usage: |
+             Usages:
+             /<reply, r> <message>
+  day:
+      description: Sets the server time to day
+      usage: |
+             Usages:
+             /day
+  night:
+      description: Sets the server time to night
+      usage: |
+             Usages:
+             /night
+  sunset:
+      description: Sets the server time to sunset
+      usage: |
+             Usages:
+             /sunset
+  ci:
+      description: Clears your or the inventory of others
+      usage: |
+             Usages:
+             /ci - Clears your inventory
+             /ci <playername> clears the inventory of another player
+  repair:
+      description: Repairs the durability of the item in your hand
+      usage: |
+             Usages:
+             /repair
+  speed:
+      description: Sets your flying or walking speed.
+      usage: |
+             Usages:
+             /speed <speed>
+  heal:
+      description: Regain your original health and food levels
+      usage: |
+             Usages:
+             /heal - Fully heal yourself
+             /heal <playername> - Fully heals another player
+  gm:
+      aliases: [gmc, gms]
+      description: Change your gamemode to creative or survival.
+      usage: |
+             Usages:
+             /<gmc, gms> - gmc = creative, gms = survival
+             /<gmc, gms> <playername> - changes the gamemode of another player
+  chat:
+      description: Mute or unmute chat.
+      usage: |
+             Usages:
+             /chat <mute, unmute>
+  kill:
+      description: Kill another player
+      usage: |
+             Usages:
+             /kill <playername>
+  inv:
+      aliases: [inventory]
+      description: View another player's inventory.
+      usage: |
+             Usages:
+             /inv <playername>
+  sudo:
+      description: Allows you to make another player run a command
+      usage: |
+             Usages:
+             /sudo <playername> <what to run>
+  killall:
+      description: Kills all harmful mobs in the current world you're in.
+      usage: |
+             Usages:
+             /killall
+  tphere:
+      description: Teleports a player to your current location.
+      usage: |
+             Usages:
+             /tphere <playername>
+  tppos:
+      description: Teleport to specific coordinates in the world you're in.
+      usage: |
+             Usages:
+             /tppos <x> <y> <z>
+  tpall:
+      description: Teleport all online players to your location.
+      usage: |
+             Usages:
+             /tpall
+  back:
+      description: Teleports you back to the last location you were teleported to.
+      usage: |
+             Usages:
+             /back
+  setspawn:
+      description: Set spawn to your current location.
+      usage: |
+             Usages:
+             /setspawn
+  spawn:
+      description: Teleport to spawn.
+      usage: |
+             Usages:
+             /spawn
+  warp:
+      description: Warp command; teleport, list, add, and delete warps
+      usage: |
+             Usages:
+             /warp list - list all warps
+             /warp delete <warp name> - delete a warp
+             /warp create <warp name> - add a warp
+             /warp <warp name> - teleport to a warp
+  v:
+      aliases: [vanish]
+      description: Vanish yourself
+      usage: |
+             Usages:
+             /v
+  enderchest:
+      aliases: [ec]
+      description: View your enderchest
+      usage: |
+             Usages:
+             /enderchest
+             /ec
