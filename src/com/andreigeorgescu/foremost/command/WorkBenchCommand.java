@@ -7,14 +7,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class EnderChestCommand implements CommandExecutor {
+public class WorkBenchCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
-            if (sender.hasPermission("foremost.enderchest")) {
-                ((Player) sender).openInventory(((Player) sender).getEnderChest());
-                sender.sendMessage(ChatColor.GREEN + "Opening your enderchest.");
+            if(sender.hasPermission("foremost.workbench")) {
+                ((Player) sender).openWorkbench(null, true);
+                sender.sendMessage(ChatColor.GREEN + "Opening workbench.");
                 return true;
             } else {
                 sender.sendMessage(Utilities.NO_PERMISSION);

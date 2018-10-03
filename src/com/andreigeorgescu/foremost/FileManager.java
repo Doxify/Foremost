@@ -45,7 +45,6 @@ public class FileManager {
 			Config configClass = new Config(spawnLocation, warps);
 			return configClass;
 		} catch (IOException | ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("[Foremost] Failed to load config.json. Returned a null Config.");
 			return new Config(null, null);

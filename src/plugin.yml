@@ -139,3 +139,10 @@ commands:
              Usages:
              /enderchest
              /ec
+  workbench:
+      aliases: [wb]
+      description: View a virtual workbench
+      usage: |
+             Usages:
+             /workbench
+             /wb
