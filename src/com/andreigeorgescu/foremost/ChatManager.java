@@ -10,28 +10,34 @@ public class ChatManager {
 	public ChatManager() {
 		chatIsMuted = false;
 	}
-	
-	public void muteChat(String mutedBy) {
-		chatIsMuted = true;
-		Bukkit.broadcastMessage(ChatColor.RED + "Chat has been muted by " + mutedBy + ".");
 
+    public boolean getChatMuteSetting() {
+        return chatIsMuted;
+    }
+
+    public boolean muteChat() {
+	    if(!chatIsMuted) {
+            chatIsMuted = true;
+            return true;
+        } else {
+            return false;
+        }
 	}
 	
-	public void unmuteChat(String mutedBy) {
-		chatIsMuted = false;
-		Bukkit.broadcastMessage(ChatColor.GREEN + "Chat has been unmuted by " + mutedBy + ".");
-
+	public boolean unmuteChat() {
+        if(chatIsMuted) {
+            chatIsMuted = false;
+            return true;
+        } else {
+            return false;
+        }
 	}
 	
 	public void clearChat(String clearedBy) {
 		for (int x = 0; x < 150; x++){
 		    Bukkit.broadcastMessage("");
 		}
-		Bukkit.broadcastMessage(ChatColor.RED + "Chat has been cleared by " + clearedBy + ".");
-	}
-	
-	public boolean getChatMuteSetting() {
-		return chatIsMuted;
+        Bukkit.broadcastMessage(ChatColor.RED + "Chat has been cleared by " + clearedBy + ".");
 	}
 
 }

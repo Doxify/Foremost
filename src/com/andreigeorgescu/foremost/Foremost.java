@@ -57,6 +57,7 @@ public class Foremost extends JavaPlugin {
         getCommand("warp").setExecutor(new WarpCommand(this));
         getCommand("enderchest").setExecutor(new EnderChestCommand());
         getCommand("workbench").setExecutor(new WorkBenchCommand());
+        getCommand("teleport").setExecutor(new TeleportCommand());
 
     }
     

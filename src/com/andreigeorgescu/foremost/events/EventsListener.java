@@ -1,11 +1,7 @@
 package com.andreigeorgescu.foremost.events;
 
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -59,29 +55,33 @@ public class EventsListener implements Listener {
 			}
 		} else {
 
-		    event.setCancelled(true);
-
-            String original = event.getMessage();
+			String original = event.getMessage();
 			String formatted = ChatColor.translateAlternateColorCodes('&', original);
+			event.setMessage(formatted);
 
-            String uuid = event.getPlayer().getUniqueId().toString();
-            com.saphron.nsa.Profile profile = plugin.nsaPlugin.getProfileManager().getProfile(uuid);
-
-            TextComponent message = new TextComponent(formatted);
-            TextComponent staffTools = new TextComponent("test");
-            staffTools.setColor(ChatColor.GOLD);
-            staffTools.addExtra("UUID: " + uuid + '\n');
-            staffTools.addExtra("IP: " + profile.getIP() + '\n');
-
-            message.setHoverEvent(new HoverEvent( HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("UUID: " + uuid + "\n" + "IP: " + profile.getIP() + "\n").create()));
-
-            for(Player p : Bukkit.getServer().getOnlinePlayers()) {
-                if(p.hasPermission("foremost.admin")) {
-                    p.spigot().sendMessage(message);
-                } else {
-                    p.sendMessage(formatted);
-                }
-            }
+//		    event.setCancelled(true);
+//
+//            String original = event.getMessage();
+//			String formatted = ChatColor.translateAlternateColorCodes('&', original);
+//
+//            String uuid = event.getPlayer().getUniqueId().toString();
+//            com.saphron.nsa.Profile profile = plugin.nsaPlugin.getProfileManager().getProfile(uuid);
+//
+//            TextComponent message = new TextComponent(formatted);
+//            TextComponent staffTools = new TextComponent("test");
+//            staffTools.setColor(ChatColor.GOLD);
+//            staffTools.addExtra("UUID: " + uuid + '\n');
+//            staffTools.addExtra("IP: " + profile.getIP() + '\n');
+//
+//            message.setHoverEvent(new HoverEvent( HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("UUID: " + uuid + "\n" + "IP: " + profile.getIP() + "\n").create()));
+//
+//            for(Player p : Bukkit.getServer().getOnlinePlayers()) {
+//                if(p.hasPermission("foremost.admin")) {
+//                    p.spigot().sendMessage(message);
+//                } else {
+//                    p.sendMessage(formatted);
+//                }
+//            }
 
 		}
 		
