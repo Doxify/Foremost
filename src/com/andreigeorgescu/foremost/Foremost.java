@@ -61,7 +61,7 @@ public class Foremost extends JavaPlugin {
         getCommand("workbench").setExecutor(new WorkBenchCommand());
         getCommand("teleport").setExecutor(new TeleportCommand());
         getCommand("give").setExecutor(new GiveCommand());
-        getCommand("tpa").setExecutor(new PlayerTeleportAcceptCommand(this));
+        getCommand("tpa").setExecutor(new PlayerTeleportCommand(this));
 
     }
     

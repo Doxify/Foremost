@@ -14,11 +14,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class PlayerTeleportAcceptCommand implements CommandExecutor {
+public class PlayerTeleportCommand implements CommandExecutor {
 
     Foremost plugin;
 
-    public PlayerTeleportAcceptCommand(Foremost p) {
+    public PlayerTeleportCommand(Foremost p) {
         plugin = p;
     }
 
@@ -33,20 +33,21 @@ public class PlayerTeleportAcceptCommand implements CommandExecutor {
                             if(target != null) {
                                 Profile targetProfile = plugin.profileManager.getProfile(target.getUniqueId().toString());
                                 if(target.getName() != sender.getName()) {
-                                    targetProfile.setTeleportRequest(sender.getName());
-                                    TextComponent teleportAcceptMessage = new TextComponent("");
-                                        TextComponent acceptMessage = new TextComponent("Accept " + sender.getName() + "'s request: ");
-                                        TextComponent denyMessage = new TextComponent("Deny " + sender.getName() + "'s request: ");
+                                    if(targetProfile.getTeleportRequest() != sender.getName()) {
+                                        targetProfile.setTeleportRequest(sender.getName());
+                                        TextComponent teleportAcceptMessage = new TextComponent("");
+                                        TextComponent acceptMessage = new TextComponent(ChatColor.GOLD + "≡ " + ChatColor.GREEN + "Click to accept " + target.getName() + "'s request");
+                                        TextComponent denyMessage = new TextComponent(ChatColor.GOLD + "≡ " + ChatColor.RED + "Click to deny " + target.getName() + "'s request");
                                         teleportAcceptMessage.setColor(ChatColor.GOLD);
-                                        teleportAcceptMessage.addExtra(sender.getName() + " has requested to teleport to you.");
+                                        teleportAcceptMessage.addExtra(ChatColor.BOLD + sender.getName() + ChatColor.GOLD + " has requested to teleport to you.");
                                         acceptMessage.setColor(ChatColor.GREEN);
-                                        acceptMessage.addExtra("[Accept]");
+                                        acceptMessage.addExtra(ChatColor.GOLD + " ≡");
                                         denyMessage.setColor(ChatColor.RED);
-                                        denyMessage.addExtra("[Deny]");
+                                        denyMessage.addExtra(ChatColor.GOLD + " ≡");
 
-                                        acceptMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Accept " + sender.getName() + "'s teleport request.").create()));
+                                        acceptMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Aaccept " + sender.getName() + "'s teleport request").create()));
                                         acceptMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept"));
-                                        denyMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Deny " + sender.getName() + "'s teleport request.").create()));
+                                        denyMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Deny " + sender.getName() + "'s teleport request").create()));
                                         denyMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpdeny"));
 
                                         target.spigot().sendMessage(teleportAcceptMessage);
@@ -54,8 +55,12 @@ public class PlayerTeleportAcceptCommand implements CommandExecutor {
                                         target.spigot().sendMessage(denyMessage);
                                         sender.sendMessage(ChatColor.GREEN + "Successfully sent " + target.getName() + " a teleport request." );
                                         return true;
+                                    } else {
+                                        sender.sendMessage(ChatColor.RED + "You've already sent a tpa request to " + target.getName() + ".");
+                                        return true;
+                                    }
                                 } else {
-                                    sender.sendMessage(ChatColor.RED + "You cannot send a tpa request to yourself!");
+                                    sender.sendMessage(ChatColor.RED + "You cannot send a request to yourself.");
                                     return true;
                                 }
                             } else {
@@ -74,29 +79,34 @@ public class PlayerTeleportAcceptCommand implements CommandExecutor {
                             if(target != null) {
                                 Profile targetProfile = plugin.profileManager.getProfile(target.getUniqueId().toString());
                                 if(target.getName() != sender.getName()) {
-                                    targetProfile.setTeleportRequest(sender.getName());
-                                    TextComponent teleportAcceptMessage = new TextComponent("");
-                                    TextComponent acceptMessage = new TextComponent("Accept " + sender.getName() + "'s request: ");
-                                    TextComponent denyMessage = new TextComponent("Deny " + sender.getName() + "'s request: ");
-                                    teleportAcceptMessage.setColor(ChatColor.GOLD);
-                                    teleportAcceptMessage.addExtra(sender.getName() + " has requested you to teleport to them.");
-                                    acceptMessage.setColor(ChatColor.GREEN);
-                                    acceptMessage.addExtra("[Accept]");
-                                    denyMessage.setColor(ChatColor.RED);
-                                    denyMessage.addExtra("[Deny]");
+                                    if(targetProfile.getTeleportRequest() != sender.getName()) {
+                                        targetProfile.setTeleportRequest(sender.getName());
+                                        TextComponent teleportAcceptMessage = new TextComponent("");
+                                        TextComponent acceptMessage = new TextComponent(ChatColor.GOLD + "≡ " + ChatColor.GREEN + "Click to accept " + sender.getName() + "'s request");
+                                        TextComponent denyMessage = new TextComponent(ChatColor.GOLD + "≡ " + ChatColor.RED + "Click to deny " + sender.getName() + "'s request");
+                                        teleportAcceptMessage.setColor(ChatColor.GOLD);
+                                        teleportAcceptMessage.addExtra(ChatColor.BOLD + sender.getName() + ChatColor.GOLD + " has requested you to teleport to them.");
+                                        acceptMessage.setColor(ChatColor.GREEN);
+                                        acceptMessage.addExtra(ChatColor.GOLD + " ≡");
+                                        denyMessage.setColor(ChatColor.RED);
+                                        denyMessage.addExtra(ChatColor.GOLD + " ≡");
 
-                                    acceptMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Accept " + sender.getName() + "'s teleport request.").create()));
-                                    acceptMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpahereaccept"));
-                                    denyMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Deny " + sender.getName() + "'s teleport request.").create()));
-                                    denyMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpdeny"));
+                                        acceptMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Accept " + sender.getName() + "'s teleport request.").create()));
+                                        acceptMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpahereaccept"));
+                                        denyMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Deny " + sender.getName() + "'s teleport request.").create()));
+                                        denyMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpdeny"));
 
-                                    target.spigot().sendMessage(teleportAcceptMessage);
-                                    target.spigot().sendMessage(acceptMessage);
-                                    target.spigot().sendMessage(denyMessage);
-                                    sender.sendMessage(ChatColor.GREEN + "Successfully sent " + target.getName() + " a tpahere request." );
-                                    return true;
+                                        target.spigot().sendMessage(teleportAcceptMessage);
+                                        target.spigot().sendMessage(acceptMessage);
+                                        target.spigot().sendMessage(denyMessage);
+                                        sender.sendMessage(ChatColor.GREEN + "Successfully sent " + target.getName() + " a tpahere request." );
+                                        return true;
+                                    } else {
+                                        sender.sendMessage(ChatColor.RED + "You've already sent a tpahere request to " + target.getName() + ".");
+                                        return true;
+                                    }
                                 } else {
-                                    sender.sendMessage(ChatColor.RED + "You cannot send a tpahere request to yourself!");
+                                    sender.sendMessage(ChatColor.RED + "You cannot send a request to yourself.");
                                     return true;
                                 }
                             } else {
@@ -153,7 +163,7 @@ public class PlayerTeleportAcceptCommand implements CommandExecutor {
                             sender.sendMessage(ChatColor.GREEN + "Successfully denied " + target.getName() + "'s teleport request.");
                             return true;
                         } else {
-                            sender.sendMessage(ChatColor.RED + "You don't have a pending teleport request.");
+                            sender.sendMessage(ChatColor.RED + "You do not have a pending teleport request.");
                             return true;
                         }
                     }
