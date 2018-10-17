@@ -152,3 +152,20 @@ commands:
       usage: |
              Usages:
              /tp <player>
+  give:
+      aliases: [i]
+      description: Give yourself or others items
+      usage: |
+             Usages:
+             /give <player> <iten> <amount>
+             /i <item> <amount>
+  tpa:
+      aliases: [tpaccept, tpdeny, tpahere, tpahereaccept]
+      description: Send and Accept teleport requests to other players
+      usage: |
+             Usages:
+             /tpa <playername>
+             /tpahere <playername>
+             /tpaccept
+             /tpahereaccept
+             /tpdeny

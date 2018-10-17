@@ -56,8 +56,9 @@ public class FileManager {
     // =============================================
 	public void saveConfigFile(String filePath, String fileName, Config config) {
 		JSONObject configJSON = new JSONObject();
-		JSONObject spawnJSON = new JSONObject();
-		JSONObject warpsJSON = new JSONObject();
+		JSONObject spawnJSON;
+		JSONObject warpsJSON;
+
 		if(config.getSpawn() instanceof Location) {
 			spawnJSON = serializeLocation(config.getSpawn());
 			configJSON.put("spawn", spawnJSON);
@@ -106,6 +107,8 @@ public class FileManager {
 		serializedObj.put("x" , locToSerialize.getX());
 		serializedObj.put("y" , locToSerialize.getY());
 		serializedObj.put("z" , locToSerialize.getZ());
+		serializedObj.put("yaw", locToSerialize.getYaw());
+		serializedObj.put("pitch", locToSerialize.getPitch());
 
 		
 		return serializedObj;
@@ -127,7 +130,7 @@ public class FileManager {
 	}
 	
 	public Location deserializeLocation(JSONObject jsonLocation) {
-		Location locToDeserialize = new Location(plugin.getServer().getWorld((String) jsonLocation.get("world")), (double) jsonLocation.get("x"), (double) jsonLocation.get("y"), (double) jsonLocation.get("z"));
+		Location locToDeserialize = new Location(plugin.getServer().getWorld((String) jsonLocation.get("world")), (double) jsonLocation.get("x"), (double) jsonLocation.get("y"), (double) jsonLocation.get("z"), ((Double) jsonLocation.get("yaw")).floatValue(), ((Double) jsonLocation.get("pitch")).floatValue());
 		return locToDeserialize;
 	}
 	

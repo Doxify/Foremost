@@ -20,7 +20,6 @@ import com.andreigeorgescu.foremost.Profile;
 public class EventsListener implements Listener {
 	
 	private final Foremost plugin;
-
 	public EventsListener(Foremost p) {
         this.plugin = p;
 	}

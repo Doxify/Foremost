@@ -9,12 +9,35 @@ import org.bukkit.inventory.ItemStack;
 
 import com.andreigeorgescu.foremost.Utilities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RepairCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
-            if(sender.hasPermission("foremost.repair")) {
+            if(sender.hasPermission("foremost.repair.all")){
+                if(args.length == 1 && args[1].equalsIgnoreCase("all")) {
+                    int repairedItems = 0;
+                    for(ItemStack item : ((Player) sender).getInventory().getContents()) {
+                        if(item.getType().getMaxDurability() > 0) {
+                            if (item.getDurability() != item.getType().getMaxDurability()) {
+                                item.setDurability((short) (item.getDurability() - item.getType().getMaxDurability()));
+                                repairedItems++;
+                            }
+                        }
+                    }
+
+                    if(repairedItems > 0) {
+                        sender.sendMessage(ChatColor.GREEN + "Successfully repaired " + repairedItems + " items.");
+                        return true;
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "There were no repairable items in your inventory.");
+                        return true;
+                    }
+                }
+            } else if(sender.hasPermission("foremost.repair")) {
             	ItemStack item = ((Player) sender).getInventory().getItemInHand();
                 if(item.getType().getMaxDurability() > 0) {
                     // Item can be repaired,

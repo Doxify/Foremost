@@ -2,6 +2,7 @@ package com.andreigeorgescu.foremost;
 
 import java.util.logging.Logger;
 
+import com.andreigeorgescu.foremost.events.ColoredSignsEventListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,6 +24,7 @@ public class Foremost extends JavaPlugin {
     public void onEnable() {
         log.info("Foremost has been enabled.");
         this.getServer().getPluginManager().registerEvents(new EventsListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new ColoredSignsEventListener(), this);
 
         // =============================================
         // Loading Config
@@ -58,6 +60,8 @@ public class Foremost extends JavaPlugin {
         getCommand("enderchest").setExecutor(new EnderChestCommand());
         getCommand("workbench").setExecutor(new WorkBenchCommand());
         getCommand("teleport").setExecutor(new TeleportCommand());
+        getCommand("give").setExecutor(new GiveCommand());
+        getCommand("tpa").setExecutor(new PlayerTeleportAcceptCommand(this));
 
     }
     
