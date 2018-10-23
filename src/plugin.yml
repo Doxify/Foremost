@@ -2,7 +2,7 @@ name: Foremost
 main: com.andreigeorgescu.foremost.Foremost
 version: 1.0.0
 author: Andrei Georgescu
-depend: [NSA]
+depend: [Vault, NSA]
 description: >
             First and foremost, the essentials.
 commands:

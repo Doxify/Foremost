@@ -3,7 +3,10 @@ package com.andreigeorgescu.foremost;
 import java.util.logging.Logger;
 
 import com.andreigeorgescu.foremost.events.ColoredSignsEventListener;
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.andreigeorgescu.foremost.command.*;
@@ -18,13 +21,19 @@ public class Foremost extends JavaPlugin {
 	public ChatManager chatManager = new ChatManager();
 	public FileManager fileManager = new FileManager(this);
 	public MessageManager messageManager = new MessageManager(this);
+	public CooldownManager cooldownManager = new CooldownManager(this);
 	public Config config = null;
+    public static Permission perms = null;
+    public static Chat chat = null;
 			
     @Override
     public void onEnable() {
         log.info("Foremost has been enabled.");
         this.getServer().getPluginManager().registerEvents(new EventsListener(this), this);
         this.getServer().getPluginManager().registerEvents(new ColoredSignsEventListener(), this);
+        setupPermissions();
+        setupChat();
+        log.info("Vault permissions and chat has been loaded.");
 
         // =============================================
         // Loading Config
@@ -41,9 +50,9 @@ public class Foremost extends JavaPlugin {
         getCommand("night").setExecutor(new NightCommand());
         getCommand("sunset").setExecutor(new SunsetCommand());
         getCommand("ci").setExecutor(new ClearInventoryCommand());
-        getCommand("repair").setExecutor(new RepairCommand());
+        getCommand("repair").setExecutor(new RepairCommand(this));
         getCommand("speed").setExecutor(new SpeedCommand());
-        getCommand("heal").setExecutor(new HealCommand());
+        getCommand("heal").setExecutor(new HealCommand(this));
         getCommand("chat").setExecutor(new ChatManagerCommand(chatManager));
         getCommand("gm").setExecutor(new GamemodeCommand());
         getCommand("kill").setExecutor(new KillCommand());
@@ -71,6 +80,18 @@ public class Foremost extends JavaPlugin {
         // Saving config to file
         // =============================================
     	fileManager.saveConfigFile("./plugins/Foremost", "config.json", config);
+    }
+
+    private boolean setupPermissions() {
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        perms = rsp.getProvider();
+        return perms != null;
+    }
+
+    private boolean setupChat() {
+        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        chat = rsp.getProvider();
+        return chat != null;
     }
     
 

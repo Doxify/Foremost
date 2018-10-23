@@ -3,7 +3,7 @@ package com.andreigeorgescu.foremost;
 import org.bukkit.Location;
 
 public class Profile {
-	
+
 	private String lastReply;
 	private Location lastLocation;
 	private String teleportRequest;

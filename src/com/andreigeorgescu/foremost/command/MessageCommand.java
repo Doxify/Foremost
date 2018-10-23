@@ -24,6 +24,7 @@ public class MessageCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
+        	String prefix = ChatColor.translateAlternateColorCodes('&', plugin.chat.getPlayerPrefix((Player) sender));
             if(sender.hasPermission("foremost.msg")) {
             	if(args.length <= 1) {
                     sender.sendMessage(ChatColor.RED + "Usage: /msg <player> <message>");
@@ -50,7 +51,7 @@ public class MessageCommand implements CommandExecutor {
                     			}
                     		} else {
                     			// The sender IS on the ignored list, sending a fake message.
-                    			sender.sendMessage(ChatColor.LIGHT_PURPLE + "(To " + target.getName() + ") " + message);
+                    			sender.sendMessage(ChatColor.LIGHT_PURPLE + "(To " + prefix + target.getName() + ChatColor.LIGHT_PURPLE + ") " + message);
             					return true;
                     		}
                     		
