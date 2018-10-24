@@ -15,7 +15,7 @@ public class Profile {
 	}
 
 	// -------------------------------------------------------------
-	// getLastReply methods
+	// lastReply methods
 	// -------------------------------------------------------------
 	public String getLastReply() {
 		return lastReply;

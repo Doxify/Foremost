@@ -2,8 +2,8 @@ package com.andreigeorgescu.foremost;
 
 import java.util.logging.Logger;
 
-import com.andreigeorgescu.foremost.events.ColoredSignsEventListener;
 import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -11,6 +11,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.andreigeorgescu.foremost.command.*;
 import com.andreigeorgescu.foremost.events.EventsListener;
+import com.andreigeorgescu.foremost.events.ChatEventListener;
+import com.andreigeorgescu.foremost.events.ColoredSignsEventListener;
+
 import com.saphron.nsa.NSA;
 
 public class Foremost extends JavaPlugin {
@@ -25,15 +28,18 @@ public class Foremost extends JavaPlugin {
 	public Config config = null;
     public static Permission perms = null;
     public static Chat chat = null;
+    public static Economy econ = null;
 			
     @Override
     public void onEnable() {
         log.info("Foremost has been enabled.");
         this.getServer().getPluginManager().registerEvents(new EventsListener(this), this);
         this.getServer().getPluginManager().registerEvents(new ColoredSignsEventListener(), this);
+        this.getServer().getPluginManager().registerEvents(new ChatEventListener(this), this);
         setupPermissions();
         setupChat();
-        log.info("Vault permissions and chat has been loaded.");
+        setupEcon();
+        log.info("Vault permissions, chat, and economy has been loaded.");
 
         // =============================================
         // Loading Config
@@ -92,6 +98,12 @@ public class Foremost extends JavaPlugin {
         RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
         chat = rsp.getProvider();
         return chat != null;
+    }
+
+    private boolean setupEcon() {
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        econ = rsp.getProvider();
+        return econ != null;
     }
     
 

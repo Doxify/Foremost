@@ -51,15 +51,15 @@ public class RepairCommand implements CommandExecutor {
                             commandSender.sendMessage(ChatColor.GRAY + "Purchase Diamond rank to remove all command cooldowns! /buy");
                             return true;
                         }
-//                    } else if (sender.hasPermission("foremost.repair.bypass")) {
-//                        ItemStack item = ((Player) sender).getInventory().getItemInHand();
-//                        if(repairItem(item)) {
-//                            sender.sendMessage(ChatColor.GREEN + "Successfully repaired the item in your hand.");
-//                            plugin.cooldownManager.setRepairCooldown(senderUUID);
-//                        } else {
-//                            sender.sendMessage(ChatColor.RED + "The item in your hand cannot be repaired, please try another item.");
-//                        }
-//                        return true;
+                    } else if (sender.hasPermission("foremost.repair.bypass")) {
+                        ItemStack item = ((Player) sender).getInventory().getItemInHand();
+                        if(repairItem(item)) {
+                            sender.sendMessage(ChatColor.GREEN + "Successfully repaired the item in your hand.");
+                            plugin.cooldownManager.setRepairCooldown(senderUUID);
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "The item in your hand cannot be repaired, please try another item.");
+                        }
+                        return true;
                     } else {
                         sender.sendMessage(Utilities.NO_PERMISSION);
                         return true;

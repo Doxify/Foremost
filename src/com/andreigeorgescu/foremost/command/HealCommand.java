@@ -31,7 +31,7 @@ public class HealCommand implements CommandExecutor {
                 case 0: {
                     if(commandSender.hasPermission("foremost.heal.cooldown.3")) {
                         if(plugin.cooldownManager.getHealCooldown(senderUUID, 180 ) == -1 || plugin.cooldownManager.getHealCooldown(senderUUID, 180 ) == 0 ) {
-                            healPlayer();
+                            healPlayer(null);
                             commandSender.sendMessage(ChatColor.GRAY + "/heal is now on cooldown for 3 minutes.");
                             plugin.cooldownManager.setHealCooldown(senderUUID);
                         } else {
@@ -40,37 +40,32 @@ public class HealCommand implements CommandExecutor {
                             commandSender.sendMessage(ChatColor.GRAY + "Purchase Diamond rank to remove all command cooldowns! /buy");
                             return true;
                         }
+                    } else if (sender.hasPermission("foremost.heal.bypass")) {
+                        healPlayer(null);
+                        return true;
+                    } else {
+                        sender.sendMessage(Utilities.NO_PERMISSION);
+                        return true;
+                    }
+                }
+                case 1: {
+                    if(sender.hasPermission("foremost.heal.others")) {
+                        Player target = Bukkit.getServer().getPlayer(args[0]);
+                        if(target != null) {
+                            healPlayer(target);
+                            sender.sendMessage(ChatColor.GREEN + "You have healed " + target.getName() + ".");
+                            target.sendMessage(ChatColor.GREEN + "You have been healed by " + sender.getName() + ".");
+                        } else {
+                            sender.sendMessage(ChatColor.RED + args[0] + " is not online.");
+                        }
+                    } else {
+                        sender.sendMessage(Utilities.NO_PERMISSION);
                     }
                 }
                 default: {
                     commandSender.sendMessage(ChatColor.RED + "Usage: /heal");
                     return true;
                 }
-
-
-//            if(args.length == 0) {
-//                if(sender.hasPermission("foremost.heal")) {
-//                	((Player) sender).setHealth(((Player) sender).getHealthScale());
-//                    ((Player) sender).setFoodLevel(20);
-//                    sender.sendMessage(ChatColor.GREEN + "You have been healed.");
-//                } else {
-//                	sender.sendMessage(Utilities.NO_PERMISSION);
-//                }
-//            } else {
-//                if(sender.hasPermission("foremost.heal.others")) {
-//                	Player target = Bukkit.getServer().getPlayer(args[0]);
-//                    if(target != null) {
-//                        ((Player) target).setHealth(((Player) target).getHealthScale());
-//                        ((Player) target).setFoodLevel(20);
-//                        sender.sendMessage(ChatColor.GREEN + "You have healed " + target.getName() + ".");
-//                        target.sendMessage(ChatColor.GREEN + "You have been healed by " + sender.getName() + ".");
-//                    } else {
-//                        sender.sendMessage(ChatColor.RED + args[0] + " is not online.");
-//                    }
-//                } else {
-//                	sender.sendMessage(Utilities.NO_PERMISSION);
-//                }
-//            }
             }
         } else {
             sender.sendMessage(ChatColor.RED + "You can only use this command in-game.");
@@ -78,9 +73,14 @@ public class HealCommand implements CommandExecutor {
         }
     }
 
-    public void healPlayer() {
-        commandSender.setHealth(commandSender.getHealthScale());
-        commandSender.setFoodLevel(20);
-        commandSender.sendMessage(ChatColor.GREEN + "You have been healed.");
+    public void healPlayer(Player p) {
+        if (p != null) {
+            commandSender.setHealth(commandSender.getHealthScale());
+            commandSender.setFoodLevel(20);
+            commandSender.sendMessage(ChatColor.GREEN + "You have been healed.");
+        } else {
+            p.setHealth(commandSender.getHealthScale());
+            p.setFoodLevel(20);
+        }
     }
 }

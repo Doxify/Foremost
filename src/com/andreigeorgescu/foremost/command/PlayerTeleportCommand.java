@@ -36,14 +36,14 @@ public class PlayerTeleportCommand implements CommandExecutor {
                                     if(targetProfile.getTeleportRequest() != sender.getName()) {
                                         targetProfile.setTeleportRequest(sender.getName());
                                         TextComponent teleportAcceptMessage = new TextComponent("");
-                                        TextComponent acceptMessage = new TextComponent(ChatColor.GOLD + "≡ " + ChatColor.GREEN + "Click to accept " + target.getName() + "'s request");
+                                        TextComponent acceptMessage = new TextComponent(ChatColor.GOLD + "\n≡ " + ChatColor.GREEN + "Click to accept " + target.getName() + "'s request");
                                         TextComponent denyMessage = new TextComponent(ChatColor.GOLD + "≡ " + ChatColor.RED + "Click to deny " + target.getName() + "'s request");
                                         teleportAcceptMessage.setColor(ChatColor.GOLD);
                                         teleportAcceptMessage.addExtra(ChatColor.BOLD + sender.getName() + ChatColor.GOLD + " has requested to teleport to you.");
                                         acceptMessage.setColor(ChatColor.GREEN);
                                         acceptMessage.addExtra(ChatColor.GOLD + " ≡");
                                         denyMessage.setColor(ChatColor.RED);
-                                        denyMessage.addExtra(ChatColor.GOLD + " ≡");
+                                        denyMessage.addExtra(ChatColor.GOLD + " ≡\n");
 
                                         acceptMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Aaccept " + sender.getName() + "'s teleport request").create()));
                                         acceptMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept"));
@@ -82,14 +82,14 @@ public class PlayerTeleportCommand implements CommandExecutor {
                                     if(targetProfile.getTeleportRequest() != sender.getName()) {
                                         targetProfile.setTeleportRequest(sender.getName());
                                         TextComponent teleportAcceptMessage = new TextComponent("");
-                                        TextComponent acceptMessage = new TextComponent(ChatColor.GOLD + "≡ " + ChatColor.GREEN + "Click to accept " + sender.getName() + "'s request");
+                                        TextComponent acceptMessage = new TextComponent(ChatColor.GOLD + "\n≡ " + ChatColor.GREEN + "Click to accept " + sender.getName() + "'s request");
                                         TextComponent denyMessage = new TextComponent(ChatColor.GOLD + "≡ " + ChatColor.RED + "Click to deny " + sender.getName() + "'s request");
                                         teleportAcceptMessage.setColor(ChatColor.GOLD);
                                         teleportAcceptMessage.addExtra(ChatColor.BOLD + sender.getName() + ChatColor.GOLD + " has requested you to teleport to them.");
                                         acceptMessage.setColor(ChatColor.GREEN);
                                         acceptMessage.addExtra(ChatColor.GOLD + " ≡");
                                         denyMessage.setColor(ChatColor.RED);
-                                        denyMessage.addExtra(ChatColor.GOLD + " ≡");
+                                        denyMessage.addExtra(ChatColor.GOLD + " ≡\n");
 
                                         acceptMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Accept " + sender.getName() + "'s teleport request.").create()));
                                         acceptMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpahereaccept"));
