@@ -1,5 +1,7 @@
 # Foremost
 
-Commmands and Permissions
+## Command Information
 ![Commands and Permissions](https://imgur.com/M2WaihC.png)
+
+
 
