@@ -14,7 +14,6 @@ import com.andreigeorgescu.foremost.Utilities;
 public class HealCommand implements CommandExecutor {
 
     private Foremost plugin;
-    private Player commandSender;
 
     public HealCommand(Foremost p) {
         plugin = p;
@@ -23,36 +22,35 @@ public class HealCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
-            commandSender = (Player) sender;
+            Player p = (Player) sender;
             String senderUUID = ((Player) sender).getUniqueId().toString();
             Profile profile = plugin.profileManager.getProfile(((Player) sender).getUniqueId().toString());
             switch (args.length) {
                 // Sender ran "/heal"
                 case 0: {
-                    if(commandSender.hasPermission("foremost.heal.cooldown.3")) {
+                    if(sender.hasPermission("foremost.heal.cooldown.3")) {
                         if(plugin.cooldownManager.getHealCooldown(senderUUID, 180 ) == -1 || plugin.cooldownManager.getHealCooldown(senderUUID, 180 ) == 0 ) {
-                            healPlayer(null);
-                            commandSender.sendMessage(ChatColor.GRAY + "/heal is now on cooldown for 3 minutes.");
+                            healPlayer(p);
+                            sender.sendMessage(ChatColor.GRAY + "/heal is now on cooldown for 3 minutes.");
                             plugin.cooldownManager.setHealCooldown(senderUUID);
                         } else {
                             // TODO: Add proper time format here: 00:00
-                            commandSender.sendMessage(ChatColor.RED + "/heal is on cooldown for " + plugin.cooldownManager.getHealCooldown(senderUUID, 300) + " more seconds!");
-                            commandSender.sendMessage(ChatColor.GRAY + "Purchase Diamond rank to remove all command cooldowns! /buy");
-                            return true;
+                            sender.sendMessage(ChatColor.RED + "/heal is on cooldown for " + plugin.cooldownManager.getHealCooldown(senderUUID, 300) + " more seconds!");
+                            sender.sendMessage(ChatColor.GRAY + "Purchase Diamond rank to remove all command cooldowns! /buy");
                         }
-                    } else if (sender.hasPermission("foremost.heal.bypass")) {
-                        healPlayer(null);
-                        return true;
+                    } else if (p.hasPermission("foremost.heal.bypass")) {
+                        healPlayer(p);
                     } else {
                         sender.sendMessage(Utilities.NO_PERMISSION);
-                        return true;
                     }
+                    break;
                 }
+                // Sender ran "/heal <playername>"
                 case 1: {
                     if(sender.hasPermission("foremost.heal.others")) {
                         Player target = Bukkit.getServer().getPlayer(args[0]);
                         if(target != null) {
-                            healPlayer(target);
+                            healPlayer(p);
                             sender.sendMessage(ChatColor.GREEN + "You have healed " + target.getName() + ".");
                             target.sendMessage(ChatColor.GREEN + "You have been healed by " + sender.getName() + ".");
                         } else {
@@ -61,26 +59,23 @@ public class HealCommand implements CommandExecutor {
                     } else {
                         sender.sendMessage(Utilities.NO_PERMISSION);
                     }
+                    break;
                 }
                 default: {
-                    commandSender.sendMessage(ChatColor.RED + "Usage: /heal");
-                    return true;
+                    p.sendMessage(ChatColor.RED + "Usage: /heal");
+                    break;
                 }
             }
+            return true;
         } else {
             sender.sendMessage(ChatColor.RED + "You can only use this command in-game.");
             return true;
         }
     }
 
-    public void healPlayer(Player p) {
-        if (p != null) {
-            commandSender.setHealth(commandSender.getHealthScale());
-            commandSender.setFoodLevel(20);
-            commandSender.sendMessage(ChatColor.GREEN + "You have been healed.");
-        } else {
-            p.setHealth(commandSender.getHealthScale());
-            p.setFoodLevel(20);
-        }
+    public void healPlayer(Player commandSender) {
+        commandSender.setHealth(commandSender.getHealthScale());
+        commandSender.setFoodLevel(20);
+        commandSender.sendMessage(ChatColor.GREEN + "You have been healed.");
     }
 }

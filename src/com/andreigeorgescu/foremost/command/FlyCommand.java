@@ -14,10 +14,12 @@ public class FlyCommand implements CommandExecutor {
         if(sender instanceof Player) {
             if(sender.hasPermission("foremost.fly")) {
                if(((Player) sender).isFlying()) {
+                   ((Player) sender).setAllowFlight(false);
                    ((Player) sender).setFlying(false);
                    sender.sendMessage(ChatColor.RED + "Flight has been disabled.");
                    return true;
                } else {
+                   ((Player) sender).setAllowFlight(true);
                    ((Player) sender).setFlying(true);
                    sender.sendMessage(ChatColor.GREEN + "Flight has been enabled.");
                    return true;

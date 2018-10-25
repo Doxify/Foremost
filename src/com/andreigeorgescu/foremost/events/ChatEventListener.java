@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.text.DecimalFormat;
 import java.util.Random;
 
 public class ChatEventListener implements Listener {
@@ -36,7 +37,7 @@ public class ChatEventListener implements Listener {
             event.setMessage(formatted);
             event.setCancelled(true);
             TextComponent message = createChatComponent(event);
-            sendMessageToAllPlayers(message, event.getPlayer());
+            sendMessageToAllPlayers(message);
 
         }
 
@@ -53,18 +54,23 @@ public class ChatEventListener implements Listener {
         String groupPrefixRaw = plugin.chat.getGroupPrefix(event.getPlayer().getWorld().getName(), playerGroup);
         String groupPrefixFormatted = ChatColor.translateAlternateColorCodes('&', groupPrefixRaw);
 
+        DecimalFormat df = new DecimalFormat("#,##0.00");
+
+
         TextComponent message = new TextComponent(groupPrefixFormatted + event.getPlayer().getName() + ChatColor.WHITE + ": " + chatColor + formatted);
 
-        ComponentBuilder hoverComponent = new ComponentBuilder(groupPrefixFormatted + event.getPlayer().getName() + "'s profile" + "\n"
+        ComponentBuilder hoverComponent = new ComponentBuilder(groupPrefixFormatted + event.getPlayer().getName() + "\n"
                                                                   + ChatColor.WHITE + " * Rank: " + ChatColor.GREEN + plugin.perms.getPrimaryGroup(event.getPlayer()) + "\n"
-                                                                  + ChatColor.WHITE + " * Money: " + ChatColor.GREEN + plugin.econ.getBalance(event.getPlayer()));
+                                                                  + ChatColor.WHITE + " * Money: " + ChatColor.GREEN + df.format(plugin.econ.getBalance(event.getPlayer())) + "\n"
+                                                                  + ChatColor.WHITE + " * Join Number: " + ChatColor.GREEN + profile.getJoinNumber() + "\n"
+                                                                  + ChatColor.WHITE + " * Join Date: " + ChatColor.GREEN + profile.getFirstJoined());
 
         message.setHoverEvent(new HoverEvent( HoverEvent.Action.SHOW_TEXT, hoverComponent.create()));
 
         return message;
     }
 
-    public void sendMessageToAllPlayers(TextComponent message, Player sender) {
+    public void sendMessageToAllPlayers(TextComponent message) {
         for(Player p : Bukkit.getServer().getOnlinePlayers()) {
             p.spigot().sendMessage(message);
         }

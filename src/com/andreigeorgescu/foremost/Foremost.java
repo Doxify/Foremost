@@ -2,6 +2,7 @@ package com.andreigeorgescu.foremost;
 
 import java.util.logging.Logger;
 
+import com.andreigeorgescu.foremost.events.PlayerTeleportEventListener;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -36,6 +37,7 @@ public class Foremost extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new EventsListener(this), this);
         this.getServer().getPluginManager().registerEvents(new ColoredSignsEventListener(), this);
         this.getServer().getPluginManager().registerEvents(new ChatEventListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerTeleportEventListener(), this);
         setupPermissions();
         setupChat();
         setupEcon();
