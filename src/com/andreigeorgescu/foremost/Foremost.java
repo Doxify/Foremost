@@ -38,10 +38,15 @@ public class Foremost extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ColoredSignsEventListener(), this);
         this.getServer().getPluginManager().registerEvents(new ChatEventListener(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerTeleportEventListener(), this);
-        setupPermissions();
-        setupChat();
-        setupEcon();
-        log.info("Vault permissions, chat, and economy has been loaded.");
+
+        try {
+            setupPermissions();
+            setupChat();
+            setupEcon();
+            log.info("Vault permissions, chat, and economy has been loaded.");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         // =============================================
         // Loading Config
@@ -88,6 +93,7 @@ public class Foremost extends JavaPlugin {
         // Saving config to file
         // =============================================
     	fileManager.saveConfigFile("./plugins/Foremost", "config.json", config);
+    	cooldownManager.handleServerClose();
     }
 
     private boolean setupPermissions() {

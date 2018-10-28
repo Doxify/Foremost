@@ -1,6 +1,7 @@
 package com.andreigeorgescu.foremost.events;
 
 import com.andreigeorgescu.foremost.Foremost;
+import com.andreigeorgescu.foremost.Profile;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -12,15 +13,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.text.DecimalFormat;
-import java.util.Random;
 
 public class ChatEventListener implements Listener {
 
     private final Foremost plugin;
-    private final String[] colors = {"&f", "&a", "&6", "&e", "&1", "&c", "&d", "&7"};
-
+    private String server;
     public ChatEventListener(Foremost p) {
         this.plugin = p;
+        server = p.nsaPlugin.getServerName();
     }
 
     @EventHandler
@@ -48,22 +48,17 @@ public class ChatEventListener implements Listener {
         String formatted = ChatColor.translateAlternateColorCodes('&', original);
         String uuid = event.getPlayer().getUniqueId().toString();
         com.saphron.nsa.Profile profile = plugin.nsaPlugin.getProfileManager().getProfile(uuid);
+        String nickname = profile.getNickname();
         String chatColor = ChatColor.translateAlternateColorCodes('&', profile.getChatColor());
         String playerGroup = plugin.perms.getPrimaryGroup(event.getPlayer());
 
         String groupPrefixRaw = plugin.chat.getGroupPrefix(event.getPlayer().getWorld().getName(), playerGroup);
         String groupPrefixFormatted = ChatColor.translateAlternateColorCodes('&', groupPrefixRaw);
 
-        DecimalFormat df = new DecimalFormat("#,##0.00");
 
+        TextComponent message = new TextComponent(groupPrefixFormatted + (nickname == null ? event.getPlayer().getName() : nickname) + ChatColor.WHITE + ": " + chatColor + formatted);
 
-        TextComponent message = new TextComponent(groupPrefixFormatted + event.getPlayer().getName() + ChatColor.WHITE + ": " + chatColor + formatted);
-
-        ComponentBuilder hoverComponent = new ComponentBuilder(groupPrefixFormatted + event.getPlayer().getName() + "\n"
-                                                                  + ChatColor.WHITE + " * Rank: " + ChatColor.GREEN + plugin.perms.getPrimaryGroup(event.getPlayer()) + "\n"
-                                                                  + ChatColor.WHITE + " * Money: " + ChatColor.GREEN + df.format(plugin.econ.getBalance(event.getPlayer())) + "\n"
-                                                                  + ChatColor.WHITE + " * Join Number: " + ChatColor.GREEN + profile.getJoinNumber() + "\n"
-                                                                  + ChatColor.WHITE + " * Join Date: " + ChatColor.GREEN + profile.getFirstJoined());
+        ComponentBuilder hoverComponent = getMessageHoverComponent(event.getPlayer(), profile, groupPrefixFormatted);
 
         message.setHoverEvent(new HoverEvent( HoverEvent.Action.SHOW_TEXT, hoverComponent.create()));
 
@@ -74,5 +69,21 @@ public class ChatEventListener implements Listener {
         for(Player p : Bukkit.getServer().getOnlinePlayers()) {
             p.spigot().sendMessage(message);
         }
+    }
+
+    public ComponentBuilder getMessageHoverComponent(Player player, com.saphron.nsa.Profile profile, String groupPrefixFormatted) {
+        DecimalFormat df = new DecimalFormat("#,##0.00");
+        StringBuilder hoverComponent = new StringBuilder();
+
+        hoverComponent.append(groupPrefixFormatted + player.getName() + "\n");
+
+        if(!plugin.nsaPlugin.getServerName().toUpperCase().contains("LOBBY")) {
+            hoverComponent.append(ChatColor.WHITE + " * Money: " + ChatColor.GREEN + df.format(plugin.econ.getBalance(player)) + "\n");
+        }
+
+        hoverComponent.append(ChatColor.WHITE + " * Join Number: " + ChatColor.GREEN + profile.getJoinNumber() + "\n");
+        hoverComponent.append(ChatColor.WHITE + " * Join Date: " + ChatColor.GREEN + profile.getFirstJoined());
+
+        return new ComponentBuilder(hoverComponent.toString());
     }
 }

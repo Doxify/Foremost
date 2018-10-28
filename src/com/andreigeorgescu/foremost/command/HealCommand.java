@@ -29,14 +29,21 @@ public class HealCommand implements CommandExecutor {
                 // Sender ran "/heal"
                 case 0: {
                     if(sender.hasPermission("foremost.heal.cooldown.3")) {
-                        if(plugin.cooldownManager.getHealCooldown(senderUUID, 180 ) == -1 || plugin.cooldownManager.getHealCooldown(senderUUID, 180 ) == 0 ) {
+                        if(!plugin.cooldownManager.hasCooldown(senderUUID, "HEAL")) {
                             healPlayer(p);
                             sender.sendMessage(ChatColor.GRAY + "/heal is now on cooldown for 3 minutes.");
-                            plugin.cooldownManager.setHealCooldown(senderUUID);
+                            plugin.cooldownManager.addCooldown(senderUUID, "HEAL", 180);
                         } else {
                             // TODO: Add proper time format here: 00:00
-                            sender.sendMessage(ChatColor.RED + "/heal is on cooldown for " + plugin.cooldownManager.getHealCooldown(senderUUID, 300) + " more seconds!");
-                            sender.sendMessage(ChatColor.GRAY + "Purchase Diamond rank to remove all command cooldowns! /buy");
+                            if(plugin.cooldownManager.hasCooldownExpired(senderUUID, "HEAL")) {
+                                plugin.cooldownManager.deleteCooldown(senderUUID, "HEAL");
+                                healPlayer(p);
+                                sender.sendMessage(ChatColor.GRAY + "/heal is now on cooldown for 3 minutes.");
+                                plugin.cooldownManager.addCooldown(senderUUID, "HEAL", 180);
+                            } else {
+                                sender.sendMessage(ChatColor.RED + "/heal is on cooldown for " + plugin.cooldownManager.getRemainingCooldown(senderUUID, "HEAL") + " more seconds!");
+                                sender.sendMessage(ChatColor.GRAY + "Purchase Diamond rank to remove all command cooldowns! /buy");
+                            }
                         }
                     } else if (p.hasPermission("foremost.heal.bypass")) {
                         healPlayer(p);
