@@ -175,3 +175,8 @@ commands:
       usage: |
              Usages:
              /fly
+  staff:
+      description: Toggle staff mode
+      usage: |
+             Usages:
+             /staff

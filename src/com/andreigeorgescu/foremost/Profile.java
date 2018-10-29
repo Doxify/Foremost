@@ -7,11 +7,24 @@ public class Profile {
 	private String lastReply;
 	private Location lastLocation;
 	private String teleportRequest;
+	private boolean staffMode;
 
 	public Profile(String lr) {
+		setStaffMode(false);
 		setLastReply(lr);
 		setLastLocation(null);
 		setTeleportRequest(null);
+	}
+
+	// -------------------------------------------------------------
+	// staffMode methods
+	// -------------------------------------------------------------
+	public boolean getStaffMode() {
+		return staffMode;
+	}
+
+	public void setStaffMode(boolean sm) {
+		staffMode = sm;
 	}
 
 	// -------------------------------------------------------------

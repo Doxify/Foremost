@@ -2,7 +2,7 @@ package com.andreigeorgescu.foremost;
 
 import java.util.logging.Logger;
 
-import com.andreigeorgescu.foremost.events.PlayerTeleportEventListener;
+import com.andreigeorgescu.foremost.events.*;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -11,9 +11,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.andreigeorgescu.foremost.command.*;
-import com.andreigeorgescu.foremost.events.EventsListener;
-import com.andreigeorgescu.foremost.events.ChatEventListener;
-import com.andreigeorgescu.foremost.events.ColoredSignsEventListener;
 
 import com.saphron.nsa.NSA;
 
@@ -26,6 +23,7 @@ public class Foremost extends JavaPlugin {
 	public FileManager fileManager = new FileManager(this);
 	public MessageManager messageManager = new MessageManager(this);
 	public CooldownManager cooldownManager = new CooldownManager(this);
+	public StaffModeManager staffModeManager = new StaffModeManager();
 	public Config config = null;
     public static Permission perms = null;
     public static Chat chat = null;
@@ -38,6 +36,7 @@ public class Foremost extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ColoredSignsEventListener(), this);
         this.getServer().getPluginManager().registerEvents(new ChatEventListener(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerTeleportEventListener(), this);
+        this.getServer().getPluginManager().registerEvents(new StaffModeEventListener(this), this);
 
         try {
             setupPermissions();
@@ -85,6 +84,7 @@ public class Foremost extends JavaPlugin {
         getCommand("give").setExecutor(new GiveCommand());
         getCommand("tpa").setExecutor(new PlayerTeleportCommand(this));
         getCommand("fly").setExecutor(new FlyCommand());
+        getCommand("staff").setExecutor(new StaffModeCommand(this));
 
     }
     
@@ -94,6 +94,7 @@ public class Foremost extends JavaPlugin {
         // =============================================
     	fileManager.saveConfigFile("./plugins/Foremost", "config.json", config);
     	cooldownManager.handleServerClose();
+        staffModeManager.handleServerClose();
     }
 
     private boolean setupPermissions() {
