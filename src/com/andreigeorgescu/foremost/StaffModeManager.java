@@ -6,12 +6,17 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.*;
 
 public class StaffModeManager {
+
+    Foremost plugin;
+
+    public StaffModeManager(Foremost p) {
+        plugin = p;
+    }
 
     private HashMap<String, StaffMode> staff = new HashMap<>();
 
@@ -41,14 +46,25 @@ public class StaffModeManager {
     public void addStaff(String uuid) {
         if(!hasStaffMode(uuid)) {
             staff.put(uuid, new StaffMode(uuid));
+
+            // Making sure all players who are in staff mode are vanished.
+            if(!plugin.nsaPlugin.getProfileManager().getProfile(uuid).getVanish()) {
+                Player p = Bukkit.getPlayer(staff.get(uuid).getPlayerUUID());
+                if(p != null) {
+                    p.performCommand("vanish");
+                }
+            }
+
         }
     }
 
     public void removeStaff(String uuid) {
         if(hasStaffMode(uuid)) {
             StaffMode staffMode = staff.get(uuid);
+            Player p = Bukkit.getPlayer(staffMode.getPlayerUUID());
             staffMode.quitStaffMode();
             staff.remove(uuid);
+
         }
     }
 
@@ -146,7 +162,7 @@ public class StaffModeManager {
                                                               " ",
                                                               ChatColor.YELLOW + "Click to teleport" ));
 
-            staffGuiItemMeta.setDisplayName(ChatColor.GREEN + target.getName());
+            staffGuiItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.chat.getPlayerPrefix(target)) + target.getName());
             staffGuiItemMeta.setLore(lore);
             staffGuiItem.setItemMeta(staffGuiItemMeta);
 

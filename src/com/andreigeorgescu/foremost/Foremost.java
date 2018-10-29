@@ -23,7 +23,7 @@ public class Foremost extends JavaPlugin {
 	public FileManager fileManager = new FileManager(this);
 	public MessageManager messageManager = new MessageManager(this);
 	public CooldownManager cooldownManager = new CooldownManager(this);
-	public StaffModeManager staffModeManager = new StaffModeManager();
+	public StaffModeManager staffModeManager = new StaffModeManager(this);
 	public Config config = null;
     public static Permission perms = null;
     public static Chat chat = null;

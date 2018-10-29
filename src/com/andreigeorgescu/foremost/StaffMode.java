@@ -66,7 +66,7 @@ public class StaffMode {
     private void generateStaffModeInventory(Player p) {
         p.getInventory().setItem(0, createGuiItem(ChatColor.RED + "Teleporter", new ArrayList<String>(Arrays.asList(ChatColor.GRAY + "Right Click: " + ChatColor.RED + "Teleport through walls", ChatColor.GRAY + "Left Click: " + ChatColor.RED + "Teleport to a block")), Material.COMPASS, 0));
         p.getInventory().setItem(8, createGuiItem(ChatColor.RED + "Online Staff", new ArrayList<String>(Arrays.asList(ChatColor.GRAY + "View online staff")), Material.PAPER, 0));
-        p.getInventory().setItem(1, createGuiItem(ChatColor.RED + "Random Teleport", new ArrayList<String>(Arrays.asList(ChatColor.GRAY + "Teleport to a random player")), Material.EYE_OF_ENDER, 0));
+        p.getInventory().setItem(1, createGuiItem(ChatColor.RED + "Random Teleport", new ArrayList<String>(Arrays.asList(ChatColor.GRAY + "Teleport to a random player")), Material.NETHER_STAR, 0));
     }
 
     private ItemStack createGuiItem(String name, ArrayList<String> lore, Material mat, int meta) {
