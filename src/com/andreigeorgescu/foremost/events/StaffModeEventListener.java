@@ -30,7 +30,7 @@ public class StaffModeEventListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        if(p.hasPermission("foremost.staffmode.force") && !plugin.staffModeManager.hasStaffMode(p.getUniqueId().toString())) {
+        if(p.hasPermission("foremost.staffmode.force") && !plugin.staffModeManager.hasStaffMode(p.getUniqueId().toString()) && !p.hasPermission("foremost.staffmode.bypass")) {
             p.performCommand("staff");
             p.sendMessage(ChatColor.YELLOW + "You've been forced into staff mode.");
         }
@@ -52,7 +52,7 @@ public class StaffModeEventListener implements Listener {
                 e.setCancelled(true);
                 p.sendMessage(ChatColor.RED + "Vanish is required while staff mode is enabled.");
             } else if(e.getMessage().toUpperCase().contains("STAFF")) {
-                if(p.hasPermission("foremost.staffmode.force")) {
+                if(p.hasPermission("foremost.staffmode.force") && !p.hasPermission("foremost.staffmode.bypass")) {
                     e.setCancelled(true);
                     p.sendMessage(ChatColor.RED + "You are not allowed to exit staff mode.");
                 }
@@ -66,21 +66,56 @@ public class StaffModeEventListener implements Listener {
         if(p != null) {
             if(plugin.staffModeManager.hasStaffMode(p.getUniqueId().toString())) {
                 e.setCancelled(true);
-                ItemStack clickedItem = e.getCurrentItem();
-                if(clickedItem.getType() == Material.SKULL_ITEM) {
-                    String targetName = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
-                    Player targetPlayer = Bukkit.getPlayer(targetName);
-                    if (targetPlayer != null) {
-                        if(targetPlayer.getName() != p.getName()) {
-                            p.teleport(targetPlayer.getLocation());
-                            p.sendMessage(ChatColor.GREEN + "You've been teleported to " + targetPlayer.getName());
+
+                switch(e.getClickedInventory().getName().toUpperCase()) {
+                    case "ONLINE STAFF": {
+                        ItemStack clickedItem = e.getCurrentItem();
+                        String targetName = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
+                        Player targetPlayer = Bukkit.getPlayer(targetName);
+
+                        if (targetPlayer != null) {
+                            if(targetPlayer.getName() != p.getName()) {
+                                p.teleport(targetPlayer.getLocation());
+                                p.sendMessage(ChatColor.GREEN + "You've been teleported to " + targetPlayer.getName());
+                                break;
+                            } else {
+                                p.sendMessage(ChatColor.RED + "You cannot teleport to yourself.");
+                                break;
+                            }
                         } else {
-                            p.sendMessage(ChatColor.RED + "You cannot teleport to yourself.");
+                            p.sendMessage(ChatColor.RED + targetName + " is not online.");
+                            break;
                         }
-                    } else {
-                        p.sendMessage(ChatColor.RED + targetName + " is not online.");
+                    }
+                    case "SERVER TOOLS": {
+                        ItemStack clickedItem = e.getCurrentItem();
+                        String itemName = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
+
+                        switch(itemName.toUpperCase()) {
+                            case "UNMUTE CHAT": {
+                                p.performCommand("chat unmute");
+                                p.openInventory(plugin.staffModeManager.getServerToolsGui(p));
+                                break;
+                            }
+                            case "MUTE CHAT": {
+                                p.performCommand("chat mute");
+                                p.openInventory(plugin.staffModeManager.getServerToolsGui(p));
+                                break;
+                            }
+                            case "CLEAR CHAT": {
+                                p.performCommand("chat clear");
+                                break;
+                            }
+                            default: {
+                                break;
+                            }
+                        }
+                    }
+                    default: {
+                        break;
                     }
                 }
+
             }
         }
     }
@@ -98,11 +133,12 @@ public class StaffModeEventListener implements Listener {
     public void onPlayerUse(PlayerInteractEvent e){
         Player p = e.getPlayer();
         if(plugin.staffModeManager.hasStaffMode(p.getUniqueId().toString())) {
-            StaffMode sm = plugin.staffModeManager.getStaffMode(p.getUniqueId().toString());
+            e.setCancelled(true);
+
             if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
                 String itemName = ChatColor.stripColor(p.getItemInHand().getItemMeta().getDisplayName());
-                switch (itemName) {
-                    case "Random Teleport": {
+                switch (itemName.toUpperCase()) {
+                    case "RANDOM TELEPORT": {
                         e.setCancelled(true);
                         Player teleportTarget = Bukkit.getPlayer(plugin.staffModeManager.handleRandomTeleport(p));
                         if(teleportTarget != null) {
@@ -113,12 +149,20 @@ public class StaffModeEventListener implements Listener {
                         }
                         break;
                     }
-                    case "Online Staff": {
-                        e.setCancelled(true);
+                    case "SPAWN": {
+                        p.performCommand("spawn");
+                        break;
+                    }
+                    case "ONLINE STAFF": {
                         Inventory onlineStaff = plugin.staffModeManager.getOnlineStaffGUI(p);
                         if(onlineStaff != null) {
                             p.openInventory(onlineStaff);
                         }
+                        break;
+                    }
+                    case "SERVER TOOLS": {
+                        Inventory serverTools = plugin.staffModeManager.getServerToolsGui(p);
+                        p.openInventory(serverTools);
                     }
                     default: {
                         break;

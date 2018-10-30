@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.*;
@@ -114,6 +115,51 @@ public class StaffModeManager {
     }
 
     // --------------------------------------------------------- //
+    //  Function: getServerToolsGui()
+    //  Parameters: Player
+    //  Returns: Inventory
+    //  Description: Gets a list of all server settings and displays
+    //               it nicely in a GUI.
+    // --------------------------------------------------------- //
+    public Inventory getServerToolsGui(Player p) {
+        int inventorySize = 9;
+        Inventory inv = Bukkit.createInventory(null, inventorySize, "Server Tools");
+        boolean chatMuted = plugin.chatManager.getChatMuteSetting();
+
+        inv.addItem(createServerToolsGuiItem(
+            (chatMuted ? ChatColor.GREEN + "Unmute Chat" : ChatColor.RED + "Mute Chat"),
+            (chatMuted ? new ArrayList<String>(Arrays.asList(ChatColor.GRAY + "Click to unmute chat", "", ChatColor.GRAY + "/chat unmute")) : new ArrayList<String>(Arrays.asList(ChatColor.GRAY + "Click to mute chat", "", ChatColor.GRAY + "/chat mute"))),
+            (chatMuted ? Material.GLOWSTONE_DUST : Material.REDSTONE)
+        ));
+
+        inv.addItem(createServerToolsGuiItem(
+            ChatColor.RED + "Clear Chat",
+            new ArrayList<String>(Arrays.asList(ChatColor.GRAY + "Click to clear chat", "", ChatColor.GRAY + "/chat clear")),
+            Material.COMMAND
+        ));
+
+        return inv;
+    }
+
+    // --------------------------------------------------------- //
+    //  Function: createServerToolsGuiItem()
+    //  Parameters:
+    //  Returns: ItemStack
+    //  Description:
+    //
+    // --------------------------------------------------------- //
+    public ItemStack createServerToolsGuiItem(String name, List<String> lore, Material guiMaterial) {
+        ItemStack item = new ItemStack(guiMaterial, 1);
+        ItemMeta itemMeta = item.getItemMeta();
+        itemMeta.setDisplayName(name);
+        itemMeta.setLore(lore);
+        item.setItemMeta(itemMeta);
+
+        return item;
+    }
+
+
+    // --------------------------------------------------------- //
     //  Function: getOnlineStaffGUI()
     //  Parameters: Player
     //  Returns: Inventory
@@ -148,7 +194,7 @@ public class StaffModeManager {
 
     // --------------------------------------------------------- //
     //  Function: createOnlineStaffGuiItem()
-    //  Parameters: String
+    //  Parameters: UUID
     //  Returns: ItemStack
     //  Description: Creates an ItemStack for on online staff
     //               member.
@@ -158,11 +204,14 @@ public class StaffModeManager {
         if(target != null) {
             ItemStack staffGuiItem = getHead(target);
             SkullMeta staffGuiItemMeta = (SkullMeta) staffGuiItem.getItemMeta();
-            List<String> lore = new ArrayList<>(Arrays.asList(ChatColor.WHITE + "Staff Mode: " + (hasStaffMode(uuid.toString()) == true ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"),
-                                                              " ",
-                                                              ChatColor.YELLOW + "Click to teleport" ));
+            List<String> lore = new ArrayList<>(Arrays.asList(
+                ChatColor.WHITE + "Rank: " + ChatColor.translateAlternateColorCodes('&', plugin.chat.getPlayerPrefix(target)),
+                ChatColor.WHITE + "Staff Mode: " + (hasStaffMode(uuid.toString()) == true ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"),
+                " ",
+                ChatColor.YELLOW + "Click to teleport"
+            ));
 
-            staffGuiItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.chat.getPlayerPrefix(target)) + target.getName());
+            staffGuiItemMeta.setDisplayName(ChatColor.GREEN + target.getName());
             staffGuiItemMeta.setLore(lore);
             staffGuiItem.setItemMeta(staffGuiItemMeta);
 

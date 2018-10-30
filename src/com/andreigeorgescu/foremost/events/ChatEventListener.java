@@ -78,11 +78,11 @@ public class ChatEventListener implements Listener {
         hoverComponent.append(groupPrefixFormatted + player.getName() + "\n");
 
         if(!plugin.nsaPlugin.getServerName().toUpperCase().contains("LOBBY")) {
-            hoverComponent.append(ChatColor.WHITE + " * Money: " + ChatColor.GREEN + df.format(plugin.econ.getBalance(player)) + "\n");
+            hoverComponent.append(ChatColor.WHITE + " Money: " + ChatColor.GREEN + df.format(plugin.econ.getBalance(player)) + "\n");
         }
 
-        hoverComponent.append(ChatColor.WHITE + " * Join Number: " + ChatColor.GREEN + profile.getJoinNumber() + "\n");
-        hoverComponent.append(ChatColor.WHITE + " * Join Date: " + ChatColor.GREEN + profile.getFirstJoined());
+        hoverComponent.append(ChatColor.WHITE + " Join Number: " + ChatColor.GREEN + profile.getJoinNumber() + "\n");
+        hoverComponent.append(ChatColor.WHITE + " Join Date: " + ChatColor.GREEN + profile.getFirstJoined());
 
         return new ComponentBuilder(hoverComponent.toString());
     }
