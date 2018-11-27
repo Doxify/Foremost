@@ -81,10 +81,11 @@ public class Foremost extends JavaPlugin {
         getCommand("enderchest").setExecutor(new EnderChestCommand());
         getCommand("workbench").setExecutor(new WorkBenchCommand());
         getCommand("teleport").setExecutor(new TeleportCommand());
-        getCommand("give").setExecutor(new GiveCommand());
+//        getCommand("give").setExecutor(new GiveCommand());
         getCommand("tpa").setExecutor(new PlayerTeleportCommand(this));
         getCommand("fly").setExecutor(new FlyCommand());
         getCommand("staff").setExecutor(new StaffModeCommand(this));
+        getCommand("help").setExecutor(new HelpCommand());
 
     }
     

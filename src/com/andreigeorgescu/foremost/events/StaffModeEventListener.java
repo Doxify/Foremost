@@ -1,10 +1,8 @@
 package com.andreigeorgescu.foremost.events;
 
 import com.andreigeorgescu.foremost.Foremost;
-import com.andreigeorgescu.foremost.StaffMode;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,7 +28,7 @@ public class StaffModeEventListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        if(p.hasPermission("foremost.staffmode.force") && !plugin.staffModeManager.hasStaffMode(p.getUniqueId().toString()) && !p.hasPermission("foremost.staffmode.bypass")) {
+        if (p.hasPermission("foremost.staffmode.force") && !plugin.staffModeManager.hasStaffMode(p.getUniqueId().toString()) && !p.hasPermission("foremost.staffmode.bypass")) {
             p.performCommand("staff");
             p.sendMessage(ChatColor.YELLOW + "You've been forced into staff mode.");
         }
@@ -52,7 +50,7 @@ public class StaffModeEventListener implements Listener {
                 e.setCancelled(true);
                 p.sendMessage(ChatColor.RED + "Vanish is required while staff mode is enabled.");
             } else if(e.getMessage().toUpperCase().contains("STAFF")) {
-                if(p.hasPermission("foremost.staffmode.force") && !p.hasPermission("foremost.staffmode.bypass")) {
+                if (p.hasPermission("foremost.staffmode.force") && !p.hasPermission("foremost.staffmode.bypass")) {
                     e.setCancelled(true);
                     p.sendMessage(ChatColor.RED + "You are not allowed to exit staff mode.");
                 }
@@ -130,7 +128,7 @@ public class StaffModeEventListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerUse(PlayerInteractEvent e){
+    public void onPlayerUse(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         if(plugin.staffModeManager.hasStaffMode(p.getUniqueId().toString())) {
             e.setCancelled(true);
@@ -171,6 +169,4 @@ public class StaffModeEventListener implements Listener {
             }
         }
     }
-
-
 }
