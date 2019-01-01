@@ -205,7 +205,7 @@ public class StaffModeManager {
             ItemStack staffGuiItem = getHead(target);
             SkullMeta staffGuiItemMeta = (SkullMeta) staffGuiItem.getItemMeta();
             List<String> lore = new ArrayList<>(Arrays.asList(
-                ChatColor.WHITE + "Rank: " + ChatColor.translateAlternateColorCodes('&', plugin.chat.getPlayerPrefix(target)),
+                ChatColor.WHITE + "Rank: " + ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix(target)),
                 ChatColor.WHITE + "Staff Mode: " + (hasStaffMode(uuid.toString()) == true ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"),
                 " ",
                 ChatColor.YELLOW + "Click to teleport"

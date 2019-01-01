@@ -27,7 +27,7 @@ public class StaffModeCommand implements CommandExecutor {
                     return true;
                 } else {
                     plugin.staffModeManager.removeStaff(p.getUniqueId().toString());
-                    p.sendMessage(ChatColor.RED + "Staff mode has been disabled.");
+
                     return true;
                 }
             } else {

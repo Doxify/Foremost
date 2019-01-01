@@ -23,8 +23,8 @@ public class MessageManager {
 	
 	public boolean sendMessage(Player sender, Player target, String message) {
 		if(sender instanceof Player && target instanceof Player) {
-			String senderPrefix = ChatColor.translateAlternateColorCodes('&', plugin.chat.getPlayerPrefix((Player) sender));
-			String targetPrefix = ChatColor.translateAlternateColorCodes('&', plugin.chat.getPlayerPrefix((Player) target));
+			String senderPrefix = ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix((Player) sender));
+			String targetPrefix = ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix((Player) target));
 			sender.sendMessage(ChatColor.LIGHT_PURPLE + "(To " + targetPrefix + target.getName() + ChatColor.LIGHT_PURPLE + ") " + message);
     		target.sendMessage(ChatColor.LIGHT_PURPLE + "(From " + senderPrefix + sender.getName() + ChatColor.LIGHT_PURPLE + ") " + message);
     		
@@ -58,8 +58,8 @@ public class MessageManager {
 		for(String uuid : plugin.nsaPlugin.getProfileManager().getSocialSpys()) {
 			UUID uuidFromString = UUID.fromString(uuid);
 			Player socialSpy = Bukkit.getPlayer(uuidFromString);
-			String senderPrefix = ChatColor.translateAlternateColorCodes('&', plugin.chat.getPlayerPrefix((Player) sender));
-			String targetPrefix = ChatColor.translateAlternateColorCodes('&', plugin.chat.getPlayerPrefix((Player) target));
+			String senderPrefix = ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix((Player) sender));
+			String targetPrefix = ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix((Player) target));
 			if(socialSpy != null) {
 				socialSpy.sendMessage(ChatColor.BLUE + "[SS] " + senderPrefix + sender.getName() + ChatColor.LIGHT_PURPLE + " > " + targetPrefix + target.getName() + ChatColor.LIGHT_PURPLE + ": " + message);
 			}

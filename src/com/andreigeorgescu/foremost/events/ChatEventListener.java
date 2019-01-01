@@ -50,9 +50,9 @@ public class ChatEventListener implements Listener {
         com.saphron.nsa.Profile profile = plugin.nsaPlugin.getProfileManager().getProfile(uuid);
         String nickname = profile.getNickname();
         String chatColor = ChatColor.translateAlternateColorCodes('&', profile.getChatColor());
-        String playerGroup = plugin.perms.getPrimaryGroup(event.getPlayer());
+        String playerGroup = plugin.nsaPlugin.getPerms().getPrimaryGroup(event.getPlayer());
 
-        String groupPrefixRaw = plugin.chat.getGroupPrefix(event.getPlayer().getWorld().getName(), playerGroup);
+        String groupPrefixRaw = plugin.nsaPlugin.getChat().getGroupPrefix(event.getPlayer().getWorld().getName(), playerGroup);
         String groupPrefixFormatted = ChatColor.translateAlternateColorCodes('&', groupPrefixRaw);
 
 
@@ -78,7 +78,7 @@ public class ChatEventListener implements Listener {
         hoverComponent.append(groupPrefixFormatted + player.getName() + "\n");
 
         if(!plugin.nsaPlugin.getServerName().toUpperCase().contains("LOBBY")) {
-            hoverComponent.append(ChatColor.WHITE + " Money: " + ChatColor.GREEN + df.format(plugin.econ.getBalance(player)) + "\n");
+            hoverComponent.append(ChatColor.WHITE + " Money: " + ChatColor.GREEN + df.format(plugin.nsaPlugin.getEcon().getBalance(player)) + "\n");
         }
 
         hoverComponent.append(ChatColor.WHITE + " Join Number: " + ChatColor.GREEN + profile.getJoinNumber() + "\n");

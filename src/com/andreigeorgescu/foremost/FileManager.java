@@ -104,11 +104,11 @@ public class FileManager {
 		JSONObject serializedObj = new JSONObject();
 		
 		serializedObj.put("world" , locToSerialize.getWorld().getName());
-		serializedObj.put("x" , locToSerialize.getX());
-		serializedObj.put("y" , locToSerialize.getY());
-		serializedObj.put("z" , locToSerialize.getZ());
-		serializedObj.put("yaw", locToSerialize.getYaw());
-		serializedObj.put("pitch", locToSerialize.getPitch());
+		serializedObj.put("x" , String.valueOf(locToSerialize.getX()));
+		serializedObj.put("y" , String.valueOf(locToSerialize.getY()));
+		serializedObj.put("z" , String.valueOf(locToSerialize.getZ()));
+		serializedObj.put("yaw", String.valueOf(locToSerialize.getYaw()));
+		serializedObj.put("pitch", String.valueOf(locToSerialize.getPitch()));
 
 		
 		return serializedObj;
@@ -130,7 +130,14 @@ public class FileManager {
 	}
 	
 	public Location deserializeLocation(JSONObject jsonLocation) {
-		Location locToDeserialize = new Location(plugin.getServer().getWorld((String) jsonLocation.get("world")), (double) jsonLocation.get("x"), (double) jsonLocation.get("y"), (double) jsonLocation.get("z"), ((Double) jsonLocation.get("yaw")).floatValue(), ((Double) jsonLocation.get("pitch")).floatValue());
+		Location locToDeserialize = new Location(plugin.getServer().getWorld(
+			(String) jsonLocation.get("world")),
+			Double.parseDouble((String) jsonLocation.get("x")),
+			Double.parseDouble((String) jsonLocation.get("y")),
+			Double.parseDouble((String) jsonLocation.get("z")),
+			Float.parseFloat((String) jsonLocation.get("yaw")),
+			Float.parseFloat((String) jsonLocation.get("pitch"))
+		);
 		return locToDeserialize;
 	}
 	

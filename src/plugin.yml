@@ -152,6 +152,11 @@ commands:
       usage: |
              Usages:
              /tp <player>
+  rename:
+      description: Rename the item in your hand
+      usage: |
+             Usages:
+             /rename <&anew item name>
 #  give:
 #      aliases: [i]
 #      description: Give yourself or others items

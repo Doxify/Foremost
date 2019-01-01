@@ -12,16 +12,17 @@ public class HelpCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         // TODO: Clean up the help command, less links.
         if(sender instanceof Player) {
-            sender.sendMessage(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Saphron Help");
-            sender.sendMessage(ChatColor.WHITE + " Website: " + ChatColor.DARK_AQUA + ChatColor.UNDERLINE + "www.sahpron.org");
-            sender.sendMessage(ChatColor.WHITE + " Store: " + ChatColor.DARK_AQUA + ChatColor.UNDERLINE + "www.saphron.org/store" + ChatColor.WHITE + " or " + ChatColor.DARK_AQUA +  "/buy");
-            sender.sendMessage(ChatColor.WHITE + " Discord: " + ChatColor.DARK_AQUA + ChatColor.UNDERLINE + "www.sahpron.org/discord" + ChatColor.WHITE + ", authenticate with " + ChatColor.DARK_AQUA + "/saphcord");
-            sender.sendMessage(ChatColor.WHITE + "General Commands:");
-            sender.sendMessage(ChatColor.WHITE + " Teleport to spawn with " + ChatColor.DARK_AQUA + "/spawn");
-            sender.sendMessage(ChatColor.WHITE + " Message Players with " + ChatColor.DARK_AQUA + "/msg <player name> <message>" + ChatColor.WHITE + ", reply with " + ChatColor.DARK_AQUA + "/r <message>" );
-            sender.sendMessage(ChatColor.WHITE + " Ignore messages from others with " + ChatColor.DARK_AQUA + "/ignore <player name>");
+            sender.sendMessage(ChatColor.RED + ChatColor.BOLD.toString() + "Saphron Help");
+            sender.sendMessage(ChatColor.WHITE + " Website: " + ChatColor.RED + "www.sahpron.org");
+            sender.sendMessage(ChatColor.WHITE + " Store: " + ChatColor.RED + "www.saphron.org/store" + ChatColor.WHITE + " or " + ChatColor.RED +  "/buy");
+            sender.sendMessage(ChatColor.WHITE + " Discord: " + ChatColor.RED + "www.sahpron.org/discord" + ChatColor.WHITE + ", authenticate with " + ChatColor.RED + "/saphcord");
+            sender.sendMessage(ChatColor.GREEN + "General Commands:");
+            sender.sendMessage(ChatColor.WHITE + " Teleport to spawn with " + ChatColor.RED + "/spawn");
+            sender.sendMessage(ChatColor.WHITE + " Message Players with " + ChatColor.RED + "/msg <player name> <message>" + ChatColor.WHITE + ", reply with " + ChatColor.RED + "/r <message>" );
+            sender.sendMessage(ChatColor.WHITE + " Ignore messages from others with " + ChatColor.RED + "/ignore <player name>");
         }
 
         return true;
     }
+
 }

@@ -25,9 +25,7 @@ public class Foremost extends JavaPlugin {
 	public CooldownManager cooldownManager = new CooldownManager(this);
 	public StaffModeManager staffModeManager = new StaffModeManager(this);
 	public Config config = null;
-    public static Permission perms = null;
-    public static Chat chat = null;
-    public static Economy econ = null;
+
 			
     @Override
     public void onEnable() {
@@ -37,15 +35,6 @@ public class Foremost extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ChatEventListener(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerTeleportEventListener(), this);
         this.getServer().getPluginManager().registerEvents(new StaffModeEventListener(this), this);
-
-        try {
-            setupPermissions();
-            setupChat();
-            setupEcon();
-            log.info("Vault permissions, chat, and economy has been loaded.");
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
 
         // =============================================
         // Loading Config
@@ -86,6 +75,7 @@ public class Foremost extends JavaPlugin {
         getCommand("fly").setExecutor(new FlyCommand());
         getCommand("staff").setExecutor(new StaffModeCommand(this));
         getCommand("help").setExecutor(new HelpCommand());
+        getCommand("rename").setExecutor(new RenameCommand());
 
     }
     
@@ -97,25 +87,4 @@ public class Foremost extends JavaPlugin {
     	cooldownManager.handleServerClose();
         staffModeManager.handleServerClose();
     }
-
-    private boolean setupPermissions() {
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp.getProvider();
-        return perms != null;
-    }
-
-    private boolean setupChat() {
-        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-        chat = rsp.getProvider();
-        return chat != null;
-    }
-
-    private boolean setupEcon() {
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        econ = rsp.getProvider();
-        return econ != null;
-    }
-    
-
-
 }
