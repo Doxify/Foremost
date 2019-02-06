@@ -1,5 +1,6 @@
 package com.andreigeorgescu.foremost.command;
 
+import com.saphron.nsa.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -7,7 +8,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import com.andreigeorgescu.foremost.ChatManager;
-import com.andreigeorgescu.foremost.Utilities;
 
 public class ChatManagerCommand implements CommandExecutor {
 	

@@ -1,5 +1,6 @@
 package com.andreigeorgescu.foremost.command;
 
+import com.saphron.nsa.Utilities;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -8,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.andreigeorgescu.foremost.Foremost;
-import com.andreigeorgescu.foremost.Utilities;
 
 public class SetSpawnCommand implements CommandExecutor {
 

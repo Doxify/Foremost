@@ -190,3 +190,13 @@ commands:
       usage: |
              Usages:
              /help
+  kit:
+      description: Kits command
+      usage: |
+             Usages:
+             /kit
+#  plugin:
+#      description: View server plugins
+#      usage: |
+#             Usages:
+#             /plugin

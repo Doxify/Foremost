@@ -1,5 +1,6 @@
 package com.andreigeorgescu.foremost.command;
 
+import com.saphron.nsa.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -8,8 +9,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-
-import com.andreigeorgescu.foremost.Utilities;
 
 public class TeleportAllCommand implements CommandExecutor {
 	@Override

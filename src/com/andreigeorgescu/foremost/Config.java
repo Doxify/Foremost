@@ -1,19 +1,32 @@
 package com.andreigeorgescu.foremost;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import com.andreigeorgescu.foremost.kits.Kit;
 import org.bukkit.Location;
+import org.bukkit.inventory.ItemStack;
 
 public class Config {
 	
 	private Location spawn;
-	private HashMap<String, Location> warps = new HashMap<String, Location>();
-	
-	public Config(Location spawnLocation, HashMap<String, Location> warpsMap) {
+	private HashMap<String, Location> warps = new HashMap<>();
+	private List<Kit> kits = new ArrayList<>();
+
+	public Config(Location spawnLocation, HashMap<String, Location> warpsMap, List<Kit> kitsMap) {
 		spawn = spawnLocation;
 		warps = warpsMap;
+		kits = kitsMap;
 	}
-	
+
+	// =============================================
+	// Kit methods
+	// =============================================
+	public List<Kit> getKits() {
+		return kits;
+	}
+
 	// =============================================
     // Spawn methods
     // =============================================

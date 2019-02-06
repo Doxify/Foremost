@@ -1,17 +1,12 @@
 package com.andreigeorgescu.foremost;
 
 import java.util.logging.Logger;
-
 import com.andreigeorgescu.foremost.events.*;
-import net.milkbowl.vault.chat.Chat;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.permission.Permission;
+import com.andreigeorgescu.foremost.kits.KitsCommand;
+import com.andreigeorgescu.foremost.kits.KitsManager;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import com.andreigeorgescu.foremost.command.*;
-
 import com.saphron.nsa.NSA;
 
 public class Foremost extends JavaPlugin {
@@ -24,6 +19,7 @@ public class Foremost extends JavaPlugin {
 	public MessageManager messageManager = new MessageManager(this);
 	public CooldownManager cooldownManager = new CooldownManager(this);
 	public StaffModeManager staffModeManager = new StaffModeManager(this);
+	public KitsManager kitManager = null;
 	public Config config = null;
 
 			
@@ -40,6 +36,7 @@ public class Foremost extends JavaPlugin {
         // Loading Config
         // =============================================
         config = fileManager.loadConfigFile("./plugins/Foremost", "config.json");
+        kitManager = new KitsManager(this);
         
         
         // =============================================
@@ -76,6 +73,8 @@ public class Foremost extends JavaPlugin {
         getCommand("staff").setExecutor(new StaffModeCommand(this));
         getCommand("help").setExecutor(new HelpCommand());
         getCommand("rename").setExecutor(new RenameCommand());
+        getCommand("kit").setExecutor(new KitsCommand(this));
+//        getCommand("plugin").setExecutor(new PluginCommand());
 
     }
     

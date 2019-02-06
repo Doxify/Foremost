@@ -1,6 +1,6 @@
 package com.andreigeorgescu.foremost.command;
 
-import com.andreigeorgescu.foremost.Utilities;
+import com.saphron.nsa.Utilities;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -11,6 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class RenameCommand implements CommandExecutor {
+
+    // todo: Implemeent a blacklist for materials that cannot be renamed.
+    // items: Spawners, Bedrock
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

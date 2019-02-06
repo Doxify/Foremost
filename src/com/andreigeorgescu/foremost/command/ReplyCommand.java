@@ -1,5 +1,6 @@
 package com.andreigeorgescu.foremost.command;
 
+import com.saphron.nsa.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,9 +10,7 @@ import org.bukkit.ChatColor;
 
 import com.andreigeorgescu.foremost.Foremost;
 import com.andreigeorgescu.foremost.Profile;
-import com.andreigeorgescu.foremost.Utilities;
 import com.saphron.nsa.NSA;
-
 
 public class ReplyCommand implements CommandExecutor {
 	

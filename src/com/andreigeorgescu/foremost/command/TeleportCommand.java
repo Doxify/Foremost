@@ -1,6 +1,6 @@
 package com.andreigeorgescu.foremost.command;
 
-import com.andreigeorgescu.foremost.Utilities;
+import com.saphron.nsa.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

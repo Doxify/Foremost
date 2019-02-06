@@ -1,19 +1,19 @@
 package com.andreigeorgescu.foremost.command;
 
 import java.util.Map.Entry;
-
+import com.saphron.nsa.Utilities;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import com.andreigeorgescu.foremost.Foremost;
-import com.andreigeorgescu.foremost.Utilities;
 
 public class WarpCommand implements CommandExecutor {
-	
+
+	// todo: Create a warp manager that has a hashmap rather than craeting a new one each time the command is ran
+
 	Foremost plugin;
 	
 	public WarpCommand(Foremost p) {

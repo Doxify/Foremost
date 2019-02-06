@@ -1,7 +1,7 @@
 package com.andreigeorgescu.foremost.command;
 
+import com.saphron.nsa.Utilities;
 import com.andreigeorgescu.foremost.Foremost;
-import com.andreigeorgescu.foremost.Profile;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -9,12 +9,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import com.andreigeorgescu.foremost.Utilities;
-import org.bukkit.inventory.meta.Repairable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RepairCommand implements CommandExecutor {
 
