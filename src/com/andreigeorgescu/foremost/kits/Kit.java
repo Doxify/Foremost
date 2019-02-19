@@ -3,13 +3,11 @@ package com.andreigeorgescu.foremost.kits;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-
 public class Kit {
 
-    private static String name;
-    private static int cooldown;
-    private static ItemStack[] kit;
+    private String name;
+    private int cooldown;
+    private ItemStack[] kit;
 
     public Kit(String n, int c, ItemStack[] k) {
         setName(n);
@@ -51,16 +49,6 @@ public class Kit {
             return true;
         }
         return false;
-    }
-
-    public void giveKit(Player p) {
-        ItemStack kitItems[] = kit.clone();
-        HashMap<Integer, ItemStack> leftOverItems = p.getInventory().addItem(kitItems);
-        if(leftOverItems.size() > 0) {
-            for(ItemStack item : leftOverItems.values()) {
-                p.getWorld().dropItem(p.getLocation(), item);
-            }
-        }
     }
 
 }

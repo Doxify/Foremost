@@ -43,10 +43,8 @@ public class MessageManager {
     		logMessage(sender, target, message);
 			notifySocialSpys(sender, target, message);
     		return true;
-		} else {
-			// TODO: handle errors here
-			return false;
 		}
+		return false;
 	}
 	
 	public void updateLastReply(Player sender, Player target) {

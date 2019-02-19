@@ -157,13 +157,6 @@ commands:
       usage: |
              Usages:
              /rename <&anew item name>
-#  give:
-#      aliases: [i]
-#      description: Give yourself or others items
-#      usage: |
-#             Usages:
-#             /give <player> <iten> <amount>
-#             /i <item> <amount>
   tpa:
       aliases: [tpaccept, tpdeny, tpahere, tpahereaccept]
       description: Send and Accept teleport requests to other players
@@ -195,8 +188,8 @@ commands:
       usage: |
              Usages:
              /kit
-#  plugin:
-#      description: View server plugins
-#      usage: |
-#             Usages:
-#             /plugin
+  kitAdmin:
+      description: Kits command
+      usage: |
+             Usages:
+             /kitAdmin

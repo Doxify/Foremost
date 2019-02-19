@@ -1,4 +1,4 @@
-package com.andreigeorgescu.foremost.kits;
+package com.andreigeorgescu.foremost.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;

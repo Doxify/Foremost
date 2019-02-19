@@ -64,10 +64,8 @@ public class EventsListener implements Listener {
 	@EventHandler
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		if(event.getCause() == TeleportCause.COMMAND || event.getCause() == TeleportCause.PLUGIN) {
-			try {
+			if(event.getFrom() != null) {
 				plugin.profileManager.getProfile(event.getPlayer().getUniqueId().toString()).setLastLocation(event.getFrom());
-			} catch (NullPointerException e) {
-				e.printStackTrace();
 			}
 		}
 	}

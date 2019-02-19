@@ -2,8 +2,10 @@ package com.andreigeorgescu.foremost;
 
 import java.util.logging.Logger;
 import com.andreigeorgescu.foremost.events.*;
-import com.andreigeorgescu.foremost.kits.KitsCommand;
+import com.andreigeorgescu.foremost.kits.KitEvents;
 import com.andreigeorgescu.foremost.kits.KitsManager;
+import com.andreigeorgescu.foremost.kits.commands.KitAdminCommand;
+import com.andreigeorgescu.foremost.kits.commands.KitCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.andreigeorgescu.foremost.command.*;
@@ -19,7 +21,7 @@ public class Foremost extends JavaPlugin {
 	public MessageManager messageManager = new MessageManager(this);
 	public CooldownManager cooldownManager = new CooldownManager(this);
 	public StaffModeManager staffModeManager = new StaffModeManager(this);
-	public KitsManager kitManager = null;
+	public KitsManager kitsManager = null;
 	public Config config = null;
 
 			
@@ -31,13 +33,14 @@ public class Foremost extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ChatEventListener(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerTeleportEventListener(), this);
         this.getServer().getPluginManager().registerEvents(new StaffModeEventListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new KitEvents(), this);
 
         // =============================================
         // Loading Config
         // =============================================
         config = fileManager.loadConfigFile("./plugins/Foremost", "config.json");
-        kitManager = new KitsManager(this);
-        
+        kitsManager = fileManager.loadKitsManager();
+//        kitsManager = new KitsManager();
         
         // =============================================
         // Plugin Commands
@@ -67,14 +70,13 @@ public class Foremost extends JavaPlugin {
         getCommand("enderchest").setExecutor(new EnderChestCommand());
         getCommand("workbench").setExecutor(new WorkBenchCommand());
         getCommand("teleport").setExecutor(new TeleportCommand());
-//        getCommand("give").setExecutor(new GiveCommand());
         getCommand("tpa").setExecutor(new PlayerTeleportCommand(this));
         getCommand("fly").setExecutor(new FlyCommand());
         getCommand("staff").setExecutor(new StaffModeCommand(this));
         getCommand("help").setExecutor(new HelpCommand());
         getCommand("rename").setExecutor(new RenameCommand());
-        getCommand("kit").setExecutor(new KitsCommand(this));
-//        getCommand("plugin").setExecutor(new PluginCommand());
+        getCommand("kit").setExecutor(new KitCommand(this));
+        getCommand("kitAdmin").setExecutor(new KitAdminCommand(this));
 
     }
     
@@ -83,7 +85,13 @@ public class Foremost extends JavaPlugin {
         // Saving config to file
         // =============================================
     	fileManager.saveConfigFile("./plugins/Foremost", "config.json", config);
+    	fileManager.saveKitsToFile();
+    	kitsManager.handleServerClose();
     	cooldownManager.handleServerClose();
         staffModeManager.handleServerClose();
+    }
+
+    public KitsManager getKitsManager() {
+        return kitsManager;
     }
 }

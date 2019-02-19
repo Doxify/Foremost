@@ -1,0 +1,97 @@
+package com.andreigeorgescu.foremost.kits.commands;
+
+import com.andreigeorgescu.foremost.Foremost;
+import com.andreigeorgescu.foremost.kits.KitsManager;
+import com.saphron.nsa.Utilities;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+public class KitAdminCommand implements CommandExecutor {
+
+    Foremost plugin;
+    KitsManager kitsManager;
+
+    public KitAdminCommand(Foremost p) { plugin = p; kitsManager = plugin.getKitsManager(); }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if(sender instanceof Player) {
+            if(sender.hasPermission("foremost.kitAdmin")) {
+                Player p = (Player) sender;
+
+                /*
+                Commands:
+                    1. /kitAdmin add "name" "cooldown (seconds)"
+                    2. /kitAdmin delete "name"
+                 */
+
+                switch (args.length) {
+                    case 3: {
+                        if(args[0].equalsIgnoreCase("ADD")) {
+                            try {
+                                String kitName = args[1];
+                                int cooldown = Integer.parseInt(args[2]);
+                                ItemStack[] kitItems = p.getInventory().getContents();
+
+                                if(kitsManager.addKit(kitName, cooldown, kitItems)) {
+                                    p.sendMessage(ChatColor.GREEN + "Successfully added kit: " + kitName);
+                                    break;
+                                } else {
+                                    p.sendMessage(ChatColor.RED + "A kit with that name already exists.");
+                                    break;
+                                }
+
+                            } catch (ClassCastException e) {
+                                p.sendMessage(getKitAdminCommandGuide());
+                                break;
+                            }
+                        } else {
+                            p.sendMessage(getKitAdminCommandGuide());
+                            break;
+                        }
+                    }
+                    case 2: {
+                        if(args[0].equalsIgnoreCase("DELETE")) {
+                            String kitName = args[1];
+
+                            if(kitsManager.deleteKit(kitName)) {
+                                p.sendMessage(ChatColor.GREEN + "Successfully deleted kit: " + kitName);
+                                break;
+                            } else {
+                                p.sendMessage(ChatColor.RED + "Couldn't find a kit with the name: " + kitName);
+                                break;
+                            }
+
+                        } else {
+                            p.sendMessage(getKitAdminCommandGuide());
+                            break;
+                        }
+                    }
+                    default: {
+                        p.sendMessage(getKitAdminCommandGuide());
+                        break;
+                    }
+                }
+            } else {
+                sender.sendMessage(Utilities.NO_PERMISSION);
+            }
+        } else {
+            sender.sendMessage(Utilities.NON_PLAYER_SENDER);
+        }
+
+        return true;
+    }
+
+    public String getKitAdminCommandGuide() {
+        StringBuilder string = new StringBuilder(ChatColor.RED + "Usage: ");
+        string.append("\n/kitAdmin add <name> <cooldown in seconds>");
+        string.append("\n/kitAdmin delete <name>");
+
+        return string.toString();
+    }
+
+}

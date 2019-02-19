@@ -11,20 +11,11 @@ import org.bukkit.inventory.ItemStack;
 public class Config {
 	
 	private Location spawn;
-	private HashMap<String, Location> warps = new HashMap<>();
-	private List<Kit> kits = new ArrayList<>();
+	private HashMap<String, Location> warps;
 
-	public Config(Location spawnLocation, HashMap<String, Location> warpsMap, List<Kit> kitsMap) {
+	public Config(Location spawnLocation, HashMap<String, Location> warpsMap) {
 		spawn = spawnLocation;
 		warps = warpsMap;
-		kits = kitsMap;
-	}
-
-	// =============================================
-	// Kit methods
-	// =============================================
-	public List<Kit> getKits() {
-		return kits;
 	}
 
 	// =============================================
