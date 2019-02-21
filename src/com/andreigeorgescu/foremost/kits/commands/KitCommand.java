@@ -42,16 +42,17 @@ public class KitCommand implements CommandExecutor {
                         Kit kit = kitsManager.getKitObject(kitName);
 
                         if(kit.hasPermission(p)) {
-                            if(!kitsManager.hasCooldown(p.getUniqueId(), kit)) {
+                            if(!kitsManager.hasCooldown(p.getUniqueId(), kit.getName())) {
                                 kitsManager.givePlayerKit(p, kit);
                                 break;
                             } else {
-                                if(kitsManager.isCooldownOver(p.getUniqueId(), kit)) {
+                                if(kitsManager.isCooldownOver(p.getUniqueId(), kit.getName())) {
+                                    kitsManager.removeCooldown(p.getUniqueId(), kit.getName());
                                     kitsManager.givePlayerKit(p, kit);
                                     break;
                                 } else {
-                                    LocalDateTime cooldown = kitsManager.getCooldown(p.getUniqueId(), kit);
-                                    p.sendMessage(ChatColor.RED + kit.getName() + " is on cooldown until " + cooldown.toString());
+                                    LocalDateTime cooldown = kitsManager.getCooldown(p.getUniqueId(), kit.getName());
+                                    p.sendMessage(ChatColor.RED + kit.getName() + " is on cooldown for " + kitsManager.getCooldownString(cooldown) + ".");
                                     break;
                                 }
                             }

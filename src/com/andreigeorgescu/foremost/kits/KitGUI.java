@@ -42,12 +42,12 @@ public class KitGUI {
         ItemStack bottomBar[] = new ItemStack[9];
 
         for(int i = 0; i < 9; i++) {
-            if(i == 4) {
+            if(i == 3) {
                 bottomBar[i] = itemStackCreator.createItemStack(
                         Material.PAPER,
                         ChatColor.LIGHT_PURPLE + "Kit Information",
                         Arrays.asList(
-                                ChatColor.GRAY + "Cooldown: " + (kit.getCooldown() == -1 ? ChatColor.GREEN + "None" : ChatColor.GREEN.toString() + kit.getCooldown()),
+                                ChatColor.GRAY + "Cooldown: " + (kit.getCooldown() == -1 ? ChatColor.GREEN + "None" : ChatColor.GREEN.toString() + kit.getCooldownString()),
                                 ChatColor.GRAY + "Unlocked: " + (kit.hasPermission(p) ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No"))
                 );
             } else {

@@ -85,6 +85,7 @@ public class Foremost extends JavaPlugin {
         // Saving config to file
         // =============================================
     	fileManager.saveConfigFile("./plugins/Foremost", "config.json", config);
+    	kitsManager.removeExpiredCooldowns();
     	fileManager.saveKitsToFile();
     	kitsManager.handleServerClose();
     	cooldownManager.handleServerClose();

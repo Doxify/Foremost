@@ -3,6 +3,7 @@ package com.andreigeorgescu.foremost.kits;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+
 public class Kit {
 
     private String name;
@@ -49,6 +50,22 @@ public class Kit {
             return true;
         }
         return false;
+    }
+
+    public String getCooldownString() {
+        StringBuilder cooldownString = new StringBuilder();
+        int milliseconds = cooldown * 1000;
+        int hours   = ((milliseconds / (1000*60*60)) % 24);
+        int minutes = ((milliseconds / (1000*60)) % 60);
+        int seconds = (milliseconds / 1000) % 60 ;
+
+        cooldownString.append(hours < 1 ? "00" : (hours < 10 ? "0" + hours : Integer.toString(hours)));
+        cooldownString.append(":");
+        cooldownString.append(minutes < 1 ? "00" : minutes < 10 ? "0" + minutes : Integer.toString(minutes));
+        cooldownString.append(":");
+        cooldownString.append(seconds < 10 ? "0" + seconds : seconds);
+
+        return cooldownString.toString();
     }
 
 }

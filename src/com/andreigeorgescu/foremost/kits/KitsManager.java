@@ -1,9 +1,10 @@
 package com.andreigeorgescu.foremost.kits;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -13,14 +14,12 @@ public class KitsManager {
     private List<Kit> kits;
     private HashMap<UUID, HashMap<String, String>> cooldowns;
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss", Locale.ENGLISH);
-
-
     private boolean enabled;
-
 
     public KitsManager(List<Kit> k, HashMap<UUID, HashMap<String, String>> c) {
         kits = k;
         cooldowns = c;
+        removeExpiredCooldowns();
 
         if(kits.size() > 1) {
             enabled = true;
@@ -28,13 +27,6 @@ public class KitsManager {
         } else {
             enabled = false;
         }
-    }
-
-    public KitsManager() {
-        kits = new ArrayList<>();
-        cooldowns = new HashMap<>();
-        enabled = false;
-        System.out.println("[Foremost] Kits Manager has been enabled with no kits or cooldowns.");
     }
 
     public void handleServerClose() {
@@ -196,19 +188,20 @@ public class KitsManager {
 
     Parameters:
     - UUID: player's uuid
-    - Kit: kit object
+    - String: kit's name
+    - int: kit's cooldown
      */
-    public void setCooldown(UUID uuid, Kit kit) {
+    public void setCooldown(UUID uuid, String kitName, int kitCooldown) {
         HashMap<String, String> playerCooldowns;
-        LocalDateTime cooldown = LocalDateTime.now().plusSeconds(kit.getCooldown());
+        LocalDateTime cooldown = LocalDateTime.now().plusSeconds(kitCooldown);
 
         if(cooldowns.containsKey(uuid)) {
             playerCooldowns = cooldowns.get(uuid);
-            playerCooldowns.put(kit.getName(), dtf.format(cooldown));
+            playerCooldowns.put(kitName, dtf.format(cooldown));
             cooldowns.put(uuid, playerCooldowns);
         } else {
             playerCooldowns = new HashMap<>();
-            playerCooldowns.put(kit.getName(), dtf.format(cooldown));
+            playerCooldowns.put(kitName, dtf.format(cooldown));
             cooldowns.put(uuid, playerCooldowns);
         }
 
@@ -219,17 +212,17 @@ public class KitsManager {
 
     Parameters:
     - UUID: player's uuid
-    - Kit: kit object
+    - String: kit's name
 
     Returns true if they do
     Returns false if they don't
      */
-    public boolean hasCooldown(UUID uuid, Kit kit) {
+    public boolean hasCooldown(UUID uuid, String kitName) {
         if(!cooldowns.containsKey(uuid)) {
             return false;
         } else {
             HashMap<String, String> playerCooldowns = cooldowns.get(uuid);
-            if(!playerCooldowns.containsKey(kit.getName())) {
+            if(!playerCooldowns.containsKey(kitName)) {
                 return false;
             } else {
                 return true;
@@ -242,18 +235,16 @@ public class KitsManager {
 
     Parameters:
     - UUID: player's uuid
-    - Kit: kit object
+    - String: kit's name
 
-    Returns true if the cooldown is over and
-    removes it from the map
-
+    Returns true if the cooldown is over
     Returns false if the cooldown isn't over
      */
-    public boolean isCooldownOver(UUID uuid, Kit kit) {
-        if(!hasCooldown(uuid, kit)) {
+    public boolean isCooldownOver(UUID uuid, String kitName) {
+        if(!hasCooldown(uuid, kitName)) {
             return true;
         } else {
-            String cooldownString = cooldowns.get(uuid).get(kit.getName());
+            String cooldownString = cooldowns.get(uuid).get(kitName);
             LocalDateTime cooldown = LocalDateTime.parse(cooldownString, dtf);
             LocalDateTime current = LocalDateTime.now();
             int result = current.compareTo(cooldown);
@@ -263,7 +254,6 @@ public class KitsManager {
             } else if(result < 0) {
                 return false;
             } else {
-                removeCooldown(uuid, kit);
                 return true;
             }
 
@@ -272,15 +262,22 @@ public class KitsManager {
 
     /*
     Removes a cooldown from a player's
-    cooldown map
+    cooldown map and removes their uuid from
+    the map if they have no other cooldowns.
 
     Parameters:
     - UUID: player's uuid
-    - Kit: kit object
+    - String: kit's name
      */
-    public void removeCooldown(UUID uuid, Kit kit) {
-        if(hasCooldown(uuid, kit)) {
-            cooldowns.get(uuid).remove(kit.getName());
+    public void removeCooldown(UUID uuid, String kitName) {
+        if(hasCooldown(uuid, kitName)) {
+            cooldowns.get(uuid).remove(kitName);
+
+            // Checking for other cooldowns
+            HashMap<String, String> playerCooldowns = cooldowns.get(uuid);
+            if(playerCooldowns.isEmpty()) {
+                cooldowns.remove(uuid);
+            }
         }
     }
 
@@ -290,23 +287,66 @@ public class KitsManager {
 
     Parameters:
     - UUID: player's uuid
-    - Kit: kit object
+    - String: kit's name
 
     Returns a DateTime object if there's a cooldown
     Returns null if the cooldown is over / doesn't exist.
      */
-    public LocalDateTime getCooldown(UUID uuid, Kit kit) {
-        if(!hasCooldown(uuid, kit)) {
+    public LocalDateTime getCooldown(UUID uuid, String kitName) {
+        if(!hasCooldown(uuid, kitName)) {
             return null;
         } else {
-            if(isCooldownOver(uuid, kit)) {
+            if(isCooldownOver(uuid, kitName)) {
                return null;
             } else {
-                String cooldownString = cooldowns.get(uuid).get(kit.getName());
+                String cooldownString = cooldowns.get(uuid).get(kitName);
                 LocalDateTime cooldown = LocalDateTime.parse(cooldownString, dtf);
                 return cooldown;
             }
         }
+    }
+
+    /*
+    Removes all cooldowns that have expired
+    from the cooldowns map
+     */
+    public void removeExpiredCooldowns() {
+        for(UUID uuid : cooldowns.keySet()) {
+            if(cooldowns.get(uuid).isEmpty()) {
+                cooldowns.remove(uuid);
+            } else {
+                for(String kitName : cooldowns.get(uuid).keySet()) {
+                    if(isCooldownOver(uuid, kitName)) {
+                        removeCooldown(uuid, kitName);
+                    }
+                }
+            }
+        }
+    }
+
+    /*
+    Returns a cooldown in a nicely formatted string
+
+    Parameters:
+    - LocalDateTime: the cooldown
+
+    Returns a string
+     */
+    public String getCooldownString(LocalDateTime cooldown) {
+        StringBuilder cooldownString = new StringBuilder();
+        LocalDateTime currentTime = LocalDateTime.now();
+        long milliseconds = Duration.between(currentTime, cooldown).toMillis();
+        int hours   = (int) ((milliseconds / (1000*60*60)) % 24);
+        int minutes = (int) ((milliseconds / (1000*60)) % 60);
+        int seconds = (int) (milliseconds / 1000) % 60 ;
+
+        cooldownString.append(hours < 1 ? "00" : (hours < 10 ? "0" + hours : Integer.toString(hours)));
+        cooldownString.append(":");
+        cooldownString.append(minutes < 1 ? "00" : minutes < 10 ? "0" + minutes : Integer.toString(minutes));
+        cooldownString.append(":");
+        cooldownString.append(seconds < 10 ? "0" + seconds : seconds);
+
+        return cooldownString.toString();
     }
 
     /*
@@ -329,13 +369,13 @@ public class KitsManager {
         }
 
         p.updateInventory();
-        p.sendMessage(org.bukkit.ChatColor.GREEN + "Successfully redeemed kit: " + kit.getName());
-//        if(!p.hasPermission("foremost.kit.bypass")) {
-//            setCooldown(p.getUniqueId(), kit);
-//            p.sendMessage("DEBUG: Cooldown expires: " + getCooldown(p.getUniqueId(), kit).toString());
-//        }
-        setCooldown(p.getUniqueId(), kit);
-        p.sendMessage("DEBUG: Cooldown expires: " + getCooldown(p.getUniqueId(), kit));
 
+        if(!p.hasPermission("foremost.kit.bypass")) {
+            setCooldown(p.getUniqueId(), kit.getName(), kit.getCooldown());
+            p.sendMessage(ChatColor.GREEN + "Successfully redeemed kit: " + kit.getName());
+            p.sendMessage(ChatColor.YELLOW + "Cooldown: " + getCooldownString(getCooldown(p.getUniqueId(), kit.getName())));
+        } else {
+            p.sendMessage(ChatColor.GREEN + "Successfully redeemed kit: " + kit.getName());
+        }
     }
 }
