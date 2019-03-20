@@ -1,5 +1,7 @@
 package com.andreigeorgescu.foremost.events;
 
+import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -63,9 +65,13 @@ public class EventsListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
-		if(event.getCause() == TeleportCause.COMMAND || event.getCause() == TeleportCause.PLUGIN) {
-			if(event.getFrom() != null) {
-				plugin.profileManager.getProfile(event.getPlayer().getUniqueId().toString()).setLastLocation(event.getFrom());
+		boolean isCitizensNPC = event.getPlayer().hasMetadata("NPC");
+		if(!isCitizensNPC) {
+			if(event.getCause() == TeleportCause.COMMAND || event.getCause() == TeleportCause.PLUGIN) {
+				if(event.getFrom() instanceof Location) {
+					Profile profile = plugin.profileManager.getProfile(event.getPlayer().getUniqueId().toString());
+					profile.setLastLocation(event.getFrom());
+				}
 			}
 		}
 	}

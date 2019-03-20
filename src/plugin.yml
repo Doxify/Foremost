@@ -1,6 +1,6 @@
 name: Foremost
 main: com.andreigeorgescu.foremost.Foremost
-version: 1.0.0
+version: 1.1.0
 author: Andrei Georgescu
 depend: [Vault, NSA]
 description: >
@@ -34,6 +34,7 @@ commands:
              Usages:
              /sunset
   ci:
+      aliases: [clear]
       description: Clears your or the inventory of others
       usage: |
              Usages:
