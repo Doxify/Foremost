@@ -3,6 +3,7 @@ main: com.andreigeorgescu.foremost.Foremost
 version: 1.1.0
 author: Andrei Georgescu
 depend: [Vault, NSA]
+softdepend: [Multiverse-Core]
 description: >
             First and foremost, the essentials.
 commands:

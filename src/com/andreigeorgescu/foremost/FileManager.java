@@ -3,7 +3,6 @@ package com.andreigeorgescu.foremost;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import com.andreigeorgescu.foremost.kits.Kit;
@@ -32,7 +31,6 @@ public class FileManager {
 		try {
 			Object configFileParsed = new JSONParser().parse(new FileReader(filePath + "/" + fileName));
 			JSONObject configJson = (JSONObject) configFileParsed;
-			HashMap<String, Location> warps = new HashMap<>();
 			Location spawnLocation = null;
 
 			try {
@@ -42,19 +40,13 @@ public class FileManager {
 				System.out.println("[Foremost] Could not load spawn json, setting it to null.");
 			}
 
-			try {
-				warps = deserializeWarps((JSONObject) configJson.get("warps"));
-			} catch (NullPointerException | IllegalArgumentException | ClassCastException e) {
-				e.printStackTrace();
-				System.out.println("[Foremost] Could not load warps json, setting them to null.");
-			}
 			
-			Config configClass = new Config(spawnLocation, warps);
+			Config configClass = new Config(spawnLocation);
 			return configClass;
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 			System.out.println("[Foremost] Failed to load config.json. Returned a null Config.");
-			return new Config(null, null);
+			return new Config(null);
 		}
 	}
 
@@ -114,17 +106,12 @@ public class FileManager {
 	public void saveConfigFile(String filePath, String fileName, Config config) {
 		JSONObject configJSON = new JSONObject();
 		JSONObject spawnJSON;
-		JSONObject warpsJSON;
 
 		if(config.getSpawn() instanceof Location) {
 			spawnJSON = serializeLocation(config.getSpawn());
 			configJSON.put("spawn", spawnJSON);
 		}
-		
-		if(config.getWarps() instanceof HashMap) {
-			warpsJSON = serializeWarps(config.getWarps());
-			configJSON.put("warps", warpsJSON);
-		}
+
 
 		try {
 			//write converted json data to a file named "CountryGSON.json"
@@ -143,20 +130,6 @@ public class FileManager {
 	// =============================================
     // Serializing
     // =============================================
-
-	@SuppressWarnings("unchecked")
-	public JSONObject serializeWarps(HashMap<String, Location> warps) {
-		JSONObject serializedWarps = new JSONObject();
-		
-		for (Map.Entry<String, Location> warp : warps.entrySet()) {
-		    String name = warp.getKey();
-		    Location location = warp.getValue();
-		    serializedWarps.put(name, serializeLocation(location));
-		}
-		
-		return serializedWarps;
-	}
-	
 	@SuppressWarnings("unchecked")
 	public JSONObject serializeLocation(Location locToSerialize) {
 		JSONObject serializedObj = new JSONObject();
@@ -175,18 +148,6 @@ public class FileManager {
 	// =============================================
     // Deserializing
     // =============================================
-	public HashMap<String, Location> deserializeWarps(JSONObject jsonWarps) {
-		HashMap<String, Location> warps = new HashMap<>();
-        @SuppressWarnings("unchecked")
-		Set<String> names = jsonWarps.keySet();
-
-		for(String name : names) {
-			warps.put(name, deserializeLocation((JSONObject) jsonWarps.get(name)));
-		}
-		
-		return warps;
-	}
-	
 	public Location deserializeLocation(JSONObject jsonLocation) {
 		Location locToDeserialize = new Location(plugin.getServer().getWorld(
 			(String) jsonLocation.get("world")),

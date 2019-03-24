@@ -6,6 +6,9 @@ import com.andreigeorgescu.foremost.kits.KitEvents;
 import com.andreigeorgescu.foremost.kits.KitsManager;
 import com.andreigeorgescu.foremost.kits.commands.KitAdminCommand;
 import com.andreigeorgescu.foremost.kits.commands.KitCommand;
+import com.andreigeorgescu.foremost.waraps.WarpCommand;
+import com.andreigeorgescu.foremost.waraps.WarpEventListener;
+import com.andreigeorgescu.foremost.waraps.WarpManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.andreigeorgescu.foremost.command.*;
@@ -23,25 +26,31 @@ public class Foremost extends JavaPlugin {
 	public StaffModeManager staffModeManager = new StaffModeManager(this);
 	public KitsManager kitsManager = null;
 	public Config config = null;
+	public WarpManager warpManager = null;
 
 			
     @Override
     public void onEnable() {
-        log.info("Foremost has been enabled.");
+
+        // =============================================
+        // Loading Configs
+        // =============================================
+        config = fileManager.loadConfigFile("./plugins/Foremost", "config.json");
+        kitsManager = fileManager.loadKitsManager();
+        warpManager = new WarpManager();
+
+        // =============================================
+        // Loading Event Listeners
+        // =============================================
         this.getServer().getPluginManager().registerEvents(new EventsListener(this), this);
         this.getServer().getPluginManager().registerEvents(new ColoredSignsEventListener(), this);
         this.getServer().getPluginManager().registerEvents(new ChatEventListener(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerTeleportEventListener(), this);
         this.getServer().getPluginManager().registerEvents(new StaffModeEventListener(this), this);
         this.getServer().getPluginManager().registerEvents(new KitEvents(), this);
+        this.getServer().getPluginManager().registerEvents(new WarpEventListener(warpManager), this);
 
-        // =============================================
-        // Loading Config
-        // =============================================
-        config = fileManager.loadConfigFile("./plugins/Foremost", "config.json");
-        kitsManager = fileManager.loadKitsManager();
-//        kitsManager = new KitsManager();
-        
+
         // =============================================
         // Plugin Commands
         // =============================================
@@ -66,7 +75,7 @@ public class Foremost extends JavaPlugin {
         getCommand("back").setExecutor(new BackCommand(this));
         getCommand("setspawn").setExecutor(new SetSpawnCommand(this));
         getCommand("spawn").setExecutor(new SpawnCommand(this));
-        getCommand("warp").setExecutor(new WarpCommand(this));
+        getCommand("warp").setExecutor(new WarpCommand(warpManager));
         getCommand("enderchest").setExecutor(new EnderChestCommand());
         getCommand("workbench").setExecutor(new WorkBenchCommand());
         getCommand("teleport").setExecutor(new TeleportCommand());
@@ -82,7 +91,7 @@ public class Foremost extends JavaPlugin {
     
     public void onDisable() {
     	// =============================================
-        // Saving config to file
+        // Saving configs to file
         // =============================================
     	fileManager.saveConfigFile("./plugins/Foremost", "config.json", config);
     	kitsManager.removeExpiredCooldowns();
@@ -90,6 +99,7 @@ public class Foremost extends JavaPlugin {
     	kitsManager.handleServerClose();
     	cooldownManager.handleServerClose();
         staffModeManager.handleServerClose();
+        warpManager.handleServerClose();
     }
 
     public KitsManager getKitsManager() {
