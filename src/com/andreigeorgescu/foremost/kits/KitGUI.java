@@ -48,7 +48,15 @@ public class KitGUI {
                         ChatColor.LIGHT_PURPLE + "Kit Information",
                         Arrays.asList(
                                 ChatColor.GRAY + "Cooldown: " + (kit.getCooldown() == -1 ? ChatColor.GREEN + "None" : ChatColor.GREEN.toString() + kit.getCooldownString()),
-                                ChatColor.GRAY + "Unlocked: " + (kit.hasPermission(p) ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No"))
+                                ChatColor.GRAY + "Unlocked: " + (kit.hasPermission(p) ? ChatColor.GREEN + "True" : ChatColor.RED + "False"))
+                );
+            } else if(i == 5) {
+                bottomBar[i] = itemStackCreator.createItemStack(
+                        Material.NAME_TAG,
+                        ChatColor.GREEN + "Redeem Kit",
+                        Arrays.asList(
+                                (kit.hasPermission(p) ? ChatColor.YELLOW + "Click to redeem kit" : ChatColor.RED + "You don't have this kit unlocked.")
+                        )
                 );
             } else {
                 bottomBar[i] = itemStackCreator.createPlaceholderItem();

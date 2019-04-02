@@ -41,7 +41,7 @@ public class KitCommand implements CommandExecutor {
                     if(kitsManager.kitExists(kitName)) {
                         Kit kit = kitsManager.getKitObject(kitName);
 
-                        if(kit.hasPermission(p)) {
+                        if(kit.hasPermission(p) && kit.getCooldown() != -1) {
                             if(!kitsManager.hasCooldown(p.getUniqueId(), kit.getName())) {
                                 kitsManager.givePlayerKit(p, kit);
                                 break;

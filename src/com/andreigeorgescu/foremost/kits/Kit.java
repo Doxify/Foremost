@@ -3,7 +3,6 @@ package com.andreigeorgescu.foremost.kits;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-
 public class Kit {
 
     private String name;
@@ -15,6 +14,7 @@ public class Kit {
         setCooldown(c);
         setKit(k);
     }
+
 
     public String getName() { return name; }
     public int getCooldown() { return cooldown; }
@@ -44,6 +44,7 @@ public class Kit {
         }
 
     }
+
 
     public boolean hasPermission(Player p) {
         if(p.hasPermission("foremost.kit." + name.toLowerCase())) {

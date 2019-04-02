@@ -1,6 +1,5 @@
 package com.andreigeorgescu.foremost.waraps;
 
-import com.avaje.ebeaninternal.server.cluster.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

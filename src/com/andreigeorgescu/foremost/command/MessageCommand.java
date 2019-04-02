@@ -4,6 +4,7 @@ import com.saphron.nsa.Utilities;
 import com.andreigeorgescu.foremost.Foremost;
 import com.saphron.nsa.NSA;
 
+import com.saphron.nsa.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -24,7 +25,7 @@ public class MessageCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
-        	String prefix = ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix((Player) sender));
+        	String prefix = ChatColor.translateAlternateColorCodes('&', plugin.getChat().getPlayerPrefix((Player) sender));
             if(sender.hasPermission("foremost.msg")) {
             	if(args.length <= 1) {
                     sender.sendMessage(ChatColor.RED + "Usage: /msg <player> <message>");
@@ -35,11 +36,16 @@ public class MessageCommand implements CommandExecutor {
                     for(int i = 1; i < args.length; i++) {
                         message.append(args[i] + " ");
                     }
+
                     if(target != null) {
-                    	if((boolean) nsaPlugin.getProfileManager().getProfile(target.getUniqueId().toString()).getTogglePM() == false || sender.hasPermission("nsa.togglepm.bypass")) {
+						User targetUser = nsaPlugin.userManager.getUser(target.getUniqueId().toString());
+                    	if(targetUser.getTogglePM() == false || sender.hasPermission("nsa.togglepm.bypass")) {
                     		// Checking if the target has the sender ignored.
-                    		if(!nsaPlugin.getProfileManager().getProfile(target.getUniqueId().toString()).isIgnored(((Player) sender).getUniqueId().toString()) || sender.hasPermission("nsa.ignore.bypass") ) {
-                    			if(!nsaPlugin.getProfileManager().getProfile(((Player) sender).getUniqueId().toString()).isIgnored(target.getUniqueId().toString())) {
+							if(true) {
+								if(true) {
+									// TODO: Implement ignored functions
+//                    		if(!nsaPlugin.getProfileManager().getProfile(target.getUniqueId().toString()).isIgnored(((Player) sender).getUniqueId().toString()) || sender.hasPermission("nsa.ignore.bypass") ) {
+//                    			if(!nsaPlugin.getProfileManager().getProfile(((Player) sender).getUniqueId().toString()).isIgnored(target.getUniqueId().toString())) {
                     				// The target is not on the ignored list of the sender or the sender has the bypass permission, sending the message.
                     				if(!plugin.messageManager.sendMessage((Player) sender, target, message.toString())) {
                     					sender.sendMessage(ChatColor.RED + "There was an error sending your message. Please contact staff.");

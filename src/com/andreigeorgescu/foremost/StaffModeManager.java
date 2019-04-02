@@ -21,10 +21,6 @@ public class StaffModeManager {
 
     private HashMap<String, StaffMode> staff = new HashMap<>();
 
-    public StaffModeManager() {
-        System.out.println("[Foremost] Staff Mode Manager: Enabled");
-    }
-
     public Set<UUID> getStaffUUIDS() {
         Set<String> stringUUIDS = staff.keySet();
         Set<UUID> formattedUUIDS = new HashSet<>();
@@ -48,13 +44,14 @@ public class StaffModeManager {
         if(!hasStaffMode(uuid)) {
             staff.put(uuid, new StaffMode(uuid));
 
-            // Making sure all players who are in staff mode are vanished.
-            if(!plugin.nsaPlugin.getProfileManager().getProfile(uuid).getVanish()) {
-                Player p = Bukkit.getPlayer(staff.get(uuid).getPlayerUUID());
-                if(p != null) {
-                    p.performCommand("vanish");
-                }
-            }
+            // TODO: Implement vanish
+//            // Making sure all players who are in staff mode are vanished.
+//            if(!plugin.nsaPlugin.getProfileManager().getProfile(uuid).getVanish()) {
+//                Player p = Bukkit.getPlayer(staff.get(uuid).getPlayerUUID());
+//                if(p != null) {
+//                    p.performCommand("vanish");
+//                }
+//            }
 
         }
     }
@@ -205,7 +202,7 @@ public class StaffModeManager {
             ItemStack staffGuiItem = getHead(target);
             SkullMeta staffGuiItemMeta = (SkullMeta) staffGuiItem.getItemMeta();
             List<String> lore = new ArrayList<>(Arrays.asList(
-                ChatColor.WHITE + "Rank: " + ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix(target)),
+                ChatColor.WHITE + "Rank: " + ChatColor.translateAlternateColorCodes('&', plugin.getChat().getPlayerPrefix(target)),
                 ChatColor.WHITE + "Staff Mode: " + (hasStaffMode(uuid.toString()) == true ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"),
                 " ",
                 ChatColor.YELLOW + "Click to teleport"

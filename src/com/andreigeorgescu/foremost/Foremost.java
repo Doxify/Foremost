@@ -9,7 +9,11 @@ import com.andreigeorgescu.foremost.kits.commands.KitCommand;
 import com.andreigeorgescu.foremost.waraps.WarpCommand;
 import com.andreigeorgescu.foremost.waraps.WarpEventListener;
 import com.andreigeorgescu.foremost.waraps.WarpManager;
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.andreigeorgescu.foremost.command.*;
 import com.saphron.nsa.NSA;
@@ -27,10 +31,20 @@ public class Foremost extends JavaPlugin {
 	public KitsManager kitsManager = null;
 	public Config config = null;
 	public WarpManager warpManager = null;
+    private static Economy econ = null;
+    private static Permission perms = null;
+    private static Chat chat = null;
 
 			
     @Override
     public void onEnable() {
+        // =============================================
+        // Vault Hook
+        // =============================================
+        setupChat();
+        setupPermissions();
+        setupEcon();
+
 
         // =============================================
         // Loading Configs
@@ -105,4 +119,44 @@ public class Foremost extends JavaPlugin {
     public KitsManager getKitsManager() {
         return kitsManager;
     }
+
+    private boolean setupEcon() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
+
+    private boolean setupChat() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        if(rsp == null) {
+            return false;
+        }
+        chat = rsp.getProvider();
+        return chat != null;
+    }
+
+    private boolean setupPermissions() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        if(rsp == null) {
+            return false;
+        }
+        perms = rsp.getProvider();
+        return perms != null;
+    }
+
+    public Permission getPerms() { return perms; }
+    public Chat getChat() { return chat; }
+    public Economy getEcon() { return econ; }
 }

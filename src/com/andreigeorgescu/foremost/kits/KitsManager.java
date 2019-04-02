@@ -4,10 +4,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.awt.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 
 public class KitsManager {
 
@@ -61,8 +63,7 @@ public class KitsManager {
      */
     public void getKitList(Player p) {
         boolean firstKit = true;
-        StringBuilder kitList = new StringBuilder(org.bukkit.ChatColor.GREEN + org.bukkit.ChatColor.BOLD.toString() + "Kits\n");
-
+        StringBuilder kitList = new StringBuilder(ChatColor.GREEN + ChatColor.BOLD.toString() + "Kits\n");
 
         if(!isEnabled()) {
             p.sendMessage(ChatColor.RED + "There are currently no kits available.");
@@ -73,17 +74,19 @@ public class KitsManager {
             // Kit permission format: foremost.kit.kitName
             if(kit.hasPermission(p)) {
                 if(firstKit) {
-                    kitList.append(org.bukkit.ChatColor.GREEN + kit.getName());
+                    kitList.append(ChatColor.GREEN + kit.getName());
                     firstKit = false;
                 } else {
-                    kitList.append(org.bukkit.ChatColor.GRAY + ", " + org.bukkit.ChatColor.GREEN + kit.getName());
+                    kitList.append(ChatColor.GRAY + ", " + ChatColor.GREEN + kit.getName());
                 }
             } else {
-                if(firstKit) {
-                    kitList.append(org.bukkit.ChatColor.RED + kit.getName());
-                    firstKit = false;
-                } else {
-                    kitList.append(org.bukkit.ChatColor.GRAY + ", " + org.bukkit.ChatColor.RED + kit.getName());
+                if(kit.getCooldown() != -1) {
+                    if(firstKit) {
+                        kitList.append(ChatColor.RED + kit.getName());
+                        firstKit = false;
+                    } else {
+                        kitList.append(ChatColor.GRAY + ", " + ChatColor.RED + kit.getName());
+                    }
                 }
             }
         }
@@ -370,12 +373,15 @@ public class KitsManager {
 
         p.updateInventory();
 
-        if(!p.hasPermission("foremost.kit.bypass")) {
-            setCooldown(p.getUniqueId(), kit.getName(), kit.getCooldown());
-            p.sendMessage(ChatColor.GREEN + "Successfully redeemed kit: " + kit.getName());
-            p.sendMessage(ChatColor.YELLOW + "Cooldown: " + getCooldownString(getCooldown(p.getUniqueId(), kit.getName())));
-        } else {
-            p.sendMessage(ChatColor.GREEN + "Successfully redeemed kit: " + kit.getName());
+        if(kit.getCooldown() != -1) {
+            if(!p.hasPermission("foremost.kit.bypass")) {
+                setCooldown(p.getUniqueId(), kit.getName(), kit.getCooldown());
+                p.sendMessage(ChatColor.GREEN + "Successfully redeemed kit: " + kit.getName());
+                p.sendMessage(ChatColor.YELLOW + "Cooldown: " + getCooldownString(getCooldown(p.getUniqueId(), kit.getName())));
+            } else {
+                p.sendMessage(ChatColor.GREEN + "Successfully redeemed kit: " + kit.getName());
+            }
         }
     }
+
 }

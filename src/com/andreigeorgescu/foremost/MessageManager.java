@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.saphron.nsa.user.User;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,21 +28,24 @@ public class MessageManager {
 	
 	public boolean sendMessage(Player sender, Player target, String message) {
 		if(sender instanceof Player && target instanceof Player) {
-			String senderPrefix = ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix((Player) sender));
-			String targetPrefix = ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix((Player) target));
+			String senderPrefix = ChatColor.translateAlternateColorCodes('&', plugin.getChat().getPlayerPrefix((Player) sender));
+			String targetPrefix = ChatColor.translateAlternateColorCodes('&', plugin.getChat().getPlayerPrefix((Player) target));
 			sender.sendMessage(ChatColor.LIGHT_PURPLE + "(To " + targetPrefix + target.getName() + ChatColor.LIGHT_PURPLE + ") " + message);
     		target.sendMessage(ChatColor.LIGHT_PURPLE + "(From " + senderPrefix + sender.getName() + ChatColor.LIGHT_PURPLE + ") " + message);
-    		
-    		if(plugin.nsaPlugin.getProfileManager().getProfile(sender.getUniqueId().toString()).getToggleSound()) {
+			User user = plugin.nsaPlugin.userManager.getUser(sender.getUniqueId().toString());
+			User targetUser = plugin.nsaPlugin.userManager.getUser(target.getUniqueId().toString());
+
+
+    		if(user.getToggleSounds()) {
     			playMessageSound(sender);
     		}
-    		if(plugin.nsaPlugin.getProfileManager().getProfile(target.getUniqueId().toString()).getToggleSound()) {
+    		if(user.getToggleSounds()) {
     			playMessageSound(target);
     		}
     		
     		updateLastReply(sender, target);
-    		logMessage(sender, target, message);
-			notifySocialSpys(sender, target, message);
+//    		logMessage(sender, target, message);
+//			notifySocialSpys(sender, target, message);
     		return true;
 		}
 		return false;
@@ -55,37 +59,40 @@ public class MessageManager {
 	public void playMessageSound(Player target) {
 		target.playSound(target.getLocation(), Sound.ORB_PICKUP, 1, 1);
 	}
-	
-	public void notifySocialSpys(Player sender, Player target, String message) {
-		for(String uuid : plugin.nsaPlugin.getProfileManager().getSocialSpys()) {
-			UUID uuidFromString = UUID.fromString(uuid);
-			Player socialSpy = Bukkit.getPlayer(uuidFromString);
-			String senderPrefix = ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix((Player) sender));
-			String targetPrefix = ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix((Player) target));
-			if(socialSpy != null) {
-				socialSpy.sendMessage(ChatColor.BLUE + "[SS] " + senderPrefix + sender.getName() + ChatColor.LIGHT_PURPLE + " > " + targetPrefix + target.getName() + ChatColor.LIGHT_PURPLE + ": " + message);
-			}
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public void logMessage(Player sender, Player target, String message) {
-		JSONObject messageLog = new JSONObject();
-		String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm"));
-		
-		messageLog.put("sender", sender.getUniqueId().toString());
-		messageLog.put("senderName", sender.getName().toLowerCase());
-		messageLog.put("target", target.getUniqueId().toString());
-		messageLog.put("targetName", target.getName().toLowerCase());
-		messageLog.put("message", message);
-		messageLog.put("timestamp", timestamp);
-		messageLog.put("server", plugin.nsaPlugin.getServerName());
-		
-		new Document();
-		new BukkitRunnable() {
-    	    public void run() {
-    	    	plugin.nsaPlugin.postMessageLogToDatabase(Document.parse(messageLog.toString()));
-    	    }
-		}.runTaskAsynchronously(plugin);
-	}
+
+	// TODO: Implement socialspy
+//	public void notifySocialSpys(Player sender, Player target, String message) {
+//		for(String uuid : plugin.nsaPlugin.getProfileManager().getSocialSpys()) {
+//			UUID uuidFromString = UUID.fromString(uuid);
+//			Player socialSpy = Bukkit.getPlayer(uuidFromString);
+//			String senderPrefix = ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix((Player) sender));
+//			String targetPrefix = ChatColor.translateAlternateColorCodes('&', plugin.nsaPlugin.getChat().getPlayerPrefix((Player) target));
+//			if(socialSpy != null) {
+//				socialSpy.sendMessage(ChatColor.BLUE + "[SS] " + senderPrefix + sender.getName() + ChatColor.LIGHT_PURPLE + " > " + targetPrefix + target.getName() + ChatColor.LIGHT_PURPLE + ": " + message);
+//			}
+//		}
+//	}
+
+	// TODO: Log messages
+//	@SuppressWarnings("unchecked")
+//	public void logMessage(Player sender, Player target, String message) {
+//		JSONObject messageLog = new JSONObject();
+//		String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm"));
+//
+//		messageLog.put("sender", sender.getUniqueId().toString());
+//		messageLog.put("senderName", sender.getName().toLowerCase());
+//		messageLog.put("target", target.getUniqueId().toString());
+//		messageLog.put("targetName", target.getName().toLowerCase());
+//		messageLog.put("message", message);
+//		messageLog.put("timestamp", timestamp);
+//		messageLog.put("server", plugin.nsaPlugin.config.getServerName());
+//
+//		new Document();
+//		new BukkitRunnable() {
+//    	    public void run() {
+//    	    	plugin.nsaPlugin.postMessageLogToDatabase(Document.parse(messageLog.toString()));
+//    	    }
+//		}.runTaskAsynchronously(plugin);
+//	}
+
 }
