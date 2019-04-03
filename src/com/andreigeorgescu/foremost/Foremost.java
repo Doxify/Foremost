@@ -100,6 +100,7 @@ public class Foremost extends JavaPlugin {
         getCommand("rename").setExecutor(new RenameCommand());
         getCommand("kit").setExecutor(new KitCommand(this));
         getCommand("kitAdmin").setExecutor(new KitAdminCommand(this));
+        getCommand("broadcast").setExecutor(new BroadcastCommand());
 
     }
     

@@ -195,3 +195,8 @@ commands:
       usage: |
              Usages:
              /kitAdmin
+  broadcast:
+      description: Broadcast a message to the entire server
+      usage: |
+             Usages:
+             /broadcast <msg>
