@@ -3,6 +3,7 @@ package com.andreigeorgescu.foremost.events;
 import com.andreigeorgescu.foremost.Foremost;
 import com.andreigeorgescu.foremost.utils.ValueFormat;
 import com.saphron.nsa.Utilities;
+import com.saphron.nsa.tags.Tag;
 import com.saphron.nsa.user.User;
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -100,7 +101,26 @@ public class ChatEventListener implements Listener {
         String playerGroup = plugin.getPerms().getPrimaryGroup(p);
         String groupPrefixRaw = plugin.getChat().getGroupPrefix(p.getName(), playerGroup);
         String groupPrefixFormatted = ChatColor.translateAlternateColorCodes('&', groupPrefixRaw);
-        TextComponent textComponent = new TextComponent(groupPrefixFormatted + (user.getNickname() == null ? p.getName() : user.getNickname()) + ChatColor.WHITE + ": " + message);
+        String displayName = (user.getNickname() == null ? p.getName() : user.getNickname());
+
+        // Creating the chat line string with the user's rank, tag (if one exists), display name, and message.
+        StringBuilder chatLineString = new StringBuilder();
+        chatLineString.append(groupPrefixFormatted + "");
+
+        if(user.getTagName() != null) {
+            Tag tag = plugin.nsaPlugin.tagManager.getTag(user.getTagName());
+            if(tag.isPrefix()) {
+                chatLineString.append(tag.getTagFormatted() + " " + displayName + ChatColor.WHITE + ": ");
+            } else {
+                chatLineString.append(displayName + " " + tag.getTagFormatted() + ChatColor.WHITE + ": ");
+            }
+        } else {
+            chatLineString.append(displayName + ChatColor.WHITE + ": ");
+        }
+
+        chatLineString.append(message);
+
+        TextComponent textComponent = new TextComponent(chatLineString.toString());
         return textComponent;
     }
 
