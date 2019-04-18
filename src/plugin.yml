@@ -2,8 +2,8 @@ name: Foremost
 main: com.andreigeorgescu.foremost.Foremost
 version: 1.1.0
 author: Andrei Georgescu
-depend: [Vault, NSA, ASkyBlock]
-softdepend: [Multiverse-Core]
+depend: [Vault, NSA, TTA]
+softdepend: [Multiverse-Core, ASkyBlock]
 description: >
             First and foremost, the essentials.
 commands:
@@ -200,3 +200,8 @@ commands:
       usage: |
              Usages:
              /broadcast <msg>
+  spawnmob:
+      description: Spawn a mob at the location you are looking
+      usage: |
+             Usages:
+             /spawnmob <mob_type>

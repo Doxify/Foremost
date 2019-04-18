@@ -1,11 +1,13 @@
 package com.andreigeorgescu.foremost.command;
 
 import com.saphron.nsa.Utilities;
+import de.Herbystar.TTA.TTA_Methods;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class BroadcastCommand implements CommandExecutor {
 
@@ -26,6 +28,12 @@ public class BroadcastCommand implements CommandExecutor {
             }
 
             Bukkit.broadcastMessage(broadcastMessage.toString());
+
+
+            for(Player p : Bukkit.getServer().getOnlinePlayers()) {
+                TTA_Methods.sendActionBar(p, broadcastMessage.toString(), 180);
+            }
+
             return true;
         } else {
             sender.sendMessage(Utilities.NO_PERMISSION);

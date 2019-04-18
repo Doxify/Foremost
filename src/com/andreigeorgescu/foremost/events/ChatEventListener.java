@@ -12,6 +12,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,8 +26,15 @@ import java.util.UUID;
 public class ChatEventListener implements Listener {
 
     private final Foremost plugin;
+    public static boolean ECON_LOADED;
+    public static boolean ASKYBLOCK_LOADED;
+    public static boolean IS_LOBBY;
+
     public ChatEventListener(Foremost p) {
         this.plugin = p;
+        ECON_LOADED = Bukkit.getServer().getPluginManager().isPluginEnabled("SaneEconomy");
+        ASKYBLOCK_LOADED = Bukkit.getServer().getPluginManager().isPluginEnabled("ASkyBlock");
+        IS_LOBBY = Bukkit.getServer().getPluginManager().isPluginEnabled("Saphub");
     }
 
     @EventHandler ( priority = EventPriority.MONITOR )
@@ -53,8 +61,11 @@ public class ChatEventListener implements Listener {
         URL messageURL = getUrlFromMessage(e.getMessage());
 
         formattedTextComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent.create()));
+
         if(messageURL != null) {
             formattedTextComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, messageURL.toString()));
+        } else {
+            formattedTextComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + p.getName()));
         }
         return formattedTextComponent;
     }
@@ -110,7 +121,7 @@ public class ChatEventListener implements Listener {
         if(user.getTagName() != null) {
             Tag tag = plugin.nsaPlugin.tagManager.getTag(user.getTagName());
             if(tag.isPrefix()) {
-                chatLineString.append(tag.getTagFormatted() + " " + displayName + ChatColor.WHITE + ": ");
+                chatLineString.append(tag.getTagFormatted() + displayName + ChatColor.WHITE + ": ");
             } else {
                 chatLineString.append(displayName + " " + tag.getTagFormatted() + ChatColor.WHITE + ": ");
             }
@@ -132,9 +143,21 @@ public class ChatEventListener implements Listener {
         String groupPrefixFormatted = ChatColor.translateAlternateColorCodes('&', groupPrefixRaw);
 
         hoverComponent.append(groupPrefixFormatted + p.getName() + "\n");
-        hoverComponent.append(ChatColor.GRAY + "● " + ChatColor.WHITE + "Join Date: " + ChatColor.GREEN + user.getFirstJoinDate() + "\n");
-        hoverComponent.append(ChatColor.GRAY + "● " + ChatColor.WHITE + "Island Level: " + ChatColor.GREEN + getIslandLevelFormatted(p.getUniqueId()) + "\n");
-        hoverComponent.append(ChatColor.GRAY + "● " + ChatColor.WHITE + "Money: " + ChatColor.GREEN + Utilities.moneyFormat.format(plugin.getEcon().getBalance(p)));
+
+        if(ECON_LOADED) {
+            hoverComponent.append(ChatColor.WHITE + "Balance: " + ChatColor.GOLD + Utilities.moneyFormat.format(plugin.getEcon().getBalance(p)) + "\n");
+            if(ASKYBLOCK_LOADED) {
+                hoverComponent.append(ChatColor.WHITE + "Island Level: " + ChatColor.GOLD + getIslandLevelFormatted(p.getUniqueId()) + "\n\n");
+            } else {
+                hoverComponent.append("\n");
+            }
+        }
+
+        if(!IS_LOBBY) {
+            hoverComponent.append(ChatColor.WHITE + "Played on this server for " + ChatColor.RED + Utilities.getTimeStringWords(p.getStatistic(Statistic.PLAY_ONE_TICK) / 20) + "\n");
+        }
+
+        hoverComponent.append(ChatColor.WHITE + "First joined Saphron on " + ChatColor.RED + user.getFirstJoinDate());
 
         return new ComponentBuilder(hoverComponent.toString());
     }
@@ -158,8 +181,9 @@ public class ChatEventListener implements Listener {
         }
     }
 
-    private String getIslandLevelFormatted(UUID uuid) {
+    public static String getIslandLevelFormatted(UUID uuid) {
         long islandLevel = ASkyBlockAPI.getInstance().getLongIslandLevel(uuid);
+
         if(islandLevel >= 1000000000000L) {
             int settings = ValueFormat.COMMAS | ValueFormat.PRECISION(2) | ValueFormat.TRILLIONS;
             String formatted = ValueFormat.format(islandLevel, settings);

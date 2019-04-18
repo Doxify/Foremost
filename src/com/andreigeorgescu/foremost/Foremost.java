@@ -101,6 +101,7 @@ public class Foremost extends JavaPlugin {
         getCommand("kit").setExecutor(new KitCommand(this));
         getCommand("kitAdmin").setExecutor(new KitAdminCommand(this));
         getCommand("broadcast").setExecutor(new BroadcastCommand());
+        getCommand("spawnmob").setExecutor(new SpawnMobCommand());
 
     }
     
