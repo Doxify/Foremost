@@ -2,6 +2,9 @@ package com.andreigeorgescu.foremost;
 
 import java.util.logging.Logger;
 import com.andreigeorgescu.foremost.events.*;
+import com.andreigeorgescu.foremost.homes.HomeClickEvent;
+import com.andreigeorgescu.foremost.homes.HomeCommand;
+import com.andreigeorgescu.foremost.homes.HomeManager;
 import com.andreigeorgescu.foremost.kits.KitEvents;
 import com.andreigeorgescu.foremost.kits.KitsManager;
 import com.andreigeorgescu.foremost.kits.commands.KitAdminCommand;
@@ -31,6 +34,7 @@ public class Foremost extends JavaPlugin {
 	public KitsManager kitsManager = null;
 	public Config config = null;
 	public WarpManager warpManager = null;
+	public HomeManager homeManager = null;
     private static Economy econ = null;
     private static Permission perms = null;
     private static Chat chat = null;
@@ -52,6 +56,7 @@ public class Foremost extends JavaPlugin {
         config = fileManager.loadConfigFile("./plugins/Foremost", "config.json");
         kitsManager = fileManager.loadKitsManager();
         warpManager = new WarpManager();
+        homeManager = new HomeManager(this);
 
         // =============================================
         // Loading Event Listeners
@@ -63,6 +68,7 @@ public class Foremost extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new StaffModeEventListener(this), this);
         this.getServer().getPluginManager().registerEvents(new KitEvents(), this);
         this.getServer().getPluginManager().registerEvents(new WarpEventListener(warpManager), this);
+        this.getServer().getPluginManager().registerEvents(new HomeClickEvent(this), this);
 
 
         // =============================================
@@ -102,6 +108,7 @@ public class Foremost extends JavaPlugin {
         getCommand("kitAdmin").setExecutor(new KitAdminCommand(this));
         getCommand("broadcast").setExecutor(new BroadcastCommand());
         getCommand("spawnmob").setExecutor(new SpawnMobCommand());
+        getCommand("home").setExecutor(new HomeCommand(this));
 
     }
     
@@ -116,6 +123,7 @@ public class Foremost extends JavaPlugin {
     	cooldownManager.handleServerClose();
         staffModeManager.handleServerClose();
         warpManager.handleServerClose();
+        homeManager.handleServerClose();
     }
 
     public KitsManager getKitsManager() {

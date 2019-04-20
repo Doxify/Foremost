@@ -3,6 +3,7 @@ package com.andreigeorgescu.foremost.command;
 import com.saphron.nsa.Utilities;
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import com.wasteofplastic.askyblock.Island;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -19,15 +20,25 @@ import java.util.List;
 public class SpawnMobCommand implements CommandExecutor {
 
     private static final List<EntityType> ALLOWED_MOBS = new ArrayList<>(Arrays.asList(
-            EntityType.CREEPER,
+            EntityType.PIG,
+            EntityType.CHICKEN,
+            EntityType.SHEEP,
+            EntityType.COW,
             EntityType.ZOMBIE,
             EntityType.SKELETON,
-            EntityType.BAT
+            EntityType.SPIDER,
+            EntityType.CREEPER,
+            EntityType.ENDERMAN,
+            EntityType.MAGMA_CUBE,
+            EntityType.PIG_ZOMBIE,
+            EntityType.BLAZE,
+            EntityType.IRON_GOLEM,
+            EntityType.VILLAGER
     ));
 
     private EntityType isInList(String name) {
         for(EntityType type : ALLOWED_MOBS) {
-            if(type.getName().toLowerCase().contains(name.toLowerCase())) {
+            if(type.getName().toLowerCase().equalsIgnoreCase(name.toLowerCase())) {
                 return type;
             }
         }
@@ -39,6 +50,11 @@ public class SpawnMobCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
             Player p = (Player) sender;
+
+            if(Bukkit.getPluginManager().isPluginEnabled("Saphub")) {
+                p.sendMessage(ChatColor.RED + "/spawnmob is disabled on this server.");
+                return true;
+            }
 
             // Checking if the player has permission
             if(!p.hasPermission("foremost.spawnmob")) {

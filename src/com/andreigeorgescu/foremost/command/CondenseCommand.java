@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +40,11 @@ public class CondenseCommand implements CommandExecutor {
                         int amount = p.getItemInHand().getAmount();
 
                         // TODO: Do something with % 9 here
+                        for(ItemStack item : p.getInventory().getContents()) {
+                            if(item != null) {
 
+                            }
+                        }
 
 
                     } else {
@@ -61,4 +66,24 @@ public class CondenseCommand implements CommandExecutor {
             return true;
         }
     }
+
+    // Returns whether or not it condensed any items in the player's
+    // inventory.
+    private boolean condensePlayerInventory(Player p) {
+        boolean condensed = false;
+
+        for(ItemStack item : p.getInventory().getContents()) {
+            if(item != null) {
+                if(TYPES.contains(item.getType())) {
+                    if(item.getAmount() >= 9) {
+//                        int
+                    }
+                }
+            }
+        }
+
+        return condensed;
+    }
+
+//    private boolean
 }

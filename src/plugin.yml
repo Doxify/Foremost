@@ -205,3 +205,11 @@ commands:
       usage: |
              Usages:
              /spawnmob <mob_type>
+  home:
+      aliases: [homes]
+      description: view your homes
+      usage: |
+             Usages:
+             /home
+             /home set
+             /home remove
