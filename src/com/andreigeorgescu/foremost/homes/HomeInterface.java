@@ -27,7 +27,7 @@ public class HomeInterface {
                             ChatColor.GRAY + "World: " + ChatColor.YELLOW + homeLocation.getWorld().getName(),
                             ChatColor.GRAY + "Coordinates: " + ChatColor.YELLOW + homeLocation.getBlockX() + ", " + homeLocation.getBlockY() + ", " + homeLocation.getBlockZ(),
                             "",
-                            ChatColor.YELLOW + "Click to teleport to" + home.getName()
+                            ChatColor.LIGHT_PURPLE + "Click to teleport to " + home.getName()
                     )),
                     Material.NAME_TAG
             );
