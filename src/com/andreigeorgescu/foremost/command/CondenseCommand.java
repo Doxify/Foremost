@@ -38,13 +38,9 @@ public class CondenseCommand implements CommandExecutor {
                 if(p.getItemInHand() != null) {
                     if(TYPES.contains(p.getItemInHand().getType())) {
                         int amount = p.getItemInHand().getAmount();
+                        int size = (int) Math.ceil(amount / 9.0);
 
-                        // TODO: Do something with % 9 here
-                        for(ItemStack item : p.getInventory().getContents()) {
-                            if(item != null) {
 
-                            }
-                        }
 
 
                     } else {

@@ -41,6 +41,8 @@ public class HomeCommand implements CommandExecutor {
                             p.sendMessage(ChatColor.RED + "You don't have any homes.");
                             sendHelpMessage(p);
                         }
+                    } else {
+                        p.sendMessage(ChatColor.RED + "You aren't allowed to create homes");
                     }
                     break;
                 }

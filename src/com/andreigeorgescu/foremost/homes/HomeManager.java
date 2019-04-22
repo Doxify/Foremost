@@ -157,7 +157,7 @@ public class HomeManager {
 
     public int getAllowedHomes(Player p) {
         for(int i = 54; i > 0; i--) {
-            if(p.hasPermission("foremost.homes." + i)) {
+            if(p.hasPermission("foremost.home." + i)) {
                 return i;
             }
         }
