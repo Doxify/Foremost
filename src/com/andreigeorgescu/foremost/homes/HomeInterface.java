@@ -26,11 +26,18 @@ public class HomeInterface {
                     new ArrayList<>(Arrays.asList(
                             ChatColor.GRAY + "World: " + ChatColor.YELLOW + homeLocation.getWorld().getName(),
                             ChatColor.GRAY + "Coordinates: " + ChatColor.YELLOW + homeLocation.getBlockX() + ", " + homeLocation.getBlockY() + ", " + homeLocation.getBlockZ(),
+                            ChatColor.GRAY + "Cooldown: " + (home.isOnCooldown() ? ChatColor.RED + "Yes" : ChatColor.GREEN + "No"),
                             "",
                             ChatColor.LIGHT_PURPLE + "Click to teleport to " + home.getName()
                     )),
-                    Material.NAME_TAG
+                    Material.NAME_TAG,
+                    0
             );
+
+            if(home.isOnCooldown()) {
+                homeItem.setType(Material.STAINED_GLASS_PANE);
+                homeItem.setDurability((short) 14);
+            }
 
             homeInventory.addItem(homeItem);
         }

@@ -1,12 +1,8 @@
 package com.andreigeorgescu.foremost.homes;
 
 import com.andreigeorgescu.foremost.Foremost;
-import com.andreigeorgescu.foremost.waraps.Warp;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,7 +20,6 @@ public class HomeManager {
 
     private Foremost plugin;
     private HashMap<UUID, List<Home>> homes;
-    private HashMap<String, Integer> homePermissions;
 
     public HomeManager(Foremost plugin) {
         this.plugin = plugin;

@@ -15,6 +15,7 @@ public class Home {
     private Location location;
     private UUID owner;
     private List<UUID> members;
+    private boolean cooldown;
 
     // Main Constructor
     public Home(String name, Location location, UUID owner) {
@@ -46,6 +47,14 @@ public class Home {
     public String getOwnerName() {
         OfflinePlayer p = Bukkit.getOfflinePlayer(owner);
         return p.getName();
+    }
+
+    public void setCooldown(boolean cooldown) {
+        this.cooldown = cooldown;
+    }
+
+    public boolean isOnCooldown() {
+        return cooldown;
     }
 
     public Location getLocation() {

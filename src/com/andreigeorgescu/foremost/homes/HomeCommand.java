@@ -60,7 +60,9 @@ public class HomeCommand implements CommandExecutor {
                         List<Home> homes = plugin.homeManager.getHomes(p);
                         if(allowedHomes != 0) {
                             if(homes == null || homes.size() < allowedHomes) {
-                                if(plugin.homeManager.addHome(p.getPlayer().getUniqueId(), args[1], p.getLocation())) {
+                                Home home = new Home(args[1], p.getLocation(), p.getUniqueId());
+                                if(plugin.homeManager.addhome(home)) {
+                                    HomeClickEvent.createTemporaryHologram(home, p, false);
                                     p.sendMessage(ChatColor.GREEN + "Successfully set home: " + args[1]);
                                     p.sendMessage(ChatColor.DARK_GREEN + "Use /home to access your homes");
                                 } else {
