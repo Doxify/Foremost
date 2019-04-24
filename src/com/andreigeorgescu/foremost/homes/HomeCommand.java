@@ -51,8 +51,12 @@ public class HomeCommand implements CommandExecutor {
                 // /home remove <home name> - removes a home
                 case 2: {
                     if(args[0].equalsIgnoreCase("remove")) {
-                        if(plugin.homeManager.removeHome(p, args[1])) {
-                            p.sendMessage(ChatColor.GREEN + "Successfully removed home: " + args[1]);
+                        Home home = plugin.homeManager.getHome(p, args[1]);
+                        if(home instanceof Home) {
+                            if(plugin.homeManager.removeHome(p, args[1])) {
+                                HomeClickEvent.createTemporaryDeleteHologram(home, p);
+                                p.sendMessage(ChatColor.GREEN + "Successfully removed home: " + args[1]);
+                            }
                         } else {
                             p.sendMessage(ChatColor.RED + "Could not find home named " + args[1]);
                         }

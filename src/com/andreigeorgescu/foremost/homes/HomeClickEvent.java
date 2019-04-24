@@ -64,18 +64,12 @@ public class HomeClickEvent implements Listener {
 
     @EventHandler
     public static void createTemporaryHologram(Home home, Player p, boolean withCooldown) {
-        Vector direction = home.getLocation().clone().getDirection();
-        Location hologramLocation = home.getLocation().clone().add(direction.multiply(2));
+        Hologram homeHologram = generateHologram(p.getLocation());
 
-        Hologram homeHologram = HologramsAPI.createHologram(plugin, hologramLocation.add(0, 2, 0));
-        VisibilityManager visibilityManager = homeHologram.getVisibilityManager();
-        visibilityManager.setVisibleByDefault(false);
-
-        homeHologram.clearLines();
         homeHologram.appendTextLine(ChatColor.GREEN + "Home: " + ChatColor.BOLD.toString() + home.getName());
         homeHologram.appendTextLine(ChatColor.WHITE.toString() + home.getLocation().getBlockX() + ", " + home.getLocation().getBlockY() + ", " + home.getLocation().getBlockZ());
 
-        visibilityManager.showTo(p);
+        homeHologram.getVisibilityManager().showTo(p);
 
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
             @Override
@@ -86,5 +80,34 @@ public class HomeClickEvent implements Listener {
                 homeHologram.delete();
             }
         }, COOLDONW * 20);
+    }
+
+    public static void createTemporaryDeleteHologram(Home home, Player p) {
+        Hologram homeHologram = generateHologram(p.getLocation());
+
+        homeHologram.appendTextLine(ChatColor.RED + "Removed Home: " + ChatColor.BOLD.toString() + home.getName());
+        homeHologram.appendTextLine(ChatColor.GRAY.toString() + home.getLocation().getBlockX() + ", " + home.getLocation().getBlockY() + ", " + home.getLocation().getBlockZ());
+
+        homeHologram.getVisibilityManager().showTo(p);
+
+        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+            @Override
+            public void run() {
+
+                homeHologram.delete();
+            }
+        }, COOLDONW * 20);
+    }
+
+    private static Hologram generateHologram(Location location) {
+        Vector direction = location.clone().getDirection();
+        Location hologramLocation = location.clone().add(direction.multiply(2));
+
+        Hologram homeHologram = HologramsAPI.createHologram(plugin, hologramLocation.add(0, 2, 0));
+        VisibilityManager visibilityManager = homeHologram.getVisibilityManager();
+        visibilityManager.setVisibleByDefault(false);
+        homeHologram.clearLines();
+
+        return homeHologram;
     }
 }
