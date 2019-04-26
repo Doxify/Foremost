@@ -21,6 +21,11 @@ public class KitAdminCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if(Bukkit.getPluginManager().getPlugin("Saphub").isEnabled()) {
+            sender.sendMessage(ChatColor.RED + "/kit is disabled on this server.");
+            return true;
+        }
+
         if(sender.hasPermission("foremost.kitAdmin")) {
             Player p = (Player) sender;
 

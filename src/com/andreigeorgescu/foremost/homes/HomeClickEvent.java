@@ -2,20 +2,14 @@ package com.andreigeorgescu.foremost.homes;
 
 import com.andreigeorgescu.foremost.Foremost;
 import com.andreigeorgescu.foremost.utils.InventoryGuard;
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
-import com.gmail.filoghost.holographicdisplays.api.VisibilityManager;
+import com.andreigeorgescu.foremost.utils.NotificationHologram;
 import com.saphron.nsa.user.User;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.util.Vector;
-import org.inventivetalent.particle.ParticleEffect;
 
 public class HomeClickEvent implements Listener {
 
@@ -44,7 +38,12 @@ public class HomeClickEvent implements Listener {
 
                         // Setting the home to cooldown mode and creating the hologram
                         home.setCooldown(true);
-                        createTemporaryHologram(home, p, true);
+                        NotificationHologram notificationHologram = new NotificationHologram();
+                        notificationHologram
+                                .setPlayer(p)
+                                .setHome(home)
+                                .setType(NotificationHologram.TYPE.HOME)
+                                .build();
 
                         // If the user has the setting toggle off then we know they want
                         // sounds sent to them.
@@ -60,54 +59,5 @@ public class HomeClickEvent implements Listener {
                 }
             }
         }
-    }
-
-    @EventHandler
-    public static void createTemporaryHologram(Home home, Player p, boolean withCooldown) {
-        Hologram homeHologram = generateHologram(p.getLocation());
-
-        homeHologram.appendTextLine(ChatColor.GREEN + "Home: " + ChatColor.BOLD.toString() + home.getName());
-        homeHologram.appendTextLine(ChatColor.WHITE.toString() + home.getLocation().getBlockX() + ", " + home.getLocation().getBlockY() + ", " + home.getLocation().getBlockZ());
-
-        homeHologram.getVisibilityManager().showTo(p);
-
-        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-            @Override
-            public void run() {
-                if(withCooldown) {
-                    home.setCooldown(false);
-                }
-                homeHologram.delete();
-            }
-        }, COOLDONW * 20);
-    }
-
-    public static void createTemporaryDeleteHologram(Home home, Player p) {
-        Hologram homeHologram = generateHologram(p.getLocation());
-
-        homeHologram.appendTextLine(ChatColor.RED + "Removed Home: " + ChatColor.BOLD.toString() + home.getName());
-        homeHologram.appendTextLine(ChatColor.GRAY.toString() + home.getLocation().getBlockX() + ", " + home.getLocation().getBlockY() + ", " + home.getLocation().getBlockZ());
-
-        homeHologram.getVisibilityManager().showTo(p);
-
-        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-            @Override
-            public void run() {
-
-                homeHologram.delete();
-            }
-        }, COOLDONW * 20);
-    }
-
-    private static Hologram generateHologram(Location location) {
-        Vector direction = location.clone().getDirection();
-        Location hologramLocation = location.clone().add(direction.multiply(2));
-
-        Hologram homeHologram = HologramsAPI.createHologram(plugin, hologramLocation.add(0, 2, 0));
-        VisibilityManager visibilityManager = homeHologram.getVisibilityManager();
-        visibilityManager.setVisibleByDefault(false);
-        homeHologram.clearLines();
-
-        return homeHologram;
     }
 }

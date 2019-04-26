@@ -9,6 +9,7 @@ import com.andreigeorgescu.foremost.kits.KitEvents;
 import com.andreigeorgescu.foremost.kits.KitsManager;
 import com.andreigeorgescu.foremost.kits.commands.KitAdminCommand;
 import com.andreigeorgescu.foremost.kits.commands.KitCommand;
+import com.andreigeorgescu.foremost.utils.HologramHandler;
 import com.andreigeorgescu.foremost.waraps.WarpCommand;
 import com.andreigeorgescu.foremost.waraps.WarpEventListener;
 import com.andreigeorgescu.foremost.waraps.WarpManager;
@@ -35,6 +36,7 @@ public class Foremost extends JavaPlugin {
 	public Config config = null;
 	public WarpManager warpManager = null;
 	public HomeManager homeManager = null;
+	public HologramHandler hologramHandler = null;
     private static Economy econ = null;
     private static Permission perms = null;
     private static Chat chat = null;
@@ -57,6 +59,7 @@ public class Foremost extends JavaPlugin {
         kitsManager = fileManager.loadKitsManager();
         warpManager = new WarpManager();
         homeManager = new HomeManager(this);
+        hologramHandler = new HologramHandler(this);
 
         // =============================================
         // Loading Event Listeners

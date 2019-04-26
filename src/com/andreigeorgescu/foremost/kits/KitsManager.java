@@ -13,8 +13,8 @@ import java.util.List;
 
 public class KitsManager {
 
-    private List<Kit> kits;
-    private HashMap<UUID, HashMap<String, String>> cooldowns;
+    private static List<Kit> kits;
+    private static HashMap<UUID, HashMap<String, String>> cooldowns;
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss", Locale.ENGLISH);
     private boolean enabled;
 
@@ -36,7 +36,7 @@ public class KitsManager {
         cooldowns.clear();
     }
 
-    public List<Kit> getKits() {
+    public static List<Kit> getKits() {
         return kits;
     }
 
@@ -220,7 +220,7 @@ public class KitsManager {
     Returns true if they do
     Returns false if they don't
      */
-    public boolean hasCooldown(UUID uuid, String kitName) {
+    public static boolean hasCooldown(UUID uuid, String kitName) {
         if(!cooldowns.containsKey(uuid)) {
             return false;
         } else {

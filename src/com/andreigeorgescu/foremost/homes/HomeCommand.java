@@ -1,6 +1,7 @@
 package com.andreigeorgescu.foremost.homes;
 
 import com.andreigeorgescu.foremost.Foremost;
+import com.andreigeorgescu.foremost.utils.NotificationHologram;
 import com.saphron.nsa.Utilities;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -54,7 +55,12 @@ public class HomeCommand implements CommandExecutor {
                         Home home = plugin.homeManager.getHome(p, args[1]);
                         if(home instanceof Home) {
                             if(plugin.homeManager.removeHome(p, args[1])) {
-                                HomeClickEvent.createTemporaryDeleteHologram(home, p);
+                                NotificationHologram notificationHologram = new NotificationHologram();
+                                notificationHologram
+                                        .setPlayer(p)
+                                        .setHome(home)
+                                        .setType(NotificationHologram.TYPE.HOME_DELETE)
+                                        .build();
                                 p.sendMessage(ChatColor.GREEN + "Successfully removed home: " + args[1]);
                             }
                         } else {
@@ -66,7 +72,12 @@ public class HomeCommand implements CommandExecutor {
                             if(homes == null || homes.size() < allowedHomes) {
                                 Home home = new Home(args[1], p.getLocation(), p.getUniqueId());
                                 if(plugin.homeManager.addhome(home)) {
-                                    HomeClickEvent.createTemporaryHologram(home, p, false);
+                                    NotificationHologram notificationHologram = new NotificationHologram();
+                                    notificationHologram
+                                            .setPlayer(p)
+                                            .setHome(home)
+                                            .setType(NotificationHologram.TYPE.HOME)
+                                            .build();
                                     p.sendMessage(ChatColor.GREEN + "Successfully set home: " + args[1]);
                                     p.sendMessage(ChatColor.DARK_GREEN + "Use /home to access your homes");
                                 } else {
