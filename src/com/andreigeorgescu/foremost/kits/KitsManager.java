@@ -15,7 +15,7 @@ public class KitsManager {
 
     private static List<Kit> kits;
     private static HashMap<UUID, HashMap<String, String>> cooldowns;
-    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss", Locale.ENGLISH);
+    private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss", Locale.ENGLISH);
     private boolean enabled;
 
     public KitsManager(List<Kit> k, HashMap<UUID, HashMap<String, String>> c) {
@@ -243,7 +243,7 @@ public class KitsManager {
     Returns true if the cooldown is over
     Returns false if the cooldown isn't over
      */
-    public boolean isCooldownOver(UUID uuid, String kitName) {
+    public static boolean isCooldownOver(UUID uuid, String kitName) {
         if(!hasCooldown(uuid, kitName)) {
             return true;
         } else {
@@ -295,7 +295,7 @@ public class KitsManager {
     Returns a DateTime object if there's a cooldown
     Returns null if the cooldown is over / doesn't exist.
      */
-    public LocalDateTime getCooldown(UUID uuid, String kitName) {
+    public static LocalDateTime getCooldown(UUID uuid, String kitName) {
         if(!hasCooldown(uuid, kitName)) {
             return null;
         } else {
@@ -335,7 +335,7 @@ public class KitsManager {
 
     Returns a string
      */
-    public String getCooldownString(LocalDateTime cooldown) {
+    public static String getCooldownString(LocalDateTime cooldown) {
         StringBuilder cooldownString = new StringBuilder();
         LocalDateTime currentTime = LocalDateTime.now();
         long milliseconds = Duration.between(currentTime, cooldown).toMillis();

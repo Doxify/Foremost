@@ -7,7 +7,9 @@ public class Profile {
 	private String lastReply;
 	private Location lastLocation;
 	private String teleportRequest;
+
 	private boolean staffMode;
+	private boolean condenseCooldown;
 
 	public Profile(String lr) {
 		setStaffMode(false);
@@ -58,6 +60,17 @@ public class Profile {
 
 	public void setTeleportRequest(String tr) {
 		teleportRequest = tr;
+	}
+
+	// -------------------------------------------------------------
+	// condenseCooldown methods
+	// -------------------------------------------------------------
+	public boolean getCondenseCooldown() {
+		return condenseCooldown;
+	}
+
+	public void setCondenseCooldown(boolean condenseCooldown) {
+		this.condenseCooldown = condenseCooldown;
 	}
 
 }

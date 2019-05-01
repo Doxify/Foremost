@@ -112,6 +112,7 @@ public class Foremost extends JavaPlugin {
         getCommand("broadcast").setExecutor(new BroadcastCommand());
         getCommand("spawnmob").setExecutor(new SpawnMobCommand());
         getCommand("home").setExecutor(new HomeCommand(this));
+        getCommand("condense").setExecutor(new CondenseCommand(this));
 
     }
     

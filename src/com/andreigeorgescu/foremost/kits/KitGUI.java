@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class KitGUI {
@@ -39,11 +40,12 @@ public class KitGUI {
 
         for(Kit kit : KitsManager.getKits()) {
             if(kit.getCooldown() != -1  || p.hasPermission("foremost.admin")) {
+                LocalDateTime cooldown = KitsManager.getCooldown(p.getUniqueId(), kit.getName());
                 ItemStack kitItem = ItemStackCreator.createItemStack(
                         (kit.hasPermission(p) ? Material.PAPER : Material.STAINED_GLASS_PANE),
                         ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + kit.getName(),
                         Arrays.asList(
-                                ChatColor.GRAY + "Cooldown: " + (kit.getCooldown() == -1 ? ChatColor.GREEN + "None" : ChatColor.GREEN.toString() + kit.getCooldownString()),
+                                ChatColor.GRAY + "Cooldown: " + (KitsManager.hasCooldown(p.getUniqueId(), kit.getName()) ? ChatColor.YELLOW + KitsManager.getCooldownString(cooldown) : (kit.getCooldown() == -1 ? ChatColor.GREEN + "None" : ChatColor.GREEN.toString() + kit.getCooldownString()) ),
                                 ChatColor.GRAY + "Unlocked: " + (kit.hasPermission(p) ? ChatColor.GREEN + "True" : ChatColor.RED + "False"),
                                 "",
                                 (kit.hasPermission(p) ? (KitsManager.hasCooldown(p.getUniqueId(), kit.getName()) ? ChatColor.RED + "This kit is on cooldown" : ChatColor.YELLOW + "Click to redeem kit") : ChatColor.RED + "You don't have this kit unlocked"),
@@ -94,11 +96,12 @@ public class KitGUI {
                     item.setDurability((short) 14);
                     bottomBar[i] = item;
                 } else {
+                    LocalDateTime cooldown = KitsManager.getCooldown(p.getUniqueId(), kit.getName());
                     ItemStack item = ItemStackCreator.createItemStack(
                         Material.STAINED_GLASS_PANE,
                         ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + kit.getName(),
                         Arrays.asList(
-                                ChatColor.GRAY + "Cooldown: " + (kit.getCooldown() == -1 ? ChatColor.GREEN + "None" : ChatColor.GREEN.toString() + kit.getCooldownString()),
+                                ChatColor.GRAY + "Cooldown: " + (KitsManager.hasCooldown(p.getUniqueId(), kit.getName()) ? ChatColor.YELLOW + KitsManager.getCooldownString(cooldown) : (kit.getCooldown() == -1 ? ChatColor.GREEN + "None" : ChatColor.GREEN.toString() + kit.getCooldownString()) ),
                                 ChatColor.GRAY + "Unlocked: " + (kit.hasPermission(p) ? ChatColor.GREEN + "True" : ChatColor.RED + "False"),
                                 "",
                                 (kit.hasPermission(p) ? (KitsManager.hasCooldown(p.getUniqueId(), kit.getName()) ? ChatColor.RED + "This kit is on cooldown" : ChatColor.YELLOW + "Click to redeem kit") : ChatColor.RED + "You don't have this kit unlocked")

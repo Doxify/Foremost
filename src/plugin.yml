@@ -205,6 +205,11 @@ commands:
       usage: |
              Usages:
              /spawnmob <mob_type>
+  condense:
+      description: Condense items into blocks
+      usage: |
+             Usages:
+             /condense
   home:
       aliases: [homes]
       description: view your homes
