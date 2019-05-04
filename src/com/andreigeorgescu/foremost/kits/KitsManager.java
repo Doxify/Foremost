@@ -1,5 +1,6 @@
 package com.andreigeorgescu.foremost.kits;
 
+import com.saphron.nsa.Utilities;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -336,20 +337,10 @@ public class KitsManager {
     Returns a string
      */
     public static String getCooldownString(LocalDateTime cooldown) {
-        StringBuilder cooldownString = new StringBuilder();
         LocalDateTime currentTime = LocalDateTime.now();
-        long milliseconds = Duration.between(currentTime, cooldown).toMillis();
-        int hours   = (int) ((milliseconds / (1000*60*60)) % 24);
-        int minutes = (int) ((milliseconds / (1000*60)) % 60);
-        int seconds = (int) (milliseconds / 1000) % 60 ;
-
-        cooldownString.append(hours < 1 ? "00" : (hours < 10 ? "0" + hours : Integer.toString(hours)));
-        cooldownString.append(":");
-        cooldownString.append(minutes < 1 ? "00" : minutes < 10 ? "0" + minutes : Integer.toString(minutes));
-        cooldownString.append(":");
-        cooldownString.append(seconds < 10 ? "0" + seconds : seconds);
-
-        return cooldownString.toString();
+        long millis = Duration.between(currentTime, cooldown).toMillis();
+        long seconds = millis / 1000;
+        return Utilities.getTimeStringWords(seconds);
     }
 
     /*

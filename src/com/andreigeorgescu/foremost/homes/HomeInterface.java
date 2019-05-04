@@ -24,7 +24,7 @@ public class HomeInterface {
             ItemStack homeItem = Utilities.createGuiItem(
                     ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + home.getName(),
                     new ArrayList<>(Arrays.asList(
-                            ChatColor.GRAY + "World: " + ChatColor.YELLOW + homeLocation.getWorld().getName(),
+//                            ChatColor.GRAY + "World: " + ChatColor.YELLOW + homeLocation.getWorld().getName(),
                             ChatColor.GRAY + "Coordinates: " + ChatColor.YELLOW + homeLocation.getBlockX() + ", " + homeLocation.getBlockY() + ", " + homeLocation.getBlockZ(),
                             ChatColor.GRAY + "Cooldown: " + (home.isOnCooldown() ? ChatColor.RED + "Yes" : ChatColor.GREEN + "No"),
                             "",
@@ -40,6 +40,26 @@ public class HomeInterface {
             }
 
             homeInventory.addItem(homeItem);
+        }
+
+        if(homes.size() < size) {
+            for(int i = homes.size(); i < size; i++) {
+                if(i >= maxHomes) {
+                    homeInventory.setItem(i, Utilities.createGuiItem(
+                            ChatColor.WHITE + " ",
+                            null,
+                            Material.STAINED_GLASS_PANE,
+                            7
+                    ));
+                } else {
+                    homeInventory.setItem(i, Utilities.createGuiItem(
+                            ChatColor.WHITE + " ",
+                            null,
+                            Material.STAINED_GLASS_PANE,
+                            5
+                    ));
+                }
+            }
         }
 
         return homeInventory;

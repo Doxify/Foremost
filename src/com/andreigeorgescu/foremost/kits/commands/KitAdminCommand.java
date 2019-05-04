@@ -3,6 +3,7 @@ package com.andreigeorgescu.foremost.kits.commands;
 import com.andreigeorgescu.foremost.Foremost;
 import com.andreigeorgescu.foremost.kits.Kit;
 import com.andreigeorgescu.foremost.kits.KitsManager;
+import com.andreigeorgescu.foremost.utils.NotificationHologram;
 import com.saphron.nsa.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,6 +12,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
 
 public class KitAdminCommand implements CommandExecutor {
 
@@ -21,7 +24,7 @@ public class KitAdminCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(Bukkit.getPluginManager().getPlugin("Saphub").isEnabled()) {
+        if(Bukkit.getPluginManager().isPluginEnabled("Saphub")) {
             sender.sendMessage(ChatColor.RED + "/kit is disabled on this server.");
             return true;
         }
@@ -65,7 +68,7 @@ public class KitAdminCommand implements CommandExecutor {
                             Player target = Bukkit.getPlayer(args[1]);
                             if(target != null) {
                                 Kit targetKit = kitsManager.getKitObject(args[2]);
-                                kitsManager.givePlayerKit(target, targetKit);
+                                givePlayerKit(target, targetKit);
                                 target.sendMessage(ChatColor.GREEN + "You've been given the " + targetKit.getName() + " kit!");
                                 break;
                             } else {
@@ -115,6 +118,25 @@ public class KitAdminCommand implements CommandExecutor {
         string.append("\n/kitAdmin give <player> <name>");
 
         return string.toString();
+    }
+
+    private void givePlayerKit(Player p, Kit kit) {
+        ItemStack kitItems[] = kit.getKit().clone();
+        HashMap<Integer, ItemStack> items = p.getInventory().addItem(kitItems);
+
+        if (items.size() > 0) {
+            for (ItemStack item : items.values()) {
+                p.getWorld().dropItem(p.getLocation(), item);
+            }
+        }
+
+        p.updateInventory();
+
+        NotificationHologram notificationHologram = new NotificationHologram();
+        notificationHologram.setPlayer(p)
+                .addLine(ChatColor.LIGHT_PURPLE + "Kit Received")
+                .addLine(ChatColor.GREEN + ChatColor.BOLD.toString() + kit.getName())
+                .build();
     }
 
 }
