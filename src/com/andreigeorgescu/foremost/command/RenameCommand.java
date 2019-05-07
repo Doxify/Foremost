@@ -1,5 +1,6 @@
 package com.andreigeorgescu.foremost.command;
 
+import com.andreigeorgescu.foremost.Foremost;
 import com.saphron.nsa.Utilities;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,9 +15,19 @@ public class RenameCommand implements CommandExecutor {
 
     // todo: Implemeent a blacklist for materials that cannot be renamed.
     // items: Spawners, Bedrock
+    public Foremost plugin;
+
+    public RenameCommand(Foremost plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if(plugin.nsaPlugin.isHub()) {
+            sender.sendMessage(ChatColor.RED + "This feature is disabled in the lobby.");
+            return true;
+        }
+
         if (sender instanceof Player) {
             if(sender.hasPermission("foremost.rename")) {
                 if(args.length > 0) {

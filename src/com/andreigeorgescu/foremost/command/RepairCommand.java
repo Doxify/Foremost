@@ -22,6 +22,11 @@ public class RepairCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if(plugin.nsaPlugin.isHub()) {
+            sender.sendMessage(ChatColor.RED + "This feature is disabled in the lobby.");
+            return true;
+        }
+
         if (sender instanceof Player) {
             commandSender = (Player) sender;
             String senderUUID = ((Player) sender).getUniqueId().toString();

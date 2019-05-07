@@ -21,6 +21,11 @@ public class BackCommand implements CommandExecutor {
 	
 	@Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if(plugin.nsaPlugin.isHub()) {
+			sender.sendMessage(ChatColor.RED + "This feature is disabled in the lobby.");
+			return true;
+		}
+
 		if(sender instanceof Player) {
 			if(sender.hasPermission("foremost.back")) {
 				Location lastLocation = plugin.profileManager.getProfile(((Player) sender).getUniqueId().toString()).getLastLocation();

@@ -21,8 +21,8 @@ public class HomeCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(plugin.getServer().getPluginManager().isPluginEnabled("Saphub")) {
-            sender.sendMessage(ChatColor.RED + "/home is disabled on this server");
+        if(plugin.nsaPlugin.isHub()) {
+            sender.sendMessage(ChatColor.RED + "This feature is disabled in the lobby.");
             return true;
         }
 

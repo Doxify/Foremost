@@ -1,9 +1,9 @@
 package com.andreigeorgescu.foremost.command;
 
+import com.andreigeorgescu.foremost.Foremost;
 import com.saphron.nsa.Utilities;
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import com.wasteofplastic.askyblock.Island;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -19,6 +19,7 @@ import java.util.List;
 
 public class SpawnMobCommand implements CommandExecutor {
 
+    private Foremost plugin;
     private static final List<EntityType> ALLOWED_MOBS = new ArrayList<>(Arrays.asList(
             EntityType.PIG,
             EntityType.CHICKEN,
@@ -36,6 +37,10 @@ public class SpawnMobCommand implements CommandExecutor {
             EntityType.VILLAGER
     ));
 
+    public SpawnMobCommand(Foremost plugin) {
+        this.plugin = plugin;
+    }
+
     private EntityType isInList(String name) {
         for(EntityType type : ALLOWED_MOBS) {
             if(type.getName().toLowerCase().equalsIgnoreCase(name.toLowerCase())) {
@@ -51,8 +56,8 @@ public class SpawnMobCommand implements CommandExecutor {
         if(sender instanceof Player) {
             Player p = (Player) sender;
 
-            if(Bukkit.getPluginManager().isPluginEnabled("Saphub")) {
-                p.sendMessage(ChatColor.RED + "/spawnmob is disabled on this server.");
+            if(plugin.nsaPlugin.isHub()) {
+                sender.sendMessage(ChatColor.RED + "This feature is disabled in the lobby.");
                 return true;
             }
 

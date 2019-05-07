@@ -3,6 +3,7 @@ package com.andreigeorgescu.foremost.command;
 import com.saphron.nsa.Utilities;
 import com.andreigeorgescu.foremost.Foremost;
 import com.andreigeorgescu.foremost.Profile;
+import mkremins.fanciful.FancyMessage;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -24,6 +25,11 @@ public class PlayerTeleportCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if(plugin.nsaPlugin.isHub()) {
+            sender.sendMessage(ChatColor.RED + "This feature is disabled in the lobby.");
+            return true;
+        }
+
         if(sender instanceof Player) {
             if(sender.hasPermission("foremost.teleport.accept")) {
                 switch(label.toUpperCase()) {
@@ -35,24 +41,20 @@ public class PlayerTeleportCommand implements CommandExecutor {
                                 if(target.getName() != sender.getName()) {
                                     if(targetProfile.getTeleportRequest() != sender.getName()) {
                                         targetProfile.setTeleportRequest(sender.getName());
-                                        TextComponent teleportAcceptMessage = new TextComponent("");
-                                        TextComponent acceptMessage = new TextComponent(ChatColor.GOLD + "\n≡ " + ChatColor.GREEN + "Click to accept " + target.getName() + "'s request");
-                                        TextComponent denyMessage = new TextComponent(ChatColor.GOLD + "≡ " + ChatColor.RED + "Click to deny " + target.getName() + "'s request");
-                                        teleportAcceptMessage.setColor(ChatColor.GOLD);
-                                        teleportAcceptMessage.addExtra(ChatColor.BOLD + sender.getName() + ChatColor.GOLD + " has requested to teleport to you.");
-                                        acceptMessage.setColor(ChatColor.GREEN);
-                                        acceptMessage.addExtra(ChatColor.GOLD + " ≡");
-                                        denyMessage.setColor(ChatColor.RED);
-                                        denyMessage.addExtra(ChatColor.GOLD + " ≡\n");
+                                        new FancyMessage(ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "INCOMING TELEPORT REQUEST")
+                                                .then("\n" + ChatColor.GRAY + "From: " + ChatColor.YELLOW + sender.getName())
+                                                .then("\n" + ChatColor.GRAY + "Type: " + ChatColor.YELLOW + "They teleport to you")
+                                                .then("\n" + ChatColor.DARK_GREEN + "Click ")
+                                                .then(ChatColor.GREEN + ChatColor.BOLD.toString() + "ACCEPT")
+                                                    .tooltip(ChatColor.GREEN + "Accept " + sender.getName() + "'s request")
+                                                    .command("/tpaccept")
+                                                .then(ChatColor.DARK_GREEN + " to accept " + sender.getName() + "'s request.")
 
-                                        acceptMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Aaccept " + sender.getName() + "'s teleport request").create()));
-                                        acceptMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept"));
-                                        denyMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Deny " + sender.getName() + "'s teleport request").create()));
-                                        denyMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpdeny"));
-
-                                        target.spigot().sendMessage(teleportAcceptMessage);
-                                        target.spigot().sendMessage(acceptMessage);
-                                        target.spigot().sendMessage(denyMessage);
+//                                                .then(ChatColor.GRAY + " or ")
+//                                                .then(ChatColor.RED + ChatColor.BOLD.toString() + "DENY")
+//                                                    .tooltip(ChatColor.RED + "Deny " + sender.getName() + "'s request")
+//                                                    .command("/tpdeny")
+                                            .send(target);
                                         sender.sendMessage(ChatColor.GREEN + "Successfully sent " + target.getName() + " a teleport request." );
                                         return true;
                                     } else {
@@ -81,24 +83,20 @@ public class PlayerTeleportCommand implements CommandExecutor {
                                 if(target.getName() != sender.getName()) {
                                     if(targetProfile.getTeleportRequest() != sender.getName()) {
                                         targetProfile.setTeleportRequest(sender.getName());
-                                        TextComponent teleportAcceptMessage = new TextComponent("");
-                                        TextComponent acceptMessage = new TextComponent(ChatColor.GOLD + "\n≡ " + ChatColor.GREEN + "Click to accept " + sender.getName() + "'s request");
-                                        TextComponent denyMessage = new TextComponent(ChatColor.GOLD + "≡ " + ChatColor.RED + "Click to deny " + sender.getName() + "'s request");
-                                        teleportAcceptMessage.setColor(ChatColor.GOLD);
-                                        teleportAcceptMessage.addExtra(ChatColor.BOLD + sender.getName() + ChatColor.GOLD + " has requested you to teleport to them.");
-                                        acceptMessage.setColor(ChatColor.GREEN);
-                                        acceptMessage.addExtra(ChatColor.GOLD + " ≡");
-                                        denyMessage.setColor(ChatColor.RED);
-                                        denyMessage.addExtra(ChatColor.GOLD + " ≡\n");
+                                        new FancyMessage(ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "INCOMING TELEPORT REQUEST")
+                                                .then("\n" + ChatColor.GRAY + "From: " + ChatColor.YELLOW + sender.getName())
+                                                .then("\n" + ChatColor.GRAY + "Type: " + ChatColor.YELLOW + "You teleport to them")
+                                                .then("\n" + ChatColor.DARK_GREEN + "Click ")
+                                                .then(ChatColor.GREEN + ChatColor.BOLD.toString() + "ACCEPT")
+                                                    .tooltip(ChatColor.GREEN + "Accept " + sender.getName() + "'s request")
+                                                    .command("/tpahereaccept")
+                                                .then(ChatColor.DARK_GREEN + " to accept " + sender.getName() + "'s request.")
 
-                                        acceptMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Accept " + sender.getName() + "'s teleport request.").create()));
-                                        acceptMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpahereaccept"));
-                                        denyMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Deny " + sender.getName() + "'s teleport request.").create()));
-                                        denyMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpdeny"));
-
-                                        target.spigot().sendMessage(teleportAcceptMessage);
-                                        target.spigot().sendMessage(acceptMessage);
-                                        target.spigot().sendMessage(denyMessage);
+//                                                .then(ChatColor.GRAY + " or ")
+//                                                .then(ChatColor.RED + ChatColor.BOLD.toString() + "DENY")
+//                                                    .tooltip(ChatColor.RED + "Deny " + sender.getName() + "'s request")
+//                                                    .command("/tpdeny")
+                                            .send(target);
                                         sender.sendMessage(ChatColor.GREEN + "Successfully sent " + target.getName() + " a tpahere request." );
                                         return true;
                                     } else {

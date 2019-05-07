@@ -106,11 +106,11 @@ public class Foremost extends JavaPlugin {
         getCommand("fly").setExecutor(new FlyCommand());
         getCommand("staff").setExecutor(new StaffModeCommand(this));
         getCommand("help").setExecutor(new HelpCommand());
-        getCommand("rename").setExecutor(new RenameCommand());
+        getCommand("rename").setExecutor(new RenameCommand(this));
         getCommand("kit").setExecutor(new KitCommand(this));
         getCommand("kitAdmin").setExecutor(new KitAdminCommand(this));
         getCommand("broadcast").setExecutor(new BroadcastCommand());
-        getCommand("spawnmob").setExecutor(new SpawnMobCommand());
+        getCommand("spawnmob").setExecutor(new SpawnMobCommand(this));
         getCommand("home").setExecutor(new HomeCommand(this));
         getCommand("condense").setExecutor(new CondenseCommand(this));
 

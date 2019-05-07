@@ -41,13 +41,18 @@ public class ChatEventListener implements Listener {
     public void onChatMessage(AsyncPlayerChatEvent e) {
         if(!e.isCancelled()) {
             Player p = e.getPlayer();
-            if(!plugin.chatManager.getChatMuteSetting() || p.hasPermission("foremost.chat.bypass")) {
-                e.setCancelled(true);
-                TextComponent message = createChatComponent(e);
-                sendMessageToAllPlayers(message);
+            if(plugin.nsaPlugin.userManager.isLoaded(p.getUniqueId())) {
+                if(!plugin.chatManager.getChatMuteSetting() || p.hasPermission("foremost.chat.bypass")) {
+                    e.setCancelled(true);
+                    TextComponent message = createChatComponent(e);
+                    sendMessageToAllPlayers(message);
+                } else {
+                    e.setCancelled(true);
+                    p.sendMessage(ChatColor.RED + "Chat is currently muted, please try again once chat is unmuted.");
+                }
             } else {
+                p.sendMessage(ChatColor.RED + "Please wait until your profile has been loaded to chat.");
                 e.setCancelled(true);
-                p.sendMessage(ChatColor.RED + "Chat is currently muted, please try again once chat is unmuted.");
             }
         }
     }
