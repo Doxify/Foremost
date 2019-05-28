@@ -32,21 +32,23 @@ public class FileManager {
 			Object configFileParsed = new JSONParser().parse(new FileReader(filePath + "/" + fileName));
 			JSONObject configJson = (JSONObject) configFileParsed;
 			Location spawnLocation = null;
+			String defaultKit = null;
 
 			try {
 				spawnLocation = deserializeLocation((JSONObject) configJson.get("spawn"));
+				defaultKit = (String) configJson.get("defaultKit");
 			} catch (NullPointerException | IllegalArgumentException | ClassCastException e) {
 				e.printStackTrace();
 				System.out.println("[Foremost] Could not load spawn json, setting it to null.");
 			}
 
 			
-			Config configClass = new Config(spawnLocation);
+			Config configClass = new Config(spawnLocation, defaultKit);
 			return configClass;
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 			System.out.println("[Foremost] Failed to load config.json. Returned a null Config.");
-			return new Config(null);
+			return new Config(null, null);
 		}
 	}
 
@@ -110,7 +112,11 @@ public class FileManager {
 		if(config.getSpawn() instanceof Location) {
 			spawnJSON = serializeLocation(config.getSpawn());
 			configJSON.put("spawn", spawnJSON);
+		} else {
+			configJSON.put("spawn", null);
 		}
+
+		configJSON.put("defaultKit", config.getDefaultKit());
 
 
 		try {

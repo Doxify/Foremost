@@ -15,7 +15,7 @@ import java.util.List;
 public class NotificationHologram {
 
     public enum TYPE {
-        DEFAULT, HOME, HOME_DELETE, KIT,
+        DEFAULT, HOME, HOME_DELETE, KIT
     }
 
     private static final int COOLDOWN = 10;

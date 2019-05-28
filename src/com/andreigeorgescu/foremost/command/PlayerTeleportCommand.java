@@ -128,7 +128,7 @@ public class PlayerTeleportCommand implements CommandExecutor {
                             ((Player) targetPlayer).teleport(((Player) sender).getLocation());
                             senderProfile.setTeleportRequest(null);
                             target.sendMessage(ChatColor.GREEN + "You've been teleported to " + sender.getName() + "!");
-                            sender.sendMessage(ChatColor.GREEN + sender.getName() + " has teleported to you!");
+                            sender.sendMessage(ChatColor.GREEN + target.getName() + " has teleported to you!");
                             return true;
                         } else {
                             sender.sendMessage(ChatColor.RED + "You do not have a pending teleport request.");

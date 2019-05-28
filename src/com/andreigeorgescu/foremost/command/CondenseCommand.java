@@ -39,7 +39,8 @@ public class CondenseCommand implements CommandExecutor {
                     Material.REDSTONE_ORE,
                     Material.LAPIS_ORE,
                     Material.COAL_ORE,
-                    Material.COAL
+                    Material.COAL,
+                    Material.INK_SACK
             ));
 
     @Override
@@ -90,7 +91,7 @@ public class CondenseCommand implements CommandExecutor {
                     // Making sure they have at least enough for one block
                     if(item.getAmount() >= 9) {
                         // Getting the block the item corresponds to
-                        Material condencedType = getCondensedType(item.getType());
+                        Material condencedType = getCondensedType(item.getType(), item.getDurability());
                         if(condencedType != null) {
                             // Condensing the inventory and giving the player the items
                             ItemStack[] condencedItems = condenseItemStack(item, condencedType);
@@ -161,7 +162,7 @@ public class CondenseCommand implements CommandExecutor {
         }
     }
 
-    private Material getCondensedType(Material material) {
+    private Material getCondensedType(Material material, Short meta) {
         switch (material) {
             case EMERALD_ORE: case EMERALD: {
                 return Material.EMERALD_BLOCK;
@@ -169,16 +170,10 @@ public class CondenseCommand implements CommandExecutor {
             case DIAMOND_ORE: case DIAMOND: {
                 return Material.DIAMOND_BLOCK;
             }
-            case IRON_ORE: {
+            case IRON_INGOT: case IRON_ORE: {
                 return Material.IRON_BLOCK;
             }
-            case IRON_INGOT: {
-                return Material.IRON_BLOCK;
-            }
-            case GOLD_ORE: {
-                return Material.GOLD_BLOCK;
-            }
-            case GOLD_INGOT: {
+            case GOLD_ORE: case GOLD_INGOT: {
                 return Material.GOLD_BLOCK;
             }
             case REDSTONE_ORE: case REDSTONE: {
@@ -187,19 +182,19 @@ public class CondenseCommand implements CommandExecutor {
             case LAPIS_ORE: {
                 return Material.LAPIS_BLOCK;
             }
-            case COAL_ORE: {
-                return Material.COAL_BLOCK;
-            }
-            case COAL: {
+            case COAL_ORE: case COAL: {
                 return Material.COAL_BLOCK;
             }
             case GOLD_NUGGET: {
                 return Material.GOLD_INGOT;
             }
+            case INK_SACK: {
+                if(meta == 4) {
+                    return Material.LAPIS_BLOCK;
+                }
+                return null;
+            }
         }
         return null;
     }
-
-
-
 }

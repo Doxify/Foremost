@@ -1,5 +1,6 @@
 package com.andreigeorgescu.foremost.events;
 
+import com.andreigeorgescu.foremost.kits.Kit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 
 import com.andreigeorgescu.foremost.Foremost;
 import com.andreigeorgescu.foremost.Profile;
+import org.bukkit.inventory.ItemStack;
 
 
 public class EventsListener implements Listener {
@@ -26,13 +28,58 @@ public class EventsListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
+	public void onPlayerJoin(PlayerJoinEvent e) {
 		Profile profile = new Profile(null);
-		this.plugin.profileManager.addProfile(event.getPlayer().getUniqueId().toString(), profile);
+		Player p = e.getPlayer();
+		this.plugin.profileManager.addProfile(p.getUniqueId().toString(), profile);
 		if(plugin.config.getSpawn() != null) {
-			event.getPlayer().teleport(plugin.config.getSpawn());
+			p.teleport(plugin.config.getSpawn());
+		}
+
+		// Giving players their default kit as per the value for "defaultKit" in config.json
+		if(!p.hasPlayedBefore()) {
+			if(plugin.config.getDefaultKit() != null) {
+				if(plugin.kitsManager.kitExists(plugin.config.getDefaultKit())) {
+					Kit defaultKit = plugin.kitsManager.getKitObject(plugin.config.getDefaultKit());
+					givePlayerDefaultKit(p, defaultKit);
+				}
+			}
 		}
 	}
+
+	// Helper function for onPlayerJoin
+	private void givePlayerDefaultKit(Player p, Kit defaultKit) {
+		for(ItemStack item : defaultKit.getKit().clone()) {
+			if(item.getType().name().toLowerCase().contains("helmet")) {
+				if(p.getEquipment().getHelmet() == null) {
+					p.getEquipment().setHelmet(item);
+				} else {
+					p.getInventory().addItem(item);
+				}
+			} else if(item.getType().name().toLowerCase().contains("chestplate")) {
+				if(p.getEquipment().getChestplate() == null) {
+					p.getEquipment().setChestplate(item);
+				} else {
+					p.getInventory().addItem(item);
+				}
+			} else if(item.getType().name().toLowerCase().contains("leggings")) {
+				if(p.getEquipment().getLeggings() == null) {
+					p.getEquipment().setLeggings(item);
+				} else {
+					p.getInventory().addItem(item);
+				}
+			} else if(item.getType().name().toLowerCase().contains("boots")) {
+				if(p.getEquipment().getBoots() == null) {
+					p.getEquipment().setBoots(item);
+				} else {
+					p.getInventory().addItem(item);
+				}
+			} else {
+				p.getInventory().addItem(item);
+			}
+		}
+	}
+
 	
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent event) {

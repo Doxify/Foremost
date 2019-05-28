@@ -1,5 +1,6 @@
 package com.andreigeorgescu.foremost.command;
 
+import com.andreigeorgescu.foremost.MessageManager;
 import com.saphron.nsa.Utilities;
 import com.andreigeorgescu.foremost.Foremost;
 import com.saphron.nsa.NSA;
@@ -30,43 +31,45 @@ public class MessageCommand implements CommandExecutor {
             	if(args.length <= 1) {
                     sender.sendMessage(ChatColor.RED + "Usage: /msg <player> <message>");
                 } else {
-                    Player target = Bukkit.getServer().getPlayer(args[0]);                    
+            		Player s = (Player) sender; // sender
+                    Player t = Bukkit.getServer().getPlayer(args[0]); // target
                     
                     StringBuilder message = new StringBuilder();
                     for(int i = 1; i < args.length; i++) {
                         message.append(args[i] + " ");
                     }
 
-                    if(target != null) {
-						User targetUser = nsaPlugin.userManager.getUser(target.getUniqueId().toString());
+                    if(t != null) {
+                    	User senderUser = nsaPlugin.userManager.getUser(s.getUniqueId());
+						User targetUser = nsaPlugin.userManager.getUser(t.getUniqueId());
                     	if(targetUser.getTogglePM() == false || sender.hasPermission("nsa.togglepm.bypass")) {
                     		// Checking if the target has the sender ignored.
-							if(true) {
-								if(true) {
-									// TODO: Implement ignored functions
-//                    		if(!nsaPlugin.getProfileManager().getProfile(target.getUniqueId().toString()).isIgnored(((Player) sender).getUniqueId().toString()) || sender.hasPermission("nsa.ignore.bypass") ) {
-//                    			if(!nsaPlugin.getProfileManager().getProfile(((Player) sender).getUniqueId().toString()).isIgnored(target.getUniqueId().toString())) {
+							if(!targetUser.isInIgnoreList(s.getUniqueId()) || s.hasPermission("nsa.ignore.bypass")) {
+								if(!senderUser.isInIgnoreList(t.getUniqueId())) {
                     				// The target is not on the ignored list of the sender or the sender has the bypass permission, sending the message.
-                    				if(!plugin.messageManager.sendMessage((Player) sender, target, message.toString())) {
-                    					sender.sendMessage(ChatColor.RED + "There was an error sending your message. Please contact staff.");
+                    				if(!plugin.messageManager.sendMessage(s, t, message.toString())) {
+                    					s.sendMessage(ChatColor.RED + "There was an error sending your message. Please contact staff.");
                     					return true;
                     				}
                     			} else {
-                    				sender.sendMessage(ChatColor.RED + "You can't message someone on your ignored list.");
+                    				s.sendMessage(ChatColor.RED + "You can't message someone on your ignored list.");
                 					return true;
                     			}
                     		} else {
-                    			// The sender IS on the ignored list, sending a fake message.
-                    			sender.sendMessage(ChatColor.LIGHT_PURPLE + "(To " + prefix + target.getName() + ChatColor.LIGHT_PURPLE + ") " + message);
+                    			// The sender IS in the ignored list, sending a fake message.
+                    			s.sendMessage(ChatColor.LIGHT_PURPLE + "(To " + prefix + t.getName() + ChatColor.LIGHT_PURPLE + ") " + message);
+								if(!senderUser.getToggleSounds()) {
+									MessageManager.playMessageSound(t);
+								}
             					return true;
                     		}
                     		
                     	} else {
-                    		sender.sendMessage(ChatColor.RED + target.getName() + " has their messages toggled off.");
+                    		s.sendMessage(ChatColor.RED + t.getName() + " has their messages toggled off.");
         					return true;
                     	}
                     } else {
-                    	sender.sendMessage(ChatColor.RED + args[0] + " is not online.");
+                    	s.sendMessage(ChatColor.RED + args[0] + " is not online.");
     					return true;
                     }
                 }
@@ -78,8 +81,4 @@ public class MessageCommand implements CommandExecutor {
         }
         return true;
     }
-
-	public Foremost getPlugin() {
-		return plugin;
-	}
 }

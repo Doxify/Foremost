@@ -30,34 +30,34 @@ public class KitAdminCommand implements CommandExecutor {
         }
 
         if(sender.hasPermission("foremost.kitAdmin")) {
-            Player p = (Player) sender;
-
             /*
             Commands:
                 1. /kitAdmin add "name" "cooldown (seconds)"
                 2. /kitAdmin delete "name"
                 3. /kitAdmin give "player" "name"
+                4. /kitAdmin setDefault "name"
              */
 
             switch (args.length) {
                 case 3: {
                     if(args[0].equalsIgnoreCase("ADD")) {
                         if(sender instanceof Player) {
+                            Player p = (Player) sender;
                             try {
                                 String kitName = args[1];
                                 int cooldown = Integer.parseInt(args[2]);
                                 ItemStack[] kitItems = p.getInventory().getContents();
 
                                 if (kitsManager.addKit(kitName, cooldown, kitItems)) {
-                                    p.sendMessage(ChatColor.GREEN + "Successfully added kit: " + kitName);
+                                    sender.sendMessage(ChatColor.GREEN + "Successfully added kit: " + kitName);
                                     break;
                                 } else {
-                                    p.sendMessage(ChatColor.RED + "A kit with that name already exists.");
+                                    sender.sendMessage(ChatColor.RED + "A kit with that name already exists.");
                                     break;
                                 }
 
                             } catch (ClassCastException e) {
-                                p.sendMessage(getKitAdminCommandGuide());
+                                sender.sendMessage(getKitAdminCommandGuide());
                                 break;
                             }
                         } else {
@@ -72,15 +72,15 @@ public class KitAdminCommand implements CommandExecutor {
                                 target.sendMessage(ChatColor.GREEN + "You've been given the " + targetKit.getName() + " kit!");
                                 break;
                             } else {
-                                p.sendMessage(ChatColor.RED + args[1] + " is not online.");
+                                sender.sendMessage(ChatColor.RED + args[1] + " is not online.");
                                 break;
                             }
                         } else {
-                            p.sendMessage(ChatColor.RED + "Couldn't find a kit with the name " + args[2]);
+                            sender.sendMessage(ChatColor.RED + "Couldn't find a kit with the name " + args[2]);
                             break;
                         }
                     } else {
-                        p.sendMessage(getKitAdminCommandGuide());
+                        sender.sendMessage(getKitAdminCommandGuide());
                         break;
                     }
                 }
@@ -89,19 +89,30 @@ public class KitAdminCommand implements CommandExecutor {
                         String kitName = args[1];
 
                         if (kitsManager.deleteKit(kitName)) {
-                            p.sendMessage(ChatColor.GREEN + "Successfully deleted kit: " + kitName);
+                            sender.sendMessage(ChatColor.GREEN + "Successfully deleted kit: " + kitName);
                             break;
                         } else {
-                            p.sendMessage(ChatColor.RED + "Couldn't find a kit with the name: " + kitName);
+                            sender.sendMessage(ChatColor.RED + "Couldn't find a kit with the name: " + kitName);
+                            break;
+                        }
+                    } else if(args[0].equalsIgnoreCase("SETDEFAULT")) {
+                        String kitName = args[1];
+
+                        if(kitsManager.kitExists(kitName)) {
+                            plugin.config.setDefaultKit(kitName);
+                            sender.sendMessage(ChatColor.GREEN + "Successfully set default kit to: " + kitName);
+                            break;
+                        } else {
+                            sender.sendMessage(ChatColor.RED + kitName + " does not exist.");
                             break;
                         }
                     } else {
-                        p.sendMessage(getKitAdminCommandGuide());
+                        sender.sendMessage(getKitAdminCommandGuide());
                         break;
                     }
                 }
                 default: {
-                    p.sendMessage(getKitAdminCommandGuide());
+                    sender.sendMessage(getKitAdminCommandGuide());
                     break;
                 }
             }
@@ -116,6 +127,7 @@ public class KitAdminCommand implements CommandExecutor {
         string.append("\n/kitAdmin add <name> <cooldown in seconds>");
         string.append("\n/kitAdmin delete <name>");
         string.append("\n/kitAdmin give <player> <name>");
+        string.append("\n/kitAdmin setDefault <name>");
 
         return string.toString();
     }
