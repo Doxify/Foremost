@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -15,9 +16,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class WarpManager {
 
@@ -27,10 +26,10 @@ public class WarpManager {
     // Default constructor
     public WarpManager() {
         warps = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-
-        if(loadWarpsFromFile()) {
-            warpMenu = loadWarpMenu();
-        }
+        loadWarpsFromFile();
+//        if(loadWarpsFromFile()) {
+//            warpMenu = loadWarpMenu();
+//        }
 
     }
 
@@ -89,39 +88,53 @@ public class WarpManager {
     }
 
     // Loads a warp gui based on the current waps loaded into the MAP
-    private Inventory loadWarpMenu() {
-        if(warps.size() > 0) {
-            int inventorySize = 9 * (int) Math.ceil(warps.size() / 9.0);
-            Inventory warpInventory = Bukkit.createInventory(null, inventorySize, "Warp Menu");
-            int inventoryCounter = 0;
-
-            for(String warpName : warps.keySet()) {
-                Warp warp = warps.get(warpName);
-                Location warpLocation = warp.getLocation();
-
-                ItemStack warpItemStack = new ItemStack(Material.NAME_TAG);
-                ItemMeta warpItemStackMeta = warpItemStack.getItemMeta();
-
-                warpItemStackMeta.setDisplayName(ChatColor.YELLOW + warp.getName());
-                warpItemStackMeta.setLore(Arrays.asList(
-                        ChatColor.GRAY + "World: " + ChatColor.YELLOW + warpLocation.getWorld().getName(),
-                        ChatColor.GRAY + "Coordinates: " + ChatColor.YELLOW + warpLocation.getBlockX() + ", " + warpLocation.getBlockY() + ", " + warpLocation.getBlockZ()
-                ));
-                warpItemStack.setItemMeta(warpItemStackMeta);
-
-                warpInventory.setItem(inventoryCounter, warpItemStack);
-                inventoryCounter++;
-            }
-
-            return warpInventory;
-        } else {
-            return null;
-        }
-    }
+//    private Inventory loadWarpMenu() {
+//        if(warps.size() > 0) {
+//            int inventorySize = 9 * (int) Math.ceil(warps.size() / 9.0);
+//            Inventory warpInventory = Bukkit.createInventory(null, inventorySize, "Warp Menu");
+//            int inventoryCounter = 0;
+//
+//            for(String warpName : warps.keySet()) {
+//                Warp warp = warps.get(warpName);
+//                warpInventory.setItem(inventoryCounter, warp.getItemStack());
+//                inventoryCounter++;
+//            }
+//
+//            return warpInventory;
+//        } else {
+//            return null;
+//        }
+//    }
 
     // Returns the warps gui if it exists, null if it doesn't
     public Inventory getWarpMenu() {
         return warpMenu;
+    }
+
+    // Returns a version of the warp menu that only consists of warps the user has permission to
+    public Inventory getWarpMenu(Player p) {
+        List<ItemStack> avaiableWarps = new ArrayList<>();
+
+        for(Warp warp : warps.values()) {
+            if(warp.hasPermission(p)) {
+                avaiableWarps.add(warp.getItemStack());
+            }
+        }
+
+        if(!avaiableWarps.isEmpty()) {
+            int inventorySize = 9 * (int) Math.ceil(avaiableWarps.size() / 9.0);
+            Inventory warpInventory = Bukkit.createInventory(null, inventorySize, "Warp Menu");
+            int inventoryCounter = 0;
+
+            for(ItemStack warpItem : avaiableWarps) {
+                warpInventory.setItem(inventoryCounter, warpItem);
+                inventoryCounter++;
+            }
+
+            return warpInventory;
+        }
+
+        return null;
     }
 
     // Returns true if successful, false if a warp with that name already exists
@@ -129,7 +142,6 @@ public class WarpManager {
         if(!warps.containsKey(name)) {
             Warp warp = new Warp(name, location);
             warps.put(name, warp);
-            warpMenu = loadWarpMenu();
             return true;
         }
         return false;
@@ -139,7 +151,6 @@ public class WarpManager {
     public boolean removeWarp(String name) {
         if(warps.containsKey(name)) {
             warps.remove(name);
-            warpMenu = loadWarpMenu();
             return true;
         }
         return false;

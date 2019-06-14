@@ -1,12 +1,15 @@
 package com.andreigeorgescu.foremost.waraps;
 
+import com.andreigeorgescu.foremost.Foremost;
 import com.saphron.nsa.Utilities;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import java.util.Map;
 
@@ -79,11 +82,18 @@ public class WarpCommand implements CommandExecutor {
                     }
                     // /warp
                     case 0: {
-                        try {
-                            p.openInventory(warpManager.getWarpMenu());
-                        } catch (NullPointerException e) {
-                            p.sendMessage(ChatColor.RED + "There are no available warps.");
-                        }
+                        Bukkit.getScheduler().runTaskAsynchronously(Foremost.getPlugin(), new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Inventory warpInventory = warpManager.getWarpMenu(p);
+                                    p.openInventory(warpInventory);
+                                } catch (NullPointerException e) {
+                                    e.printStackTrace();
+                                    p.sendMessage(ChatColor.RED + "You don't have any available warps.");
+                                }
+                            }
+                        });
                         break;
                     }
                     default: {

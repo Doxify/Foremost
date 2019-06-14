@@ -24,6 +24,7 @@ import com.saphron.nsa.NSA;
 
 public class Foremost extends JavaPlugin {
 
+    public static Foremost instance;
 	public NSA nsaPlugin = (NSA) this.getServer().getPluginManager().getPlugin("NSA");
     public Logger log = Bukkit.getLogger();
     public ProfileManager profileManager = new ProfileManager();
@@ -44,6 +45,8 @@ public class Foremost extends JavaPlugin {
 			
     @Override
     public void onEnable() {
+        instance = this;
+
         // =============================================
         // Vault Hook
         // =============================================
@@ -173,4 +176,5 @@ public class Foremost extends JavaPlugin {
     public Permission getPerms() { return perms; }
     public Chat getChat() { return chat; }
     public Economy getEcon() { return econ; }
+    public static Foremost getPlugin() { return instance; }
 }

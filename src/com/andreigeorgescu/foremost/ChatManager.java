@@ -2,6 +2,7 @@ package com.andreigeorgescu.foremost;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 public class ChatManager {
 	
@@ -34,9 +35,14 @@ public class ChatManager {
 	}
 	
 	public void clearChat(String clearedBy) {
-		for (int x = 0; x < 150; x++){
-		    Bukkit.broadcastMessage("");
-		}
+		for(Player p : Bukkit.getServer().getOnlinePlayers()) {
+		    if(!p.hasPermission("foremost.chat")) {
+                for (int x = 0; x < 150; x++){
+                    p.sendMessage(" ");
+                }
+            }
+        }
+
         Bukkit.broadcastMessage(ChatColor.RED + "Chat has been cleared by " + clearedBy + ".");
 	}
 

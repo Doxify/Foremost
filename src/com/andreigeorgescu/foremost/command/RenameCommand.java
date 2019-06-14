@@ -11,10 +11,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class RenameCommand implements CommandExecutor {
 
-    // todo: Implemeent a blacklist for materials that cannot be renamed.
-    // items: Spawners, Bedrock
+    private static final List<Material> blackList = new ArrayList<>(Arrays.asList(
+            Material.BEDROCK,
+            Material.MOB_SPAWNER,
+            Material.CHEST,
+            Material.HOPPER
+    ));
+
+
     public Foremost plugin;
 
     public RenameCommand(Foremost plugin) {
@@ -33,20 +43,24 @@ public class RenameCommand implements CommandExecutor {
                 if(args.length > 0) {
                     ItemStack itemInHand = ((Player) sender).getItemInHand();
                     if(itemInHand.getType() != Material.AIR) {
-                        StringBuilder itemName = new StringBuilder();
-                        for (int i = 0; i < args.length; i++) {
-                            itemName.append(args[i]);
-                            if(i+1 != args.length) {
-                                itemName.append(" ");
+                        if(!blackList.contains(itemInHand.getType())) {
+                            StringBuilder itemName = new StringBuilder();
+                            for (int i = 0; i < args.length; i++) {
+                                itemName.append(args[i]);
+                                if(i+1 != args.length) {
+                                    itemName.append(" ");
+                                }
                             }
+
+                            String newItemName = ChatColor.translateAlternateColorCodes('&', itemName.toString());
+                            ItemMeta itemInHandItemMeta = itemInHand.getItemMeta();
+                            itemInHandItemMeta.setDisplayName(newItemName);
+                            itemInHand.setItemMeta(itemInHandItemMeta);
+
+                            sender.sendMessage(ChatColor.GREEN + "The item in your hand has been renamed: " + ChatColor.translateAlternateColorCodes('&', itemName.toString()));
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "This item cannot be renamed.");
                         }
-
-                        String newItemName = ChatColor.translateAlternateColorCodes('&', itemName.toString());
-                        ItemMeta itemInHandItemMeta = itemInHand.getItemMeta();
-                        itemInHandItemMeta.setDisplayName(newItemName);
-                        itemInHand.setItemMeta(itemInHandItemMeta);
-
-                        sender.sendMessage(ChatColor.GREEN + "The item in your hand has been renamed: " + ChatColor.translateAlternateColorCodes('&', itemName.toString()));
                     } else {
                         sender.sendMessage(ChatColor.RED + "You are not holding an item in your hand!");
                     }

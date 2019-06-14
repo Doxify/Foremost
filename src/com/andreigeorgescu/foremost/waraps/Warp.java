@@ -1,25 +1,34 @@
 package com.andreigeorgescu.foremost.waraps;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONObject;
+
+import java.util.Arrays;
 
 
 public class Warp {
 
     private String name;
     private Location location;
+    private ItemStack itemStack;
 
     // Main Constructor
     public Warp(String n, Location l) {
         this.name = n;
         this.location = l;
+        createItemStack();
     }
 
     // Constructor used for loading warps from JSON
     public Warp(JSONObject warpObject) {
         deserialize(warpObject);
+        createItemStack();
     }
 
     // Get a warp's name
@@ -29,7 +38,7 @@ public class Warp {
 
     // Get a warp's location
     public Location getLocation() {
-        return location;
+        return location.clone();
     }
 
     // Returns true if a player has permission to warp, false if not
@@ -38,6 +47,23 @@ public class Warp {
             return true;
         }
         return false;
+    }
+
+    private void createItemStack() {
+        ItemStack warpItem = new ItemStack(Material.NAME_TAG);
+        ItemMeta warpItemMeta = warpItem.getItemMeta();
+        warpItemMeta.setDisplayName(ChatColor.YELLOW + name);
+        warpItemMeta.setLore(Arrays.asList(
+                ChatColor.GRAY + "World: " + ChatColor.YELLOW + location.getWorld().getName(),
+                ChatColor.GRAY + "Coordinates: " + ChatColor.YELLOW + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ()
+        ));
+
+        warpItem.setItemMeta(warpItemMeta);
+        this.itemStack = warpItem;
+    }
+
+    public final ItemStack getItemStack() {
+        return this.itemStack.clone();
     }
 
     // Serializes the warp object into a JSONObject

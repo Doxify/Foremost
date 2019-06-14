@@ -19,6 +19,7 @@ import java.util.*;
 public class CondenseCommand implements CommandExecutor {
 
     private Foremost plugin;
+    private static final int COOLDOWN = 30;
 
     public CondenseCommand(Foremost plugin) {
         this.plugin = plugin;
@@ -52,7 +53,7 @@ public class CondenseCommand implements CommandExecutor {
 
                 // Checking for cooldown
                 if(profile.getCondenseCooldown()) {
-                    p.sendMessage(ChatColor.RED + "You can only use /condense once every 5 minutes.");
+                    p.sendMessage(ChatColor.RED + "You can only use /condense once every " + COOLDOWN + " seconds.");
                 } else {
                     // Condensing
                     condensePlayerInventory(p);
@@ -66,7 +67,7 @@ public class CondenseCommand implements CommandExecutor {
                                 profile.setCondenseCooldown(false);
                             }
                         }
-                    }, 300 * 20);
+                    }, COOLDOWN * 20);
                 }
 
                 return true;
