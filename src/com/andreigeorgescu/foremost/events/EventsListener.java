@@ -84,7 +84,6 @@ public class EventsListener implements Listener {
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent event) {
 		plugin.profileManager.deleteProfile(event.getPlayer().getUniqueId().toString());
-		plugin.cooldownManager.handleDisconnect(event.getPlayer().getUniqueId().toString());
 	}
 
 	@EventHandler

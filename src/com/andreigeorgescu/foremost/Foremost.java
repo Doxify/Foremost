@@ -1,6 +1,8 @@
 package com.andreigeorgescu.foremost;
 
 import java.util.logging.Logger;
+
+import com.andreigeorgescu.foremost.cooldowns.CooldownManager;
 import com.andreigeorgescu.foremost.events.*;
 import com.andreigeorgescu.foremost.homes.HomeClickEvent;
 import com.andreigeorgescu.foremost.homes.HomeCommand;
@@ -31,8 +33,8 @@ public class Foremost extends JavaPlugin {
 	public ChatManager chatManager = new ChatManager();
 	public FileManager fileManager = new FileManager(this);
 	public MessageManager messageManager = new MessageManager(this);
-	public CooldownManager cooldownManager = new CooldownManager(this);
-	public StaffModeManager staffModeManager = new StaffModeManager(this);
+	public CooldownManager cooldownManager = null;
+//	public StaffModeManager staffModeManager = new StaffModeManager(this);
 	public KitsManager kitsManager = null;
 	public Config config = null;
 	public WarpManager warpManager = null;
@@ -56,13 +58,14 @@ public class Foremost extends JavaPlugin {
 
 
         // =============================================
-        // Loading Configs
+        // Loading Managers
         // =============================================
         config = fileManager.loadConfigFile("./plugins/Foremost", "config.json");
         kitsManager = fileManager.loadKitsManager();
         warpManager = new WarpManager();
         homeManager = new HomeManager(this);
         hologramHandler = new HologramHandler(this);
+        cooldownManager = new CooldownManager();
 
         // =============================================
         // Loading Event Listeners
@@ -86,7 +89,7 @@ public class Foremost extends JavaPlugin {
         getCommand("night").setExecutor(new NightCommand());
         getCommand("sunset").setExecutor(new SunsetCommand());
         getCommand("ci").setExecutor(new ClearInventoryCommand());
-        getCommand("repair").setExecutor(new RepairCommand(this));
+        getCommand("repair").setExecutor(new RepairCommand());
         getCommand("speed").setExecutor(new SpeedCommand());
         getCommand("heal").setExecutor(new HealCommand(this));
         getCommand("chat").setExecutor(new ChatManagerCommand(chatManager));
@@ -107,7 +110,7 @@ public class Foremost extends JavaPlugin {
         getCommand("teleport").setExecutor(new TeleportCommand());
         getCommand("tpa").setExecutor(new PlayerTeleportCommand(this));
         getCommand("fly").setExecutor(new FlyCommand());
-        getCommand("staff").setExecutor(new StaffModeCommand(this));
+//        getCommand("staff").setExecutor(new StaffModeCommand(this));
         getCommand("help").setExecutor(new HelpCommand());
         getCommand("rename").setExecutor(new RenameCommand(this));
         getCommand("kit").setExecutor(new KitCommand(this));
@@ -128,7 +131,7 @@ public class Foremost extends JavaPlugin {
     	fileManager.saveKitsToFile();
     	kitsManager.handleServerClose();
     	cooldownManager.handleServerClose();
-        staffModeManager.handleServerClose();
+//        staffModeManager.handleServerClose();
         warpManager.handleServerClose();
         homeManager.handleServerClose();
     }

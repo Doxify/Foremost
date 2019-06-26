@@ -175,11 +175,11 @@ commands:
       usage: |
              Usages:
              /fly
-  staff:
-      description: Toggle staff mode
-      usage: |
-             Usages:
-             /staff
+#  staff:
+#      description: Toggle staff mode
+#      usage: |
+#             Usages:
+#             /staff
   help:
       description: Get general server help
       usage: |

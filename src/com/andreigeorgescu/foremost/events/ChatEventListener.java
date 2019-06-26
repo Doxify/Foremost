@@ -152,7 +152,8 @@ public class ChatEventListener implements Listener {
         if(ECON_LOADED) {
             hoverComponent.append(ChatColor.WHITE + "Balance: " + ChatColor.GOLD + Utilities.moneyFormat.format(plugin.getEcon().getBalance(p)) + "\n");
             if(ASKYBLOCK_LOADED) {
-                hoverComponent.append(ChatColor.WHITE + "Island Level: " + ChatColor.GOLD + getIslandLevelFormatted(p.getUniqueId()) + "\n\n");
+                hoverComponent.append(ChatColor.WHITE + "Island Level: " + ChatColor.GOLD + getIslandLevelFormatted(p.getUniqueId()) + "\n");
+//                hoverComponent.append(ChatColor.WHITE + "Class: " + ChatColor.GOLD + plugin.s)
             } else {
                 hoverComponent.append("\n");
             }

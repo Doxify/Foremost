@@ -1,4 +1,4 @@
-package com.andreigeorgescu.foremost;
+package com.andreigeorgescu.foremost.cooldowns;
 
 public class Cooldown {
 
@@ -16,6 +16,8 @@ public class Cooldown {
     private void setCooldown(int c) {
         this.cooldown = c;
     }
+
+    public Long getTimestamp() { return this.timestamp; }
 
     public boolean cooldownExpired() {
         if((this.timestamp + this.cooldown) <= (System.currentTimeMillis() / 1000)) {

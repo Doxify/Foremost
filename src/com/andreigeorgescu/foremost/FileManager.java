@@ -66,7 +66,7 @@ public class FileManager {
 		}
 
 		try {
-			Object cooldownFileParsed = new JSONParser().parse(new FileReader("./plugins/Foremost/cooldowns.json"));
+			Object cooldownFileParsed = new JSONParser().parse(new FileReader("./plugins/Foremost/kCooldowns.json"));
 			JSONArray cooldownJson = (JSONArray) cooldownFileParsed;
 			cooldowns = kitSerializer.deserializeCooldowns(cooldownJson);
 		} catch (IOException | ParseException e) {
@@ -92,12 +92,12 @@ public class FileManager {
 		}
 
 		try {
-			FileWriter writer = new FileWriter("./plugins/Foremost/cooldowns.json");
+			FileWriter writer = new FileWriter("./plugins/Foremost/kCooldowns.json");
 			writer.write(cooldownJSON.toString());
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("[Foremost] There was an error saving to cooldowns.json");
+			System.out.println("[Foremost] There was an error saving to kCooldowns.json");
 		}
 
 	}

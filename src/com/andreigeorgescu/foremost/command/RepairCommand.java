@@ -1,5 +1,7 @@
 package com.andreigeorgescu.foremost.command;
 
+import com.andreigeorgescu.foremost.cooldowns.Cooldown;
+import com.andreigeorgescu.foremost.cooldowns.CooldownManager;
 import com.saphron.nsa.Utilities;
 import com.andreigeorgescu.foremost.Foremost;
 import org.bukkit.ChatColor;
@@ -12,64 +14,49 @@ import org.bukkit.inventory.ItemStack;
 
 public class RepairCommand implements CommandExecutor {
 
-    private Foremost plugin;
-    private Player commandSender;
-
-    public RepairCommand(Foremost p) {
-        plugin = p;
-    }
-
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(plugin.nsaPlugin.isHub()) {
+        if(Foremost.getPlugin().nsaPlugin.isHub()) {
             sender.sendMessage(ChatColor.RED + "This feature is disabled in the lobby.");
             return true;
         }
 
         if (sender instanceof Player) {
-            commandSender = (Player) sender;
-            String senderUUID = ((Player) sender).getUniqueId().toString();
+            Player p = (Player) sender;
             switch (args.length) {
                 // Sender ran "/repair"
                 case 0: {
                     if (sender.hasPermission("foremost.repair.cooldown.5")) {
-                        if (!plugin.cooldownManager.hasCooldown(senderUUID, "REPAIR")) {
-                            ItemStack item = ((Player) sender).getInventory().getItemInHand();
+                        if(!Foremost.getPlugin().cooldownManager.hasCooldown(CooldownManager.COOLDOWN.REPAIR, p.getUniqueId())) {
+                            ItemStack item = p.getItemInHand();
                             if(repairItem(item)) {
-                                sender.sendMessage(ChatColor.GREEN + "Successfully repaired the item in your hand.");
-                                sender.sendMessage(ChatColor.GRAY + "/repair is now on cooldown for 5 minutes.");
-                                plugin.cooldownManager.addCooldown(senderUUID, "REPAIR", 300);
+                                p.sendMessage(ChatColor.GREEN + "Successfully repaired the item in your hand.");
+                                p.sendMessage(ChatColor.GRAY + "/repair is now on cooldown for 5 minutes.");
+                                Foremost.getPlugin().cooldownManager.addCooldown(CooldownManager.COOLDOWN.REPAIR, p.getUniqueId(), 300);
                             } else {
-                                sender.sendMessage(ChatColor.RED + "The item in your hand cannot be repaired, please try another item.");
+                                p.sendMessage(ChatColor.RED + "The item in your hand cannot be repaired.");
                             }
-                            return true;
                         } else {
-                            // TODO: Add proper time format here: 00:00
-                            commandSender.sendMessage(ChatColor.RED + "/repair is on cooldown for " + plugin.cooldownManager.getRemainingCooldown(senderUUID, "REPAIR") + " more seconds!");
-                            commandSender.sendMessage(ChatColor.GRAY + "Purchase Diamond rank to remove all command cooldowns! /buy");
-                            return true;
+                            Cooldown cooldown = Foremost.getPlugin().cooldownManager.getCooldown(CooldownManager.COOLDOWN.REPAIR, p.getUniqueId());
+                            p.sendMessage(ChatColor.RED + "/repair is on cooldown for " + Utilities.getTimeStringWordsWithSeconds(cooldown.getRemainingCooldown()));
                         }
                     } else if (sender.hasPermission("foremost.repair.bypass")) {
-                        ItemStack item = ((Player) sender).getInventory().getItemInHand();
+                        ItemStack item = p.getItemInHand();
                         if(repairItem(item)) {
-                            sender.sendMessage(ChatColor.GREEN + "Successfully repaired the item in your hand.");
-                            plugin.cooldownManager.addCooldown(senderUUID, "REPAIR", 300);
+                            p.sendMessage(ChatColor.GREEN + "Successfully repaired the item in your hand.");
                         } else {
-                            sender.sendMessage(ChatColor.RED + "The item in your hand cannot be repaired, please try another item.");
+                            p.sendMessage(ChatColor.RED + "The item in your hand cannot be repaired.");
                         }
-                        return true;
                     } else {
-                        sender.sendMessage(Utilities.NO_PERMISSION);
-                        return true;
+                        p.sendMessage(Utilities.NO_PERMISSION);
                     }
+                    return true;
                 }
                 // Sender ran "/repair <args>"
                 case 1: {
                     if (sender.hasPermission("foremost.repair.all.cooldown.60")) {
                         if (args[0].equalsIgnoreCase("all")) {
-                            if (!plugin.cooldownManager.hasCooldown(senderUUID, "REPAIRALL")) {
-
+                            if(!Foremost.getPlugin().cooldownManager.hasCooldown(CooldownManager.COOLDOWN.REPAIRALL, p.getUniqueId())) {
                                 int repairedItems = 0;
 
                                 // Repairing all items in the players inventory
@@ -87,40 +74,46 @@ public class RepairCommand implements CommandExecutor {
                                 }
 
                                 if (repairedItems != 0) {
-                                    sender.sendMessage(ChatColor.GREEN + "Successfully repaired " + repairedItems + " item(s).");
-                                    plugin.cooldownManager.addCooldown(senderUUID, "REPAIRALL", 3600);
+                                    p.sendMessage(ChatColor.GREEN + "Successfully repaired " + repairedItems + " item(s).");
+                                    p.sendMessage(ChatColor.GRAY + "/repair is on cooldown for 60 seconds.");
+                                    Foremost.getPlugin().cooldownManager.addCooldown(CooldownManager.COOLDOWN.REPAIRALL, p.getUniqueId(), 60);
                                 } else {
-                                    sender.sendMessage(ChatColor.RED + "There are no items that can be repaired in your inventory.");
+                                    p.sendMessage(ChatColor.RED + "There are no items that can be repaired in your inventory.");
                                 }
-
-                                return true;
                             } else {
-                                // TODO: Add proper time format here: 00:00
-                                commandSender.sendMessage(ChatColor.RED + "/repair all is on cooldown for " + plugin.cooldownManager.getRemainingCooldown(senderUUID, "REPAIRALL") + " more seconds!");
-                                commandSender.sendMessage(ChatColor.GRAY + "Purchase Diamond rank to remove all command cooldowns! /buy");
-                                return true;
+                                Cooldown cooldown = Foremost.getPlugin().cooldownManager.getCooldown(CooldownManager.COOLDOWN.REPAIRALL, p.getUniqueId());
+                                p.sendMessage(ChatColor.RED + "/repair all is on cooldown for " + Utilities.getTimeStringWordsWithSeconds(cooldown.getRemainingCooldown()));
                             }
                         } else {
                             sender.sendMessage(ChatColor.RED + "Usage: /repair all");
-                            return true;
                         }
                     } else if(sender.hasPermission("foremost.repair.bypass")) {
                         int repairedItems = 0;
-                        for (ItemStack item : ((Player) sender).getInventory()) {
-                            if (repairItem(item)) {
+
+                        // Repairing all items in the players inventory
+                        for(ItemStack item : ((Player) sender).getInventory().getContents()) {
+                            if(repairItem(item)) {
                                 repairedItems++;
                             }
                         }
+
+                        // Repairing all items in the players armor inventory
+                        for(ItemStack item : ((Player) sender).getInventory().getArmorContents()) {
+                            if(repairItem(item)) {
+                                repairedItems++;
+                            }
+                        }
+
+
                         if (repairedItems != 0) {
                             sender.sendMessage(ChatColor.GREEN + "Successfully repaired " + repairedItems + " item(s).");
                         } else {
                             sender.sendMessage(ChatColor.RED + "There are no items that can be repaired in your inventory.");
                         }
-                        return true;
                     } else {
                         sender.sendMessage(Utilities.NO_PERMISSION);
-                        return true;
                     }
+                    return true;
                 }
                 default: {
                     return true;
