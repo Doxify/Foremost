@@ -39,6 +39,7 @@ public class RepairCommand implements CommandExecutor {
                         } else {
                             Cooldown cooldown = Foremost.getPlugin().cooldownManager.getCooldown(CooldownManager.COOLDOWN.REPAIR, p.getUniqueId());
                             p.sendMessage(ChatColor.RED + "/repair is on cooldown for " + Utilities.getTimeStringWordsWithSeconds(cooldown.getRemainingCooldown()));
+                            p.sendMessage(ChatColor.RED + "Purchase a higher rank for a reduced or no cooldown.");
                         }
                     } else if (sender.hasPermission("foremost.repair.bypass")) {
                         ItemStack item = p.getItemInHand();
@@ -83,6 +84,7 @@ public class RepairCommand implements CommandExecutor {
                             } else {
                                 Cooldown cooldown = Foremost.getPlugin().cooldownManager.getCooldown(CooldownManager.COOLDOWN.REPAIRALL, p.getUniqueId());
                                 p.sendMessage(ChatColor.RED + "/repair all is on cooldown for " + Utilities.getTimeStringWordsWithSeconds(cooldown.getRemainingCooldown()));
+                                p.sendMessage(ChatColor.RED + "Purchase a higher rank for a reduced or no cooldown.");
                             }
                         } else {
                             sender.sendMessage(ChatColor.RED + "Usage: /repair all");

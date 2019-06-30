@@ -35,6 +35,7 @@ public class HealCommand implements CommandExecutor {
                         } else {
                             Cooldown cooldown = Foremost.getPlugin().cooldownManager.getCooldown(CooldownManager.COOLDOWN.HEAL, p.getUniqueId());
                             p.sendMessage(ChatColor.RED + "/heal is on cooldown for " + Utilities.getTimeStringWordsWithSeconds(cooldown.getRemainingCooldown()));
+                            p.sendMessage(ChatColor.RED + "Purchase a higher rank for a reduced or no cooldown.");
                         }
                     } else if (p.hasPermission("foremost.heal.bypass")) {
                         healPlayer(p);

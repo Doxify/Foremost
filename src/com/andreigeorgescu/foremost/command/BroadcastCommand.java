@@ -31,10 +31,6 @@ public class BroadcastCommand implements CommandExecutor {
             Bukkit.broadcastMessage(broadcastMessage.toString());
             Bukkit.broadcastMessage(" ");
 
-            for(Player p : Bukkit.getServer().getOnlinePlayers()) {
-                TTA_Methods.sendActionBar(p, broadcastMessage.toString(), 180);
-            }
-
             return true;
         } else {
             sender.sendMessage(Utilities.NO_PERMISSION);
