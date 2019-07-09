@@ -3,7 +3,7 @@ main: com.andreigeorgescu.foremost.Foremost
 version: 1.1.0
 author: Andrei Georgescu
 depend: [Vault, NSA, TTA]
-softdepend: [Multiverse-Core, ASkyBlock]
+softdepend: [Multiverse-Core, ASkyBlock, PlaceholderAPI]
 description: >
             First and foremost, the essentials.
 commands:
@@ -175,11 +175,11 @@ commands:
       usage: |
              Usages:
              /fly
-#  staff:
-#      description: Toggle staff mode
-#      usage: |
-#             Usages:
-#             /staff
+  staff:
+      description: Toggle staff mode
+      usage: |
+             Usages:
+             /staff
   help:
       description: Get general server help
       usage: |

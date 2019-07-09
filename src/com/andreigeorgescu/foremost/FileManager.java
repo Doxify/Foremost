@@ -65,14 +65,14 @@ public class FileManager {
 			System.out.println("[Foremost] Failed to load kits.json. Returned an empty List.");
 		}
 
-		try {
-			Object cooldownFileParsed = new JSONParser().parse(new FileReader("./plugins/Foremost/kCooldowns.json"));
-			JSONArray cooldownJson = (JSONArray) cooldownFileParsed;
-			cooldowns = kitSerializer.deserializeCooldowns(cooldownJson);
-		} catch (IOException | ParseException e) {
-			e.printStackTrace();
-			System.out.println("[Foremost] Failed to load cooldowns.json. Returned an empty HashMap.");
-		}
+//		try {
+//			Object cooldownFileParsed = new JSONParser().parse(new FileReader("./plugins/Foremost/kCooldowns.json"));
+//			JSONArray cooldownJson = (JSONArray) cooldownFileParsed;
+//			cooldowns = kitSerializer.deserializeCooldowns(cooldownJson);
+//		} catch (IOException | ParseException e) {
+//			e.printStackTrace();
+//			System.out.println("[Foremost] Failed to load cooldowns.json. Returned an empty HashMap.");
+//		}
 
 		return new KitsManager(kits, cooldowns);
 
@@ -91,14 +91,14 @@ public class FileManager {
 			System.out.println("[Foremost] There was an error saving to kits.json");
 		}
 
-		try {
-			FileWriter writer = new FileWriter("./plugins/Foremost/kCooldowns.json");
-			writer.write(cooldownJSON.toString());
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("[Foremost] There was an error saving to kCooldowns.json");
-		}
+//		try {
+//			FileWriter writer = new FileWriter("./plugins/Foremost/kCooldowns.json");
+//			writer.write(cooldownJSON.toString());
+//			writer.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			System.out.println("[Foremost] There was an error saving to kCooldowns.json");
+//		}
 
 	}
 	

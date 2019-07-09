@@ -125,7 +125,7 @@ public class RepairCommand implements CommandExecutor {
         return true;
     }
 
-    private boolean repairItem(ItemStack item) {
+    public static boolean repairItem(ItemStack item) {
        if(item != null && item.getType() != Material.AIR) {
            if(!item.getItemMeta().spigot().isUnbreakable()) {
                if (item.getDurability() != 0) {

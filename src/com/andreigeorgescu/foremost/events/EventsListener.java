@@ -88,7 +88,6 @@ public class EventsListener implements Listener {
 
 	@EventHandler
 	public void onPlayerDeath(PlayerRespawnEvent event) {
-		Player p = event.getPlayer();
 		event.setRespawnLocation(plugin.config.getSpawn());
 	}
 	
@@ -116,7 +115,9 @@ public class EventsListener implements Listener {
 			if(event.getCause() == TeleportCause.COMMAND || event.getCause() == TeleportCause.PLUGIN) {
 				if(event.getFrom() instanceof Location) {
 					Profile profile = plugin.profileManager.getProfile(event.getPlayer().getUniqueId().toString());
-					profile.setLastLocation(event.getFrom());
+					if(profile != null) {
+						profile.setLastLocation(event.getFrom());
+					}
 				}
 			}
 		}

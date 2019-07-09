@@ -1,7 +1,5 @@
 package com.andreigeorgescu.foremost;
 
-import java.util.logging.Logger;
-
 import com.andreigeorgescu.foremost.cooldowns.CooldownManager;
 import com.andreigeorgescu.foremost.events.*;
 import com.andreigeorgescu.foremost.homes.HomeClickEvent;
@@ -11,6 +9,13 @@ import com.andreigeorgescu.foremost.kits.KitEvents;
 import com.andreigeorgescu.foremost.kits.KitsManager;
 import com.andreigeorgescu.foremost.kits.commands.KitAdminCommand;
 import com.andreigeorgescu.foremost.kits.commands.KitCommand;
+import com.andreigeorgescu.foremost.staff.StaffManager;
+import com.andreigeorgescu.foremost.staff.StaffPlaceholders;
+import com.andreigeorgescu.foremost.staff.commands.StaffCommand;
+import com.andreigeorgescu.foremost.staff.events.ForemostQueueListener;
+import com.andreigeorgescu.foremost.staff.events.StaffInventoryUse;
+import com.andreigeorgescu.foremost.staff.events.StaffJoinAndLeave;
+import com.andreigeorgescu.foremost.staff.events.StaffTools;
 import com.andreigeorgescu.foremost.utils.HologramHandler;
 import com.andreigeorgescu.foremost.waraps.WarpCommand;
 import com.andreigeorgescu.foremost.waraps.WarpEventListener;
@@ -28,18 +33,17 @@ public class Foremost extends JavaPlugin {
 
     public static Foremost instance;
 	public NSA nsaPlugin = (NSA) this.getServer().getPluginManager().getPlugin("NSA");
-    public Logger log = Bukkit.getLogger();
     public ProfileManager profileManager = new ProfileManager();
 	public ChatManager chatManager = new ChatManager();
 	public FileManager fileManager = new FileManager(this);
 	public MessageManager messageManager = new MessageManager(this);
 	public CooldownManager cooldownManager = null;
-//	public StaffModeManager staffModeManager = new StaffModeManager(this);
 	public KitsManager kitsManager = null;
 	public Config config = null;
 	public WarpManager warpManager = null;
 	public HomeManager homeManager = null;
 	public HologramHandler hologramHandler = null;
+	public StaffManager staffManager = null;
     private static Economy econ = null;
     private static Permission perms = null;
     private static Chat chat = null;
@@ -66,6 +70,7 @@ public class Foremost extends JavaPlugin {
         homeManager = new HomeManager(this);
         hologramHandler = new HologramHandler(this);
         cooldownManager = new CooldownManager();
+        staffManager = new StaffManager();
 
         // =============================================
         // Loading Event Listeners
@@ -74,10 +79,13 @@ public class Foremost extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ColoredSignsEventListener(), this);
         this.getServer().getPluginManager().registerEvents(new ChatEventListener(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerTeleportEventListener(), this);
-        this.getServer().getPluginManager().registerEvents(new StaffModeEventListener(this), this);
         this.getServer().getPluginManager().registerEvents(new KitEvents(), this);
         this.getServer().getPluginManager().registerEvents(new WarpEventListener(warpManager), this);
         this.getServer().getPluginManager().registerEvents(new HomeClickEvent(this), this);
+
+        this.getServer().getPluginManager().registerEvents(new StaffJoinAndLeave(), this);
+        this.getServer().getPluginManager().registerEvents(new StaffInventoryUse(), this);
+        this.getServer().getPluginManager().registerEvents(new StaffTools(), this);
 
 
         // =============================================
@@ -110,7 +118,6 @@ public class Foremost extends JavaPlugin {
         getCommand("teleport").setExecutor(new TeleportCommand());
         getCommand("tpa").setExecutor(new PlayerTeleportCommand(this));
         getCommand("fly").setExecutor(new FlyCommand());
-//        getCommand("staff").setExecutor(new StaffModeCommand(this));
         getCommand("help").setExecutor(new HelpCommand());
         getCommand("rename").setExecutor(new RenameCommand(this));
         getCommand("kit").setExecutor(new KitCommand(this));
@@ -119,6 +126,18 @@ public class Foremost extends JavaPlugin {
         getCommand("spawnmob").setExecutor(new SpawnMobCommand(this));
         getCommand("home").setExecutor(new HomeCommand(this));
         getCommand("condense").setExecutor(new CondenseCommand(this));
+        getCommand("staff").setExecutor(new StaffCommand());
+
+
+        // Registering placeholders
+        if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
+            new StaffPlaceholders().register();
+        }
+
+        // Registering queue channel
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "Queue");
+        getServer().getMessenger().registerIncomingPluginChannel(this, "ForemostQueue", new ForemostQueueListener());
+
 
     }
     
@@ -131,9 +150,9 @@ public class Foremost extends JavaPlugin {
     	fileManager.saveKitsToFile();
     	kitsManager.handleServerClose();
     	cooldownManager.handleServerClose();
-//        staffModeManager.handleServerClose();
         warpManager.handleServerClose();
         homeManager.handleServerClose();
+        staffManager.handleServerClose();
     }
 
     public KitsManager getKitsManager() {
