@@ -127,6 +127,7 @@ public class Foremost extends JavaPlugin {
         getCommand("home").setExecutor(new HomeCommand(this));
         getCommand("condense").setExecutor(new CondenseCommand(this));
         getCommand("staff").setExecutor(new StaffCommand());
+        getCommand("helpop").setExecutor(new HelpOpCommand());
 
 
         // Registering placeholders

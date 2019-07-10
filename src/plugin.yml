@@ -218,3 +218,8 @@ commands:
              /home
              /home set
              /home remove
+  helpop:
+    description: Get help from an operator
+    usage: |
+      Usages:
+      /helpop

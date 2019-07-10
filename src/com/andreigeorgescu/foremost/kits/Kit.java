@@ -1,7 +1,11 @@
 package com.andreigeorgescu.foremost.kits;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Kit {
 
@@ -29,18 +33,33 @@ public class Kit {
     }
 
     public void setKit(ItemStack[] k) {
-        int kitItems = 0;
+//        int kitItems = 0;
+//
+//        for(ItemStack item : k) {
+//            if(item != null) {
+//                kitItems++;
+//            }
+//        }
+//
+//        kit = new ItemStack[kitItems];
+//
+//        for(int i = 0; i < kitItems; i++) {
+//            kit[i] = new ItemStack(k[i]);
+//        }
 
-        for(ItemStack item : k) {
-            if(item != null) {
-                kitItems++;
+        List<ItemStack> kitItems = new ArrayList<>();
+
+        for(int i = 0; i < k.length; i++) {
+            if(k[i] != null) {
+                if(k[i].getType() != Material.AIR) {
+                    kitItems.add(k[i].clone());
+                }
             }
         }
 
-        kit = new ItemStack[kitItems];
-
-        for(int i = 0; i < kitItems; i++) {
-            kit[i] = new ItemStack(k[i]);
+        kit = new ItemStack[kitItems.size()];
+        for(int i = 0; i < kitItems.size(); i++) {
+            kit[i] = kitItems.get(i);
         }
 
     }

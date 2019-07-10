@@ -96,13 +96,8 @@ public class StaffManager {
             removeFromStaffMode(staffModePlayer.getPlayer());
         }
 
-        Bukkit.getScheduler().runTaskLater(Foremost.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                staff.clear();
-                vanished.clear();
-            }
-        }, 20);
+        staff.clear();
+        vanished.clear();
     }
 
     // TASK
