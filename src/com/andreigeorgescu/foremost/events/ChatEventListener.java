@@ -129,7 +129,6 @@ public class ChatEventListener implements Listener {
         }
 
         chatLineString.append(message);
-d .
         TextComponent textComponent = new TextComponent(chatLineString.toString());
         return textComponent;
     }
