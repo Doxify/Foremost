@@ -21,7 +21,8 @@ public class RenameCommand implements CommandExecutor {
             Material.BEDROCK,
             Material.MOB_SPAWNER,
             Material.CHEST,
-            Material.HOPPER
+            Material.HOPPER,
+            Material.STICK
     ));
 
 
