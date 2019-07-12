@@ -26,15 +26,9 @@ import java.util.UUID;
 public class ChatEventListener implements Listener {
 
     private final Foremost plugin;
-    public static boolean ECON_LOADED;
-    public static boolean ASKYBLOCK_LOADED;
-    public static boolean IS_LOBBY;
 
     public ChatEventListener(Foremost p) {
         this.plugin = p;
-        ECON_LOADED = Bukkit.getServer().getPluginManager().isPluginEnabled("SaneEconomy");
-        ASKYBLOCK_LOADED = Bukkit.getServer().getPluginManager().isPluginEnabled("ASkyBlock");
-        IS_LOBBY = Bukkit.getServer().getPluginManager().isPluginEnabled("Saphub");
     }
 
     @EventHandler ( priority = EventPriority.MONITOR )
@@ -135,7 +129,7 @@ public class ChatEventListener implements Listener {
         }
 
         chatLineString.append(message);
-
+d .
         TextComponent textComponent = new TextComponent(chatLineString.toString());
         return textComponent;
     }
@@ -149,17 +143,16 @@ public class ChatEventListener implements Listener {
 
         hoverComponent.append(groupPrefixFormatted + p.getName() + "\n");
 
-        if(ECON_LOADED) {
-            hoverComponent.append(ChatColor.WHITE + "Balance: " + ChatColor.GOLD + Utilities.moneyFormat.format(plugin.getEcon().getBalance(p)) + "\n");
-            if(ASKYBLOCK_LOADED) {
-                hoverComponent.append(ChatColor.WHITE + "Island Level: " + ChatColor.GOLD + getIslandLevelFormatted(p.getUniqueId()) + "\n");
-//                hoverComponent.append(ChatColor.WHITE + "Class: " + ChatColor.GOLD + plugin.s)
-            } else {
-                hoverComponent.append("\n");
-            }
+        if(plugin.saphblock != null) {
+            hoverComponent.append(ChatColor.RED + "Statistics");
+            hoverComponent.append(ChatColor.WHITE + " Balance: " + ChatColor.GREEN + Utilities.moneyFormat.format(plugin.getEcon().getBalance(p)) + "\n");
+            hoverComponent.append(ChatColor.WHITE + " Island Level: " + ChatColor.YELLOW + getIslandLevelFormatted(p.getUniqueId()) + "\n");
+            hoverComponent.append(ChatColor.WHITE + " Class: " + ChatColor.YELLOW + plugin.saphblock.profileManager.getProfile(p.getUniqueId()).getClassLevel() + "\n");
+            hoverComponent.append(ChatColor.WHITE + " sPoints: " + ChatColor.RED + plugin.saphblock.profileManager.getProfile(p.getUniqueId()).getsPointAccount().getBalance() + "\n");
+            hoverComponent.append(ChatColor.WHITE + " Shards: " + ChatColor.AQUA + plugin.saphblock.profileManager.getProfile(p.getUniqueId()).getShards().getBalance() + "\n\n");
         }
 
-        if(!IS_LOBBY) {
+        if(!plugin.nsaPlugin.isHub()) {
             hoverComponent.append(ChatColor.WHITE + "Played on this server for " + ChatColor.RED + Utilities.getTimeStringWords(p.getStatistic(Statistic.PLAY_ONE_TICK) / 20) + "\n");
         }
 

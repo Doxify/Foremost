@@ -28,11 +28,13 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.andreigeorgescu.foremost.command.*;
 import com.saphron.nsa.NSA;
+import org.saphron.saphblock.Saphblock;
 
 public class Foremost extends JavaPlugin {
 
     public static Foremost instance;
 	public NSA nsaPlugin = (NSA) this.getServer().getPluginManager().getPlugin("NSA");
+	public Saphblock saphblock = (Saphblock) this.getServer().getPluginManager().getPlugin("Saphblock");
     public ProfileManager profileManager = new ProfileManager();
 	public ChatManager chatManager = new ChatManager();
 	public FileManager fileManager = new FileManager(this);
@@ -71,6 +73,11 @@ public class Foremost extends JavaPlugin {
         hologramHandler = new HologramHandler(this);
         cooldownManager = new CooldownManager();
         staffManager = new StaffManager();
+
+        // =============================================
+        // Loading Deps
+        // =============================================
+        saphblock = (Saphblock) this.getServer().getPluginManager().getPlugin("Saphblock");
 
         // =============================================
         // Loading Event Listeners
