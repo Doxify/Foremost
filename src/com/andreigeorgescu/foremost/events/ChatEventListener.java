@@ -64,7 +64,7 @@ public class ChatEventListener implements Listener {
         if(messageURL != null) {
             formattedTextComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, messageURL.toString()));
         } else {
-            formattedTextComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + p.getName()));
+            formattedTextComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/islandprofile " + p.getName()));
         }
         return formattedTextComponent;
     }
@@ -143,12 +143,11 @@ public class ChatEventListener implements Listener {
         hoverComponent.append(groupPrefixFormatted + p.getName() + "\n");
 
         if(plugin.saphblock != null) {
-            hoverComponent.append(ChatColor.RED + "Statistics");
-            hoverComponent.append(ChatColor.WHITE + " Balance: " + ChatColor.GREEN + Utilities.moneyFormat.format(plugin.getEcon().getBalance(p)) + "\n");
-            hoverComponent.append(ChatColor.WHITE + " Island Level: " + ChatColor.YELLOW + getIslandLevelFormatted(p.getUniqueId()) + "\n");
-            hoverComponent.append(ChatColor.WHITE + " Class: " + ChatColor.YELLOW + plugin.saphblock.profileManager.getProfile(p.getUniqueId()).getClassLevel() + "\n");
-            hoverComponent.append(ChatColor.WHITE + " sPoints: " + ChatColor.RED + plugin.saphblock.profileManager.getProfile(p.getUniqueId()).getsPointAccount().getBalance() + "\n");
-            hoverComponent.append(ChatColor.WHITE + " Shards: " + ChatColor.AQUA + plugin.saphblock.profileManager.getProfile(p.getUniqueId()).getShards().getBalance() + "\n\n");
+            hoverComponent.append(ChatColor.WHITE + "Balance: " + ChatColor.GREEN + Utilities.moneyFormat.format(plugin.getEcon().getBalance(p)) + "\n");
+            hoverComponent.append(ChatColor.WHITE + "Island Level: " + ChatColor.YELLOW + getIslandLevelFormatted(p.getUniqueId()) + "\n");
+            hoverComponent.append(ChatColor.WHITE + "Class: " + ChatColor.YELLOW + plugin.saphblock.profileManager.getProfile(p.getUniqueId()).getClassLevel() + "\n");
+            hoverComponent.append(ChatColor.WHITE + "sPoints: " + ChatColor.RED + plugin.saphblock.profileManager.getProfile(p.getUniqueId()).getsPointAccount().getBalance() + "\n");
+            hoverComponent.append(ChatColor.WHITE + "Shards: " + ChatColor.AQUA + plugin.saphblock.profileManager.getProfile(p.getUniqueId()).getShards().getBalance() + "\n\n");
         }
 
         if(!plugin.nsaPlugin.isHub()) {
@@ -156,6 +155,10 @@ public class ChatEventListener implements Listener {
         }
 
         hoverComponent.append(ChatColor.WHITE + "First joined Saphron on " + ChatColor.RED + user.getFirstJoinDate());
+
+        if(plugin.saphblock != null) {
+            hoverComponent.append("\n" + ChatColor.YELLOW + ChatColor.UNDERLINE.toString() + "Click to view " + p.getName() + "'s Island Profile");
+        }
 
         return new ComponentBuilder(hoverComponent.toString());
     }

@@ -1,6 +1,7 @@
 package com.andreigeorgescu.foremost;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class ProfileManager {
 	static HashMap<String, Profile> profiles;
@@ -20,6 +21,10 @@ public class ProfileManager {
 	public Profile getProfile(String uuid) {
 		return profiles.get(uuid);
 
+	}
+
+	public Profile getProfile(UUID uuid) {
+		return profiles.get(uuid.toString());
 	}
 
 }
