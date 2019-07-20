@@ -157,7 +157,7 @@ public class ChatEventListener implements Listener {
         hoverComponent.append(ChatColor.WHITE + "First joined Saphron on " + ChatColor.RED + user.getFirstJoinDate());
 
         if(plugin.saphblock != null) {
-            hoverComponent.append("\n" + ChatColor.YELLOW + ChatColor.UNDERLINE.toString() + "Click to view " + p.getName() + "'s Island Profile");
+            hoverComponent.append("\n\n" + ChatColor.YELLOW + ChatColor.UNDERLINE.toString() + "Click to view " + p.getName() + "'s Island Profile");
         }
 
         return new ComponentBuilder(hoverComponent.toString());

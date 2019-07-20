@@ -13,9 +13,9 @@ public class HelpCommand implements CommandExecutor {
         // TODO: Clean up the help command, less links.
         if(sender instanceof Player) {
             sender.sendMessage(ChatColor.RED + ChatColor.BOLD.toString() + "Skyblock" + ChatColor.RED + " Help");
-            sender.sendMessage(ChatColor.GRAY + " Website: " + ChatColor.RED + "www.sahpron.org");
+            sender.sendMessage(ChatColor.GRAY + " Website: " + ChatColor.RED + "www.saphron.org");
             sender.sendMessage(ChatColor.GRAY + " Store: " + ChatColor.RED + "www.saphron.org/store" + ChatColor.GRAY + " or " + ChatColor.RED +  "/buy");
-            sender.sendMessage(ChatColor.GRAY + " Discord: " + ChatColor.RED + "www.sahpron.org/discord" + ChatColor.GRAY + ", authenticate with " + ChatColor.RED + "/saphcord");
+            sender.sendMessage(ChatColor.GRAY + " Discord: " + ChatColor.RED + "www.saphron.org/discord" + ChatColor.GRAY + ", authenticate with " + ChatColor.RED + "/saphcord");
             sender.sendMessage(ChatColor.GRAY + "General Commands:");
             sender.sendMessage(ChatColor.GRAY + " Teleport to spawn with " + ChatColor.RED + "/spawn");
             sender.sendMessage(ChatColor.GRAY + " Message Players with " + ChatColor.RED + "/msg <player name> <message>" + ChatColor.GRAY + ", reply with " + ChatColor.RED + "/r <message>" );
